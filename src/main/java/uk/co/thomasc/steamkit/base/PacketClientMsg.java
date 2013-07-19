@@ -56,7 +56,7 @@ public final class PacketClientMsg implements IPacketMsg {
 			targetJobID = extendedHdr.targetJobID;
 			sourceJobID = extendedHdr.sourceJobID;
 		} catch (final IOException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		}
 	}
 

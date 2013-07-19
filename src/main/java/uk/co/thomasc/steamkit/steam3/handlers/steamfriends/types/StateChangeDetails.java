@@ -35,7 +35,7 @@ public final class StateChangeDetails {
 			stateChange = EChatMemberStateChange.f(is.readInt());
 			chatterActedBy = new SteamID(is.readLong());
 		} catch (final IOException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		}
 
 		// TODO: for EChatMemberStateChange.Entered, the following data is a binary kv MessageObject

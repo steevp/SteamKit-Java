@@ -81,13 +81,13 @@ public class ZipUtil {
 			f.setAccessible(true);
 			try {
 				position = f.getInt(writer);
-			} catch (IllegalArgumentException | IllegalAccessException e) {
-				e.printStackTrace();
+			} catch (Exception e) {
+				uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 			}
 
 			writer.write(header);
-		} catch (NoSuchFieldException | SecurityException e1) {
-			e1.printStackTrace();
+		} catch (Exception e1) {
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e1);
 		}
 
 		return position;
@@ -115,8 +115,8 @@ public class ZipUtil {
 			f.setAccessible(true);
 			try {
 				position = f.getInt(writer);
-			} catch (IllegalArgumentException | IllegalAccessException e1) {
-				e1.printStackTrace();
+			} catch (Exception e1) {
+				uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e1);
 			}
 
 			writer.write(ZipUtil.Version); // versionGenerator
@@ -146,11 +146,11 @@ public class ZipUtil {
 
 			try {
 				position2 = f.getInt(writer);
-			} catch (IllegalArgumentException | IllegalAccessException e) {
-				e.printStackTrace();
+			} catch (Exception e) {
+				uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 			}
-		} catch (NoSuchFieldException | SecurityException e2) {
-			e2.printStackTrace();
+		} catch (Exception e2) {
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e2);
 		}
 
 		return position2 - position + 4;

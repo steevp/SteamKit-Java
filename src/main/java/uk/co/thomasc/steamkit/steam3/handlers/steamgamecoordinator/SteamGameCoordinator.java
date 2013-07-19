@@ -83,7 +83,7 @@ public final class SteamGameCoordinator extends ClientMsgHandler {
 					final CraftResponseCallback craftCallback = new CraftResponseCallback(craftMsg.getBody());
 					getClient().postCallback(craftCallback);
 				} catch (IOException e) {
-					e.printStackTrace();
+					uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 				}
 			}
 		}

@@ -11,24 +11,6 @@ public class Utils {
 
 	public static EOSType getOSType() {
 		final String os = System.getProperty("os.name");
-		switch (os) {
-			case "Windows 7":
-				return EOSType.Win7;
-			case "Windows 2003":
-				return EOSType.Win2003;
-			case "Windows XP":
-				return EOSType.WinXP;
-			case "Windows 2000":
-				return EOSType.Win200;
-			case "Windows NT":
-				return EOSType.WinNT;
-			case "Windows ME":
-				return EOSType.WinME;
-			case "Windows 98":
-				return EOSType.Win98;
-			case "Windows 95":
-				return EOSType.Win95;
-		}
 		if (os.startsWith("Win")) {
 			return EOSType.WinUnknown;
 		} else if (os.startsWith("Mac")) {
@@ -36,7 +18,8 @@ public class Utils {
 		} else if (os.indexOf("nix") >= 0) {
 			return EOSType.LinuxUnknown;
 		}
-		return EOSType.Unknown;
+		//return EOSType.Unknown;
+		return EOSType.Win7;
 	}
 
 	public static byte[] generateMachineID() {
@@ -52,7 +35,7 @@ public class Utils {
 				}
 			} while (NetworkInterface.getNetworkInterfaces().hasMoreElements());
 		} catch (final SocketException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		}
 		return null;
 	}

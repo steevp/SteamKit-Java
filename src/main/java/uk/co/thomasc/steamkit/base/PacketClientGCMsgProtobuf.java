@@ -57,7 +57,7 @@ public final class PacketClientGCMsgProtobuf implements IPacketGCMsg {
 		try {
 			protobufHeader.deSerialize(is);
 		} catch (final IOException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		}
 
 		targetJobID = new JobID(protobufHeader.proto.getJobidTarget());

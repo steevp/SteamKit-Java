@@ -153,7 +153,7 @@ public final class WebAPI {
 		try {
 			return call(functionName, version, apiArgs, requestMethod, secure);
 		} catch (final IOException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		}
 
 		return null;

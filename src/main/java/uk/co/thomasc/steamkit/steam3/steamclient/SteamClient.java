@@ -164,7 +164,7 @@ public final class SteamClient extends CMClient {
 				try {
 					callbackLock.wait(timeout);
 				} catch (final InterruptedException e) {
-					e.printStackTrace();
+					uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 				}
 				if (callbackQueue.size() == 0) {
 					return null;
@@ -186,7 +186,7 @@ public final class SteamClient extends CMClient {
 				try {
 					callbackLock.wait();
 				} catch (final InterruptedException e) {
-					e.printStackTrace();
+					uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 				}
 			}
 
@@ -206,7 +206,7 @@ public final class SteamClient extends CMClient {
 				try {
 					callbackLock.wait(timeout);
 				} catch (final InterruptedException e) {
-					e.printStackTrace();
+					uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 				}
 				if (callbackQueue.size() == 0) {
 					return null;
@@ -291,7 +291,7 @@ public final class SteamClient extends CMClient {
 		postCallback(new ConnectedCallback(EResult.OK));
 	}
 
-	void handleEncryptResult(IPacketMsg packetMsg) { // Not an override, I know :S
+	protected void handleEncryptResult(IPacketMsg packetMsg) { // Not an override, I know :S
 		final Msg<MsgChannelEncryptResult> encResult = new Msg<MsgChannelEncryptResult>(packetMsg, MsgChannelEncryptResult.class);
 
 		postCallback(new ConnectedCallback(encResult.getBody()));

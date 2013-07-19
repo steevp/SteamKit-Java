@@ -21,7 +21,7 @@ public class NetHelpersTest {
 			Assert.assertEquals(NetHelpers.getIPAddress(ip), ipV);
 			Assert.assertEquals(NetHelpers.getIPAddress(ipV), ip);
 		} catch (final UnknownHostException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		}
 
 		try {
@@ -31,7 +31,7 @@ public class NetHelpersTest {
 			Assert.assertEquals(NetHelpers.getIPAddress(ip), ipV);
 			Assert.assertEquals(NetHelpers.getIPAddress(ipV), ip);
 		} catch (final UnknownHostException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		}
 
 		try {
@@ -41,7 +41,7 @@ public class NetHelpersTest {
 			Assert.assertEquals(NetHelpers.getIPAddress(ip), ipV);
 			Assert.assertEquals(NetHelpers.getIPAddress(ipV), ip);
 		} catch (final UnknownHostException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		}
 	}
 

@@ -24,7 +24,7 @@ public class BinaryReader {
 		try {
 			reader.pushLimit(len);
 		} catch (final InvalidProtocolBufferException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		}
 	}
 
@@ -50,7 +50,7 @@ public class BinaryReader {
 			f.setAccessible(true);
 			return (int) f.get(reader);
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		}
 		return 0;*/
 		return reader.getTotalBytesRead();

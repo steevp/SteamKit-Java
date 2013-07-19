@@ -3,6 +3,7 @@ package uk.co.thomasc.steamkit.networking.steam3;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 import uk.co.thomasc.steamkit.base.IClientMsg;
 import uk.co.thomasc.steamkit.util.cSharp.events.EventArgs;
@@ -37,11 +38,13 @@ public class TcpConnection extends Connection {
 		try {
 			socket = new Socket(endPoint.getIpAddress(), endPoint.getPort());
 		} catch (final IOException e) {
+			DebugLog.writeLine("TcpConnection", "Error connecting (1): %s", e);
 		}
 
 		try {
 			connectCompleted(socket);
 		} catch (final IOException e) {
+			DebugLog.writeLine("TcpConnection", "Error connecting (2): %s", e);
 		}
 	}
 
@@ -147,7 +150,7 @@ public class TcpConnection extends Connection {
 				try {
 					Thread.sleep(100);
 				} catch (final InterruptedException e1) {
-					e1.printStackTrace();
+					uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e1);
 				}
 
 				if (!isConnected) {
@@ -233,13 +236,14 @@ public class TcpConnection extends Connection {
 		}
 	}
 
-	/**
-	 * Gets the local IP.
-	 */
 	@Override
 	public InetAddress getLocalIP() {
 		if (sock == null) {
-			return InetAddress.getLoopbackAddress(); // Return a InetAddress. The request will fail anyway so it doesn't matter
+			try {
+				return InetAddress.getLocalHost();
+			} catch (UnknownHostException e) {
+				uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
+			} // Return a InetAddress. The request will fail anyway so it doesn't matter
 		}
 		return sock.getLocalAddress();
 	}

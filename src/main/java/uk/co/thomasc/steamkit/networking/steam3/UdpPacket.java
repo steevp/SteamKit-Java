@@ -114,7 +114,7 @@ class UdpPacket {
 			header.payloadSize = (short) buf.length;
 			header.msgSize = buf.length;
 		} catch (final IOException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		}
 	}
 
@@ -130,7 +130,7 @@ class UdpPacket {
 
 			ms.write(payload.readBytes());
 		} catch (final IOException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		}
 
 		return ms.toByteArray();

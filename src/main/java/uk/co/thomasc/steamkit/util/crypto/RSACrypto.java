@@ -1,5 +1,8 @@
 package uk.co.thomasc.steamkit.util.crypto;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.math.BigInteger;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
@@ -16,8 +19,6 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import uk.co.thomasc.steamkit.util.crypto.asnkeyparser.AsnKeyParser;
 import uk.co.thomasc.steamkit.util.crypto.asnkeyparser.BerDecodeException;
@@ -36,7 +37,7 @@ public class RSACrypto {
 			final BigInteger[] keys = keyParser.parseRSAPublicKey();
 			init(keys[0], keys[1], true);
 		} catch (final BerDecodeException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		}
 	}
 
@@ -50,28 +51,33 @@ public class RSACrypto {
 
 	private void init(BigInteger mod, BigInteger exp, boolean oaep) {
 		try {
+			Security.insertProviderAt(new org.spongycastle.jce.provider.BouncyCastleProvider(), 1);
+			
 			final RSAPublicKeySpec publicKeySpec = new RSAPublicKeySpec(mod, exp);
 
-			final KeyFactory factory = KeyFactory.getInstance("RSA");
+			final KeyFactory factory = KeyFactory.getInstance("RSA", "SC");
 			RSAkey = (RSAPublicKey) factory.generatePublic(publicKeySpec);
 
-			Security.addProvider(new BouncyCastleProvider());
 			if (oaep) {
-				cipher = Cipher.getInstance("RSA/None/OAEPWithSHA1AndMGF1Padding", "BC");
+				cipher = Cipher.getInstance("RSA/None/OAEPWithSHA1AndMGF1Padding", "SC");
 			} else {
-				cipher = Cipher.getInstance("RSA/None/PKCS1Padding", "BC");
+				cipher = Cipher.getInstance("RSA/None/PKCS1Padding", "SC");
 			}
 			cipher.init(Cipher.ENCRYPT_MODE, RSAkey);
 		} catch (final NoSuchAlgorithmException e) {
-			e.printStackTrace();
+			Writer writer = new StringWriter();
+			PrintWriter printWriter = new PrintWriter(writer);
+			e.printStackTrace(printWriter);
+			String s = writer.toString();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", s);
 		} catch (final NoSuchPaddingException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		} catch (final InvalidKeyException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		} catch (final InvalidKeySpecException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		} catch (final NoSuchProviderException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		}
 	}
 
@@ -79,9 +85,9 @@ public class RSACrypto {
 		try {
 			return cipher.doFinal(input);
 		} catch (final IllegalBlockSizeException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		} catch (final BadPaddingException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		}
 		return null;
 	}

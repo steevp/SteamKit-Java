@@ -350,7 +350,7 @@ public final class SteamFriends extends ClientMsgHandler {
 			leaveChat.write(EChatMemberStateChange.Left.v()); // StateChange
 			leaveChat.write(getClient().getSteamId().convertToLong()); // ChatterActedBy
 		} catch (final IOException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		}
 
 		getClient().send(leaveChat);
@@ -380,7 +380,7 @@ public final class SteamFriends extends ClientMsgHandler {
 		try {
 			chatMsg.writeNullTermString(message, Charset.forName("UTF8"));
 		} catch (final IOException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		}
 
 		getClient().send(chatMsg);
@@ -702,7 +702,7 @@ public final class SteamFriends extends ClientMsgHandler {
 		try {
 			msgData = chatMsg.getReader().readBytes();
 		} catch (IOException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		}
 
 		final ChatMsgCallback callback = new ChatMsgCallback(chatMsg.getBody(), msgData);
@@ -718,7 +718,7 @@ public final class SteamFriends extends ClientMsgHandler {
 			final ChatMemberInfoCallback callback = new ChatMemberInfoCallback(membInfo.getBody(), payload);
 			getClient().postCallback(callback);
 		} catch (IOException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		}
 	}
 

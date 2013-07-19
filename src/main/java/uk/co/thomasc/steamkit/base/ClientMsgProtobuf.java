@@ -140,8 +140,8 @@ public final class ClientMsgProtobuf<U extends GeneratedMessage.Builder<U>> exte
 		try {
 			final Method m = clazz.getMethod("newBuilder");
 			body = (U) m.invoke(null);
-		} catch (IllegalAccessException | NoSuchMethodException | SecurityException | IllegalArgumentException | InvocationTargetException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		}
 
 		// set our emsg
@@ -178,7 +178,7 @@ public final class ClientMsgProtobuf<U extends GeneratedMessage.Builder<U>> exte
 		try {
 			deSerialize(msg.getData());
 		} catch (final IOException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		}
 	}
 
@@ -209,8 +209,8 @@ public final class ClientMsgProtobuf<U extends GeneratedMessage.Builder<U>> exte
 		try {
 			final Method m = clazz.getMethod("newBuilder");
 			body = (U) m.invoke(null);
-		} catch (IllegalAccessException | NoSuchMethodException | SecurityException | IllegalArgumentException | InvocationTargetException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		}
 		body.mergeFrom(is.getStream());
 

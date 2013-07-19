@@ -18,7 +18,7 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.spongycastle.jce.provider.BouncyCastleProvider;
 
 import uk.co.thomasc.steamkit.util.classlesshasher.JenkinsHash;
 import uk.co.thomasc.steamkit.util.logging.Debug;
@@ -37,10 +37,12 @@ public class CryptoHelper {
 	 */
 	public static byte[] SHAHash(byte[] input) {
 		try {
-			final MessageDigest md = MessageDigest.getInstance("SHA-1");
+			final MessageDigest md = MessageDigest.getInstance("SHA-1", "SC");
 			return md.digest(input);
 		} catch (final NoSuchAlgorithmException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
+		} catch (NoSuchProviderException e) {
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		}
 		return null;
 	}
@@ -110,7 +112,7 @@ public class CryptoHelper {
 			Debug.Assert(key.length == 32);
 
 			// encrypt iv using ECB and provided key
-			Cipher cipher = Cipher.getInstance("AES/ECB/NoPadding", "BC");
+			Cipher cipher = Cipher.getInstance("AES/ECB/NoPadding", "SC");
 			cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key, "AES"));
 
 			// generate iv
@@ -118,7 +120,7 @@ public class CryptoHelper {
 			final byte[] cryptedIv = cipher.doFinal(iv);
 
 			// encrypt input plaintext with CBC using the generated (plaintext) IV and the provided key
-			cipher = Cipher.getInstance("AES/CBC/PKCS7Padding", "BC");
+			cipher = Cipher.getInstance("AES/CBC/PKCS7Padding", "SC");
 			cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key, "AES"), new IvParameterSpec(iv));
 
 			final byte[] cipherText = cipher.doFinal(input);
@@ -130,19 +132,19 @@ public class CryptoHelper {
 
 			return output;
 		} catch (final InvalidKeyException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		} catch (final InvalidAlgorithmParameterException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		} catch (final NoSuchAlgorithmException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		} catch (final NoSuchPaddingException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		} catch (final IllegalBlockSizeException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		} catch (final BadPaddingException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		} catch (final NoSuchProviderException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		}
 		return new byte[0];
 	}
@@ -155,7 +157,7 @@ public class CryptoHelper {
 			Security.addProvider(new BouncyCastleProvider());
 			Debug.Assert(key.length == 32);
 
-			Cipher cipher = Cipher.getInstance("AES/ECB/NoPadding", "BC");
+			Cipher cipher = Cipher.getInstance("AES/ECB/NoPadding", "SC");
 
 			// first 16 bytes of input is the ECB encrypted IV
 			byte[] iv = new byte[16];
@@ -169,25 +171,25 @@ public class CryptoHelper {
 			cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(key, "AES"));
 			iv = cipher.doFinal(cryptedIv);
 
-			cipher = Cipher.getInstance("AES/CBC/PKCS7Padding", "BC");
+			cipher = Cipher.getInstance("AES/CBC/PKCS7Padding", "SC");
 
 			// decrypt the remaining ciphertext in cbc with the decrypted IV
 			cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(key, "AES"), new IvParameterSpec(iv));
 			return cipher.doFinal(cipherText);
 		} catch (final InvalidKeyException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		} catch (final InvalidAlgorithmParameterException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		} catch (final NoSuchAlgorithmException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		} catch (final NoSuchPaddingException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		} catch (final IllegalBlockSizeException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		} catch (final BadPaddingException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		} catch (final NoSuchProviderException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		}
 		return new byte[0];
 	}

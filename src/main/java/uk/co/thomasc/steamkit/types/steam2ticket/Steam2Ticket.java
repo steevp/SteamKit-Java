@@ -46,7 +46,7 @@ public final class Steam2Ticket {
 				entries.add(entry);
 			}
 		} catch (final IOException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		}
 	}
 }

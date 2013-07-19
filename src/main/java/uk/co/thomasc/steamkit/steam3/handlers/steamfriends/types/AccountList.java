@@ -19,8 +19,8 @@ public final class AccountList<T extends Account> extends HashMap<SteamID, T> {
 				final T account = clazz.newInstance();
 				account.steamId = steamId;
 				put(steamId, account);
-			} catch (InstantiationException | IllegalAccessException e) {
-				e.printStackTrace();
+			} catch (Exception e) {
+				uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 			}
 		}
 		return get(steamId);

@@ -91,9 +91,9 @@ public final class ClientGCMsg<T extends IGCSerializableMessage> extends GCMsgBa
 		try {
 			body = clazz.newInstance();
 		} catch (final InstantiationException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		} catch (final IllegalAccessException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		}
 
 		// assign our emsg
@@ -132,7 +132,7 @@ public final class ClientGCMsg<T extends IGCSerializableMessage> extends GCMsgBa
 		try {
 			deSerialize(msg.getData());
 		} catch (final IOException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		}
 	}
 

@@ -10,7 +10,7 @@ import uk.co.thomasc.steamkit.base.generated.steamlanguage.EUniverse;
 public class SteamID {
 	BitVector64 steamid;
 
-	static Pattern SteamIDRegex = Pattern.compile("STEAM_(?<universe>[0-5]):(?<authserver>[0-1]):(?<accountid>\\d+)", Pattern.CASE_INSENSITIVE);
+	static Pattern SteamIDRegex = Pattern.compile("STEAM_([0-5]):([0-1]):(\\d+)", Pattern.CASE_INSENSITIVE);
 
 	/**
 	 * The account instance value when representing all instanced {@link SteamID}
@@ -182,8 +182,8 @@ public class SteamID {
 			return false;
 		}
 
-		final int accId = Integer.parseInt(m.group("accountid"));
-		final int authServer = Integer.parseInt(m.group("authserver"));
+		final int accId = Integer.parseInt(m.group(3));
+		final int authServer = Integer.parseInt(m.group(2));
 
 		setAccountUniverse(eUniverse);
 		setAccountInstance(1);

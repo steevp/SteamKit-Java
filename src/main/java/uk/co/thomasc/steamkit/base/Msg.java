@@ -115,9 +115,9 @@ public final class Msg<T extends ISteamSerializableMessage> extends MsgBase<MsgH
 		try {
 			body = clazz.newInstance();
 		} catch (final InstantiationException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		} catch (final IllegalAccessException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		}
 
 		// assign our emsg
@@ -146,7 +146,7 @@ public final class Msg<T extends ISteamSerializableMessage> extends MsgBase<MsgH
 		try {
 			deSerialize(msg.getData());
 		} catch (final IOException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		}
 	}
 

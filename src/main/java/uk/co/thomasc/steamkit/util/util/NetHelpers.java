@@ -12,7 +12,7 @@ public class NetHelpers {
 		try {
 			return InetAddress.getByAddress(buff.array());
 		} catch (final UnknownHostException e) {
-			e.printStackTrace();
+			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		}
 		return null;
 	}
