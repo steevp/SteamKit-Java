@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import lombok.Getter;
-
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EMsg;
 import uk.co.thomasc.steamkit.base.generated.steamlanguageinternal.ISteamSerializableMessage;
 import uk.co.thomasc.steamkit.base.generated.steamlanguageinternal.MsgHdr;
@@ -98,16 +97,19 @@ public final class Msg<T extends ISteamSerializableMessage> extends MsgBase<MsgH
 	/**
 	 * The structure body of the message.
 	 */
-	@Getter private T body;
+	@Getter
+	private T body;
 
 	public Msg(Class<T> clazz) {
 		this(clazz, 0);
 	}
 
 	/**
-	 * Initializes a new instance of the {@link Msg} class.
-	 * This is a client send constructor.
-	 * @param payloadReserve	The number of bytes to initialize the payload capacity to.
+	 * Initializes a new instance of the {@link Msg} class. This is a client
+	 * send constructor.
+	 * 
+	 * @param payloadReserve
+	 *            The number of bytes to initialize the payload capacity to.
 	 */
 	public Msg(Class<T> clazz, int payloadReserve) {
 		super(MsgHdr.class, payloadReserve);
@@ -125,10 +127,13 @@ public final class Msg<T extends ISteamSerializableMessage> extends MsgBase<MsgH
 	}
 
 	/**
-	 * Initializes a new instance of the {@link Msg} class.
-	 * This a reply constructor.
-	 * @param msg				The message that this instance is a reply for.
-	 * @param payloadReserve	The number of bytes to initialize the payload capacity to.
+	 * Initializes a new instance of the {@link Msg} class. This a reply
+	 * constructor.
+	 * 
+	 * @param msg
+	 *            The message that this instance is a reply for.
+	 * @param payloadReserve
+	 *            The number of bytes to initialize the payload capacity to.
 	 */
 	public Msg(MsgBase<MsgHdr> msg, Class<T> clazz, int payloadReserve) {
 		this(clazz, payloadReserve);
@@ -137,9 +142,11 @@ public final class Msg<T extends ISteamSerializableMessage> extends MsgBase<MsgH
 	}
 
 	/**
-	 * Initializes a new instance of the {@link Msg} class.
-	 * This is a recieve constructor.
-	 * @param msg	The packet message to build this client message from.
+	 * Initializes a new instance of the {@link Msg} class. This is a recieve
+	 * constructor.
+	 * 
+	 * @param msg
+	 *            The packet message to build this client message from.
 	 */
 	public Msg(IPacketMsg msg, Class<T> clazz) {
 		this(clazz);
@@ -152,7 +159,8 @@ public final class Msg<T extends ISteamSerializableMessage> extends MsgBase<MsgH
 
 	/**
 	 * serializes this client message instance to a byte array.
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
 	@Override
 	public byte[] serialize() throws IOException {
@@ -167,7 +175,8 @@ public final class Msg<T extends ISteamSerializableMessage> extends MsgBase<MsgH
 
 	/**
 	 * Initializes this client message by deserializing the specified data.
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
 	@Override
 	public void deSerialize(byte[] data) throws IOException {
@@ -179,7 +188,13 @@ public final class Msg<T extends ISteamSerializableMessage> extends MsgBase<MsgH
 		final int payloadOffset = ms.getPosition();
 		final int payloadLen = ms.getRemaining();
 
-		setReader(new BinaryReader(new ByteArrayInputStream(Arrays.copyOfRange(data, payloadOffset, payloadOffset + payloadLen))));
+		setReader(new BinaryReader(new ByteArrayInputStream(copyOfRange(data, payloadOffset, payloadOffset + payloadLen))));
 	}
 
+	public static byte[] copyOfRange(byte[] from, int start, int end){
+        int length = end - start;
+        byte[] result = new byte[length];
+        System.arraycopy(from, start, result, 0, length);
+        return result;
+    }
 }

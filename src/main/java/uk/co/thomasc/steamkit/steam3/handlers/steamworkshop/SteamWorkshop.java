@@ -29,10 +29,13 @@ import uk.co.thomasc.steamkit.types.JobID;
  */
 public final class SteamWorkshop extends ClientMsgHandler {
 	/**
-	 * Requests details for a given published workshop file.
-	 * Requests details for a given published workshop file.
-	 * @param publishedFileId	The file ID being requested.
-	 * @return The Job ID of the request. This can be used to find the appropriate {@link JobCallback}.
+	 * Requests details for a given published workshop file. Requests details
+	 * for a given published workshop file.
+	 * 
+	 * @param publishedFileId
+	 *            The file ID being requested.
+	 * @return The Job ID of the request. This can be used to find the
+	 *         appropriate {@link JobCallback}.
 	 */
 	public JobID requestPublishedFileDetails(long publishedFileId) {
 		final ClientMsgProtobuf<CMsgClientUCMGetPublishedFileDetails.Builder> request = new ClientMsgProtobuf<CMsgClientUCMGetPublishedFileDetails.Builder>(CMsgClientUCMGetPublishedFileDetails.class, EMsg.ClientUCMGetPublishedFileDetails);
@@ -47,9 +50,13 @@ public final class SteamWorkshop extends ClientMsgHandler {
 
 	/**
 	 * Enumerates the list of published files for the current logged in user.
-	 * Results are returned in a {@link UserPublishedFilesCallback} from a {@link JobCallback}.
-	 * @param details	The specific details of the request.
-	 * @return The Job ID of the request. This can be used to find the appropriate {@link JobCallback}.
+	 * Results are returned in a {@link UserPublishedFilesCallback} from a
+	 * {@link JobCallback}.
+	 * 
+	 * @param details
+	 *            The specific details of the request.
+	 * @return The Job ID of the request. This can be used to find the
+	 *         appropriate {@link JobCallback}.
 	 */
 	public JobID enumerateUserPublishedFiles(EnumerationUserDetails details) {
 		final ClientMsgProtobuf<CMsgClientUCMEnumerateUserPublishedFiles.Builder> enumRequest = new ClientMsgProtobuf<CMsgClientUCMEnumerateUserPublishedFiles.Builder>(CMsgClientUCMEnumerateUserPublishedFiles.class, EMsg.ClientUCMEnumerateUserPublishedFiles);
@@ -66,9 +73,13 @@ public final class SteamWorkshop extends ClientMsgHandler {
 
 	/**
 	 * Enumerates the list of subscribed files for the current logged in user.
-	 * Results are returned in a {@link UserSubscribedFilesCallback} from a {@link JobCallback}.
-	 * @param details	The specific details of the request.
-	 * @return The Job ID of the request. This can be used to find the appropriate {@link JobCallback}.
+	 * Results are returned in a {@link UserSubscribedFilesCallback} from a
+	 * {@link JobCallback}.
+	 * 
+	 * @param details
+	 *            The specific details of the request.
+	 * @return The Job ID of the request. This can be used to find the
+	 *         appropriate {@link JobCallback}.
 	 */
 	public JobID enumerateUserSubscribedFiles(EnumerationUserDetails details) {
 		final ClientMsgProtobuf<CMsgClientUCMEnumerateUserSubscribedFiles.Builder> enumRequest = new ClientMsgProtobuf<CMsgClientUCMEnumerateUserSubscribedFiles.Builder>(CMsgClientUCMEnumerateUserSubscribedFiles.class, EMsg.ClientUCMEnumerateUserSubscribedFiles);
@@ -83,10 +94,14 @@ public final class SteamWorkshop extends ClientMsgHandler {
 	}
 
 	/**
-	 * Enumerates the list of published files for the current logged in user based on user action.
-	 * Results are returned in a {@link UserActionPublishedFilesCallback} from a {@link JobCallback}.
-	 * @param details	The specific details of the request.
-	 * @return The Job ID of the request. This can be used to find the appropriate {@link JobCallback}.
+	 * Enumerates the list of published files for the current logged in user
+	 * based on user action. Results are returned in a
+	 * {@link UserActionPublishedFilesCallback} from a {@link JobCallback}.
+	 * 
+	 * @param details
+	 *            The specific details of the request.
+	 * @return The Job ID of the request. This can be used to find the
+	 *         appropriate {@link JobCallback}.
 	 */
 	public JobID enumeratePublishedFilesByUserAction(EnumerationUserDetails details) {
 		final ClientMsgProtobuf<CMsgClientUCMEnumeratePublishedFilesByUserAction.Builder> enumRequest = new ClientMsgProtobuf<CMsgClientUCMEnumeratePublishedFilesByUserAction.Builder>(CMsgClientUCMEnumeratePublishedFilesByUserAction.class, EMsg.ClientUCMEnumeratePublishedFilesByUserAction);
@@ -102,10 +117,14 @@ public final class SteamWorkshop extends ClientMsgHandler {
 	}
 
 	/**
-	 * Enumerates the list of all published files on the Steam workshop.
-	 * Results are returned in a {@link PublishedFilesCallback} from a {@link JobCallback}.
-	 * @param details	The specific details of the request.
-	 * @return The Job ID of the request. This can be used to find the appropriate {@link JobCallback}.
+	 * Enumerates the list of all published files on the Steam workshop. Results
+	 * are returned in a {@link PublishedFilesCallback} from a
+	 * {@link JobCallback}.
+	 * 
+	 * @param details
+	 *            The specific details of the request.
+	 * @return The Job ID of the request. This can be used to find the
+	 *         appropriate {@link JobCallback}.
 	 */
 	public JobID enumeratePublishedFiles(EnumerationDetails details) {
 		final ClientMsgProtobuf<CMsgCREEnumeratePublishedFiles.Builder> enumRequest = new ClientMsgProtobuf<CMsgCREEnumeratePublishedFiles.Builder>(CMsgCREEnumeratePublishedFiles.class, EMsg.CREEnumeratePublishedFiles);
@@ -134,21 +153,21 @@ public final class SteamWorkshop extends ClientMsgHandler {
 	@Override
 	public void handleMsg(IPacketMsg packetMsg) {
 		switch (packetMsg.getMsgType()) {
-			case CREEnumeratePublishedFilesResponse:
-				handleEnumPublishedFiles(packetMsg);
-				break;
-			case ClientUCMEnumerateUserPublishedFilesResponse:
-				handleEnumUserPublishedFiles(packetMsg);
-				break;
-			case ClientUCMEnumerateUserSubscribedFilesResponse:
-				handleEnumUserSubscribedFiles(packetMsg);
-				break;
-			case ClientUCMEnumeratePublishedFilesByUserActionResponse:
-				handleEnumPublishedFilesByAction(packetMsg);
-				break;
-			case ClientUCMGetPublishedFileDetailsResponse:
-				handlePublishedFileDetails(packetMsg);
-				break;
+		case CREEnumeratePublishedFilesResponse:
+			handleEnumPublishedFiles(packetMsg);
+			break;
+		case ClientUCMEnumerateUserPublishedFilesResponse:
+			handleEnumUserPublishedFiles(packetMsg);
+			break;
+		case ClientUCMEnumerateUserSubscribedFilesResponse:
+			handleEnumUserSubscribedFiles(packetMsg);
+			break;
+		case ClientUCMEnumeratePublishedFilesByUserActionResponse:
+			handleEnumPublishedFilesByAction(packetMsg);
+			break;
+		case ClientUCMGetPublishedFileDetailsResponse:
+			handlePublishedFileDetails(packetMsg);
+			break;
 		}
 	}
 

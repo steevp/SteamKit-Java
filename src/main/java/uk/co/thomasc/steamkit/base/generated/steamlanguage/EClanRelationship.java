@@ -3,11 +3,7 @@ package uk.co.thomasc.steamkit.base.generated.steamlanguage;
 import java.util.HashMap;
 
 public enum EClanRelationship {
-	None(0),
-	Blocked(1),
-	Invited(2),
-	Member(3),
-	Kicked(4), ;
+	None(0), Blocked(1), Invited(2), Member(3), Kicked(4), ;
 
 	private int code;
 

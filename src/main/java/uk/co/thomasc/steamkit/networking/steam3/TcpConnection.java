@@ -2,6 +2,7 @@ package uk.co.thomasc.steamkit.networking.steam3;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -26,7 +27,9 @@ public class TcpConnection extends Connection {
 
 	/**
 	 * Connects to the specified end point.
-	 * @param endPoint	The end point.
+	 * 
+	 * @param endPoint
+	 *            The end point.
 	 */
 	@Override
 	public void connect(IPEndPoint endPoint) {
@@ -36,7 +39,8 @@ public class TcpConnection extends Connection {
 		DebugLog.writeLine("TcpConnection", "Connecting to %s...", endPoint);
 		Socket socket = null;
 		try {
-			socket = new Socket(endPoint.getIpAddress(), endPoint.getPort());
+			socket = new Socket();
+			socket.connect(new InetSocketAddress(endPoint.getIpAddress(), endPoint.getPort()), 15000); // 15 second timeout
 		} catch (final IOException e) {
 			DebugLog.writeLine("TcpConnection", "Error connecting (1): %s", e);
 		}
@@ -87,7 +91,8 @@ public class TcpConnection extends Connection {
 		try {
 			netThread.join();
 		} catch (final InterruptedException e) {
-		};
+		}
+		;
 		netThread = null;
 
 		cleanup();
@@ -97,8 +102,10 @@ public class TcpConnection extends Connection {
 
 	/**
 	 * Sends the specified client net message.
-	 * @param clientMsg	The client net message.
-	 * @throws IOException 
+	 * 
+	 * @param clientMsg
+	 *            The client net message.
+	 * @throws IOException
 	 */
 	@Override
 	public void send(IClientMsg clientMsg) {
@@ -107,21 +114,21 @@ public class TcpConnection extends Connection {
 				DebugLog.writeLine("TcpConnection", "Attempting to send client message when not connected: %s", clientMsg.getMsgType());
 				return;
 			}
-	
+
 			byte[] data = clientMsg.serialize();
-	
+
 			// encrypt outgoing traffic if we need to
 			if (netFilter != null) {
 				data = netFilter.processOutgoing(data);
 			}
-	
+
 			synchronized (sock) {
 				// write header
 				netWriter.write(data.length);
 				netWriter.write(TcpConnection.MAGIC);
-	
+
 				netWriter.write(data);
-	
+
 				netWriter.flush();
 			}
 		} catch (final IOException ex) {
@@ -161,7 +168,8 @@ public class TcpConnection extends Connection {
 				try {
 					canRead = !netReader.isAtEnd();
 				} catch (final IOException e) {
-				};
+				}
+				;
 
 				if (!canRead) {
 					// nothing to read yet
@@ -230,7 +238,8 @@ public class TcpConnection extends Connection {
 				}
 				sock.close();
 			} catch (final IOException e) {
-			};
+			}
+			;
 
 			sock = null;
 		}

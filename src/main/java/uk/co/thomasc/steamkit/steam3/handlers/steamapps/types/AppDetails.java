@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
-
 import uk.co.thomasc.steamkit.steam3.handlers.steamapps.SteamApps;
 
 /**
- * Represents app request details when calling {@link SteamApps#getAppInfo(int)}.
+ * Represents app request details when calling {@link SteamApps#getAppInfo(int)}
+ * .
  */
 public final class AppDetails {
 	/**
@@ -24,7 +24,8 @@ public final class AppDetails {
 	/**
 	 * Gets the Section CRC list for this request.
 	 */
-	@Getter private final List<Integer> sectionCRC = new ArrayList<Integer>();
+	@Getter
+	private final List<Integer> sectionCRC = new ArrayList<Integer>();
 
 	/**
 	 * Initializes a new instance of the {@link AppDetails} class.

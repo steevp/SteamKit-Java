@@ -3,14 +3,7 @@ package uk.co.thomasc.steamkit.base.generated.steamlanguage;
 import java.util.HashMap;
 
 public enum ECurrencyCode {
-	Invalid(0),
-	USD(1),
-	GBP(2),
-	EUR(3),
-	CHF(4),
-	RUB(5),
-	PLN(6),
-	BRL(7), ;
+	Invalid(0), USD(1), GBP(2), EUR(3), CHF(4), RUB(5), PLN(6), BRL(7), ;
 
 	private int code;
 

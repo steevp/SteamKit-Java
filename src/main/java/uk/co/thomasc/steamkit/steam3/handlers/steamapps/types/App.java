@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import lombok.Getter;
-
 import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientAppInfoResponse;
 import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientAppInfoResponse.App.Section;
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EAppInfoSection;
@@ -19,22 +18,26 @@ public final class App {
 	/**
 	 * Gets the status of the app.
 	 */
-	@Getter private final AppInfoStatus status;
+	@Getter
+	private final AppInfoStatus status;
 
 	/**
 	 * Gets the AppID for this app.
 	 */
-	@Getter private final int appID;
+	@Getter
+	private final int appID;
 
 	/**
 	 * Gets the last change number for this app.
 	 */
-	@Getter private int changeNumber;
+	@Getter
+	private int changeNumber;
 
 	/**
 	 * Gets a section data for this app.
 	 */
-	@Getter private final Map<EAppInfoSection, KeyValue> sections = new HashMap<EAppInfoSection, KeyValue>();
+	@Getter
+	private final Map<EAppInfoSection, KeyValue> sections = new HashMap<EAppInfoSection, KeyValue>();
 
 	public App(CMsgClientAppInfoResponse.App app, AppInfoStatus status) {
 		this.status = status;

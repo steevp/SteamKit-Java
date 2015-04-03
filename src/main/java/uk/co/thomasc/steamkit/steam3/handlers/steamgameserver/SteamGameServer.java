@@ -2,8 +2,6 @@ package uk.co.thomasc.steamkit.steam3.handlers.steamgameserver;
 
 import java.security.InvalidParameterException;
 
-import com.google.protobuf.ByteString;
-
 import uk.co.thomasc.steamkit.base.ClientMsgProtobuf;
 import uk.co.thomasc.steamkit.base.IPacketMsg;
 import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientLogOff;
@@ -23,17 +21,21 @@ import uk.co.thomasc.steamkit.types.steamid.SteamID;
 import uk.co.thomasc.steamkit.util.util.NetHelpers;
 import uk.co.thomasc.steamkit.util.util.Utils;
 
+import com.google.protobuf.ByteString;
+
 /**
  * This handler is used for interacting with the Steam network as a game server.
  */
 public final class SteamGameServer extends ClientMsgHandler {
 	/**
-	 * Logs onto the Steam network as a persistent game server.
-	 * The client should already have been connected at this point.
-	 * Results are return in a {@link LoggedOnCallback}.
-	 * @param details	The details to use for logging on.
+	 * Logs onto the Steam network as a persistent game server. The client
+	 * should already have been connected at this point. Results are return in a
+	 * {@link LoggedOnCallback}.
+	 * 
+	 * @param details
+	 *            The details to use for logging on.
 	 */
-	public void logOn(LogOnDetails details) {
+	public void logOn(LogOnDetails details, String machineID) {
 		if (details == null) {
 			throw new InvalidParameterException("details");
 		}
@@ -56,7 +58,7 @@ public final class SteamGameServer extends ClientMsgHandler {
 
 		logon.getBody().setClientOsType(Utils.getOSType().v());
 		logon.getBody().setGameServerAppId(details.appId);
-		logon.getBody().setMachineId(ByteString.copyFrom(Utils.generateMachineID()));
+		logon.getBody().setMachineId(ByteString.copyFromUtf8(machineID));
 
 		logon.getBody().setAccountName(details.username);
 		logon.getBody().setPassword(details.password);
@@ -65,12 +67,14 @@ public final class SteamGameServer extends ClientMsgHandler {
 	}
 
 	/**
-	 * Logs the client into the Steam3 network as an anonymous game server.
-	 * The client should already have been connected at this point.
-	 * Results are returned in a {@link LoggedOnCallback}.
-	 * @param appId	The AppID served by this game server, or 0 for the default.
+	 * Logs the client into the Steam3 network as an anonymous game server. The
+	 * client should already have been connected at this point. Results are
+	 * returned in a {@link LoggedOnCallback}.
+	 * 
+	 * @param appId
+	 *            The AppID served by this game server, or 0 for the default.
 	 */
-	public void logOnAnonymous(int appId) {
+	public void logOnAnonymous(int appId, String machineID) {
 		final ClientMsgProtobuf<CMsgClientLogon.Builder> logon = new ClientMsgProtobuf<CMsgClientLogon.Builder>(CMsgClientLogon.class, EMsg.ClientLogon);
 
 		final SteamID gsId = new SteamID(0, 0, getClient().getConnectedUniverse(), EAccountType.AnonGameServer);
@@ -85,19 +89,19 @@ public final class SteamGameServer extends ClientMsgHandler {
 
 		logon.getBody().setClientOsType(Utils.getOSType().v());
 		logon.getBody().setGameServerAppId(appId);
-		logon.getBody().setMachineId(ByteString.copyFrom(Utils.generateMachineID()));
+		logon.getBody().setMachineId(ByteString.copyFromUtf8(machineID));
 
 		getClient().send(logon);
 	}
 
-	public void logOnAnonymous() {
-		logOnAnonymous(0);
+	public void logOnAnonymous(String machineID) {
+		logOnAnonymous(0, machineID);
 	}
 
 	/**
-	 * Logs the game server off of the Steam3 network.
-	 * This method does not disconnect the client.
-	 * Results are returned in a {@link LoggedOffCallback}.
+	 * Logs the game server off of the Steam3 network. This method does not
+	 * disconnect the client. Results are returned in a
+	 * {@link LoggedOffCallback}.
 	 */
 	public void logOff() {
 		final ClientMsgProtobuf<CMsgClientLogOff.Builder> logOff = new ClientMsgProtobuf<CMsgClientLogOff.Builder>(CMsgClientLogOff.class, EMsg.ClientLogOff);
@@ -110,12 +114,12 @@ public final class SteamGameServer extends ClientMsgHandler {
 	@Override
 	public void handleMsg(IPacketMsg packetMsg) {
 		switch (packetMsg.getMsgType()) {
-			case GSStatusReply:
-				handleStatusReply(packetMsg);
-				break;
-			case ClientTicketAuthComplete:
-				handleAuthComplete(packetMsg);
-				break;
+		case GSStatusReply:
+			handleStatusReply(packetMsg);
+			break;
+		case ClientTicketAuthComplete:
+			handleAuthComplete(packetMsg);
+			break;
 		}
 	}
 

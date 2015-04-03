@@ -17,10 +17,13 @@ import uk.co.thomasc.steamkit.util.util.NetHelpers;
  */
 public final class SteamMasterServer extends ClientMsgHandler {
 	/**
-	 * Requests a list of servers from the Steam game master server.
-	 * Results are returned in a {@link QueryCallback} from a {@link JobCallback}.
-	 * @param details	The details for the request.
-	 * @return The Job ID of the request. This can be used to find the appropriate {@link JobCallback}.
+	 * Requests a list of servers from the Steam game master server. Results are
+	 * returned in a {@link QueryCallback} from a {@link JobCallback}.
+	 * 
+	 * @param details
+	 *            The details for the request.
+	 * @return The Job ID of the request. This can be used to find the
+	 *         appropriate {@link JobCallback}.
 	 */
 	public JobID serverQuery(QueryDetails details) {
 		final ClientMsgProtobuf<CMsgClientGMSServerQuery.Builder> query = new ClientMsgProtobuf<CMsgClientGMSServerQuery.Builder>(CMsgClientGMSServerQuery.class, EMsg.ClientGMSServerQuery);
@@ -48,9 +51,9 @@ public final class SteamMasterServer extends ClientMsgHandler {
 	@Override
 	public void handleMsg(IPacketMsg packetMsg) {
 		switch (packetMsg.getMsgType()) {
-			case GMSClientServerQueryResponse:
-				handleServerQueryResponse(packetMsg);
-				break;
+		case GMSClientServerQueryResponse:
+			handleServerQueryResponse(packetMsg);
+			break;
 		}
 	}
 

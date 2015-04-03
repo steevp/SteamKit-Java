@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
-
 import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientPackageInfoResponse;
 import uk.co.thomasc.steamkit.steam3.handlers.steamapps.SteamApps;
 import uk.co.thomasc.steamkit.steam3.handlers.steamapps.types.Package;
@@ -12,13 +11,15 @@ import uk.co.thomasc.steamkit.steam3.handlers.steamapps.types.PackageStatus;
 import uk.co.thomasc.steamkit.steam3.steamclient.callbackmgr.CallbackMsg;
 
 /**
- * This callback is received in response to calling {@link SteamApps#getPackageInfo(int)}.
+ * This callback is received in response to calling
+ * {@link SteamApps#getPackageInfo(int)}.
  */
 public final class PackageInfoCallback extends CallbackMsg {
 	/**
 	 * Gets the list of packages this response contains.
 	 */
-	@Getter private final List<Package> packages = new ArrayList<Package>();
+	@Getter
+	private final List<Package> packages = new ArrayList<Package>();
 
 	/**
 	 * Gets a count of packages pending in this response.

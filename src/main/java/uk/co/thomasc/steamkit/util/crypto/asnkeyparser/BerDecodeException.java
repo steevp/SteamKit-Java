@@ -5,7 +5,8 @@ import lombok.Getter;
 public final class BerDecodeException extends Exception {
 	private static final long serialVersionUID = -2265804415271565348L;
 
-	@Getter private final int _position;
+	@Getter
+	private final int _position;
 
 	public BerDecodeException() {
 		_position = 0;

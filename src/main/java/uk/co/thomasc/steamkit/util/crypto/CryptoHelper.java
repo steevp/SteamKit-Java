@@ -48,63 +48,43 @@ public class CryptoHelper {
 	}
 
 	/*
-		/// <summary>
-		/// Encrypts using AES/CBC/PKCS7 an input byte array with a given key and IV
-		/// </summary>
-		public static byte[] AESEncrypt( byte[] input, byte[] key, byte[] iv )
-		{
-			using ( var aes = new RijndaelManaged() )
-			{
-				aes.BlockSize = 128;
-				aes.KeySize = 128;
-
-				aes.Mode = CipherMode.CBC;
-				aes.Padding = PaddingMode.PKCS7;
-
-				using ( var aesTransform = aes.CreateEncryptor( key, iv ) )
-				using ( var ms = new MemoryStream() )
-				using ( var cs = new CryptoStream( ms, aesTransform, CryptoStreamMode.Write ) )
-				{
-					cs.Write( input, 0, input.Length );
-					cs.FlushFinalBlock();
-					
-					return ms.ToArray();
-				}
-			}
-		}
-
-		/// <summary>
-		/// Decrypts an input byte array using AES/CBC/PKCS7 with a given key and IV
-		/// </summary>
-		public static byte[] AESDecrypt( byte[] input, byte[] key, byte[] iv )
-		{
-			using ( var aes = new RijndaelManaged() )
-			{
-				aes.BlockSize = 128;
-				aes.KeySize = 128;
-
-				aes.Mode = CipherMode.CBC;
-				aes.Padding = PaddingMode.PKCS7;
-
-				byte[] plainText = new byte[ input.Length ];
-				int outLen = 0;
-
-				using ( var aesTransform = aes.CreateDecryptor( key, iv ) )
-				using ( var ms = new MemoryStream( input ) )
-				using ( var cs = new CryptoStream( ms, aesTransform, CryptoStreamMode.Read ) )
-				{
-					outLen = cs.Read( plainText, 0, plainText.Length );
-				}
-
-				byte[] output = new byte[ outLen ];
-				Array.Copy( plainText, 0, output, 0, output.Length );
-
-				return output;
-			}
-		}*/
+	 * /// <summary> /// Encrypts using AES/CBC/PKCS7 an input byte array with a
+	 * given key and IV /// </summary> public static byte[] AESEncrypt( byte[]
+	 * input, byte[] key, byte[] iv ) { using ( var aes = new RijndaelManaged()
+	 * ) { aes.BlockSize = 128; aes.KeySize = 128;
+	 * 
+	 * aes.Mode = CipherMode.CBC; aes.Padding = PaddingMode.PKCS7;
+	 * 
+	 * using ( var aesTransform = aes.CreateEncryptor( key, iv ) ) using ( var
+	 * ms = new MemoryStream() ) using ( var cs = new CryptoStream( ms,
+	 * aesTransform, CryptoStreamMode.Write ) ) { cs.Write( input, 0,
+	 * input.Length ); cs.FlushFinalBlock();
+	 * 
+	 * return ms.ToArray(); } } }
+	 * 
+	 * /// <summary> /// Decrypts an input byte array using AES/CBC/PKCS7 with a
+	 * given key and IV /// </summary> public static byte[] AESDecrypt( byte[]
+	 * input, byte[] key, byte[] iv ) { using ( var aes = new RijndaelManaged()
+	 * ) { aes.BlockSize = 128; aes.KeySize = 128;
+	 * 
+	 * aes.Mode = CipherMode.CBC; aes.Padding = PaddingMode.PKCS7;
+	 * 
+	 * byte[] plainText = new byte[ input.Length ]; int outLen = 0;
+	 * 
+	 * using ( var aesTransform = aes.CreateDecryptor( key, iv ) ) using ( var
+	 * ms = new MemoryStream( input ) ) using ( var cs = new CryptoStream( ms,
+	 * aesTransform, CryptoStreamMode.Read ) ) { outLen = cs.Read( plainText, 0,
+	 * plainText.Length ); }
+	 * 
+	 * byte[] output = new byte[ outLen ]; Array.Copy( plainText, 0, output, 0,
+	 * output.Length );
+	 * 
+	 * return output; } }
+	 */
 
 	/**
-	 * Performs an encryption using AES/CBC/PKCS7 with an input byte array and key, with a random IV prepended using AES/ECB/None
+	 * Performs an encryption using AES/CBC/PKCS7 with an input byte array and
+	 * key, with a random IV prepended using AES/ECB/None
 	 */
 	public static byte[] SymmetricEncrypt(byte[] input, byte[] key) {
 		try {
@@ -150,7 +130,8 @@ public class CryptoHelper {
 	}
 
 	/**
-	 * Decrypts using AES/CBC/PKCS7 with an input byte array and key, using the random IV prepended using AES/ECB/None
+	 * Decrypts using AES/CBC/PKCS7 with an input byte array and key, using the
+	 * random IV prepended using AES/ECB/None
 	 */
 	public static byte[] SymmetricDecrypt(byte[] input, byte[] key) {
 		try {
@@ -161,11 +142,11 @@ public class CryptoHelper {
 
 			// first 16 bytes of input is the ECB encrypted IV
 			byte[] iv = new byte[16];
-			final byte[] cryptedIv = Arrays.copyOfRange(input, 0, 16);
+			final byte[] cryptedIv = copyOfRange(input, 0, 16);
 
 			// the rest is ciphertext
 			byte[] cipherText = new byte[input.length - cryptedIv.length];
-			cipherText = Arrays.copyOfRange(input, cryptedIv.length, cryptedIv.length + cipherText.length);
+			cipherText = copyOfRange(input, cryptedIv.length, cryptedIv.length + cipherText.length);
 
 			// decrypt the IV using ECB
 			cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(key, "AES"));
@@ -193,6 +174,13 @@ public class CryptoHelper {
 		}
 		return new byte[0];
 	}
+	
+	public static byte[] copyOfRange(byte[] from, int start, int end){
+        int length = end - start;
+        byte[] result = new byte[length];
+        System.arraycopy(from, start, result, 0, length);
+        return result;
+    }
 
 	/**
 	 * Performs the Jenkins hash on an input byte array
@@ -214,7 +202,8 @@ public class CryptoHelper {
 	}
 
 	/**
-	 * Performs CRC32 on an input byte array using the CrcStandard.Crc32Bit parameters
+	 * Performs CRC32 on an input byte array using the CrcStandard.Crc32Bit
+	 * parameters
 	 */
 	public static byte[] CRCHash(byte[] input) {
 		final CRC32 crc = new CRC32();

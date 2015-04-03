@@ -20,7 +20,7 @@ public class GCMsgCraftItemResponse implements IGCSerializableMessage {
 	public ECraftingRecipe recipe = ECraftingRecipe.Unknown;
 
 	public int unknown = 0; // Usually 0x0000000
-	
+
 	public List<Long> items = new ArrayList<Long>();
 
 	public GCMsgCraftItemResponse() {

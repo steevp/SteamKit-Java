@@ -3,13 +3,7 @@ package uk.co.thomasc.steamkit.base.generated.steamlanguage;
 import java.util.HashMap;
 
 public enum EPersonaState {
-	Offline(0),
-	Online(1),
-	Busy(2),
-	Away(3),
-	Snooze(4),
-	LookingToTrade(5),
-	LookingToPlay(6), ;
+	Offline(0), Online(1), Busy(2), Away(3), Snooze(4), LookingToTrade(5), LookingToPlay(6), ;
 
 	private int code;
 

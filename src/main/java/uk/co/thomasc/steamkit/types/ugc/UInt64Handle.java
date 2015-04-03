@@ -4,14 +4,17 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * The base class used for wrapping common ulong types, to introduce type safety and distinguish between common types.
+ * The base class used for wrapping common ulong types, to introduce type safety
+ * and distinguish between common types.
  */
 public abstract class UInt64Handle {
 
 	/**
 	 * The value
 	 */
-	@Getter @Setter protected Long value;
+	@Getter
+	@Setter
+	protected Long value;
 
 	/**
 	 * Initializes a new instance of the {@link UInt64Handle} class.
@@ -21,7 +24,9 @@ public abstract class UInt64Handle {
 
 	/**
 	 * Initializes a new instance of the {@link UInt64Handle} class.
-	 * @param value	The value to initialize this handle to.
+	 * 
+	 * @param value
+	 *            The value to initialize this handle to.
 	 */
 	protected UInt64Handle(long value) {
 		this.value = value;
@@ -36,7 +41,8 @@ public abstract class UInt64Handle {
 	}
 
 	/**
-	 * Determines whether the specified {@link Object} is equal to this instance.
+	 * Determines whether the specified {@link Object} is equal to this
+	 * instance.
 	 */
 	@Override
 	public boolean equals(Object obj) {

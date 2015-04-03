@@ -3,24 +3,18 @@ package uk.co.thomasc.steamkit.base.gc.tf2;
 import java.util.HashMap;
 
 public enum ECraftingRecipe {
-	Unknown(0),
-	SmeltClassWeapons(3),
-	CombineScrap(4),
-	CombineReclaimed(5),
-	SmeltReclaimed(22),
-	SmeltRefined(23),
-	;
+	Unknown(0), SmeltClassWeapons(3), CombineScrap(4), CombineReclaimed(5), SmeltReclaimed(22), SmeltRefined(23), BestFit(-2) ;
 
 	private short recipe;
-	
+
 	private ECraftingRecipe(int recipe) {
 		this.recipe = (short) recipe;
 	}
-	
+
 	public short v() {
 		return recipe;
 	}
-	
+
 	private static HashMap<Short, ECraftingRecipe> values = new HashMap<Short, ECraftingRecipe>();
 
 	static {

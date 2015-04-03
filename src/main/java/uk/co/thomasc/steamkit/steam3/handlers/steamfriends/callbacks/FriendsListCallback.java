@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import lombok.Getter;
-
 import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientFriendsList;
 import uk.co.thomasc.steamkit.steam3.handlers.steamfriends.types.Friend;
 import uk.co.thomasc.steamkit.steam3.steamclient.callbackmgr.CallbackMsg;
@@ -14,14 +13,17 @@ import uk.co.thomasc.steamkit.steam3.steamclient.callbackmgr.CallbackMsg;
  */
 public final class FriendsListCallback extends CallbackMsg {
 	/**
-	 * Gets a value indicating whether this {@link FriendsListCallback} is an incremental update.
+	 * Gets a value indicating whether this {@link FriendsListCallback} is an
+	 * incremental update.
 	 */
-	@Getter private final boolean incremental;
+	@Getter
+	private final boolean incremental;
 
 	/**
 	 * Gets the friend list.
 	 */
-	@Getter private final Set<Friend> friendList = new HashSet<Friend>();
+	@Getter
+	private final Set<Friend> friendList = new HashSet<Friend>();
 
 	public FriendsListCallback(CMsgClientFriendsList msg) {
 		incremental = msg.getBincremental();

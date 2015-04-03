@@ -4,7 +4,8 @@ import uk.co.thomasc.steamkit.base.generated.steamlanguage.EWorkshopFileAction;
 import uk.co.thomasc.steamkit.steam3.handlers.steamworkshop.SteamWorkshop;
 
 /**
- * Represents the details of an enumeration request used for the local user's files.
+ * Represents the details of an enumeration request used for the local user's
+ * files.
  */
 public final class EnumerationUserDetails {
 	/**
@@ -13,8 +14,8 @@ public final class EnumerationUserDetails {
 	public int appId;
 
 	/**
-	 * Gets or sets the sort order.
-	 * This value is only used by {@link SteamWorkshop#enumeratePublishedFiles(EnumerationDetails)}
+	 * Gets or sets the sort order. This value is only used by
+	 * {@link SteamWorkshop#enumeratePublishedFiles(EnumerationDetails)}
 	 */
 	public int sortOrder;
 
@@ -24,8 +25,9 @@ public final class EnumerationUserDetails {
 	public int startIndex;
 
 	/**
-	 * Gets or sets the user action to filter by.
-	 * This value is only used by {@link SteamWorkshop#enumeratePublishedFilesByUserAction(EnumerationUserDetails)}.
+	 * Gets or sets the user action to filter by. This value is only used by
+	 * {@link SteamWorkshop#enumeratePublishedFilesByUserAction(EnumerationUserDetails)}
+	 * .
 	 */
 	public EWorkshopFileAction userAction;
 }

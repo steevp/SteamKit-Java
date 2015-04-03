@@ -3,17 +3,7 @@ package uk.co.thomasc.steamkit.base.generated.steamlanguage;
 import java.util.HashMap;
 
 public enum EClientPersonaStateFlag {
-	Status(1),
-	PlayerName(2),
-	QueryPort(4),
-	SourceID(8),
-	Presence(16),
-	Metadata(32),
-	LastSeen(64),
-	ClanInfo(128),
-	GameExtraInfo(256),
-	GameDataBlob(512),
-	ClanTag(1024), ;
+	Status(1), PlayerName(2), QueryPort(4), SourceID(8), Presence(16), Metadata(32), LastSeen(64), ClanInfo(128), GameExtraInfo(256), GameDataBlob(512), ClanTag(1024), ;
 
 	private int code;
 

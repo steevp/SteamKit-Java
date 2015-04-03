@@ -11,14 +11,19 @@ import uk.co.thomasc.steamkit.steam3.steamclient.callbackmgr.JobCallback;
 import uk.co.thomasc.steamkit.types.JobID;
 
 /**
- * This handler is used for interacting with remote storage and user generated content.
+ * This handler is used for interacting with remote storage and user generated
+ * content.
  */
 public final class SteamCloud extends ClientMsgHandler {
 	/**
-	 * Requests details for a specific item of user generated content from the Steam servers.
-	 * Results are returned in a {@link UGCDetailsCallback} from a {@link JobCallback}.
-	 * @param ugcId	The unique user generated content id.
-	 * @return The Job ID of the request. This can be used to find the appropriate {@link JobCallback}.
+	 * Requests details for a specific item of user generated content from the
+	 * Steam servers. Results are returned in a {@link UGCDetailsCallback} from
+	 * a {@link JobCallback}.
+	 * 
+	 * @param ugcId
+	 *            The unique user generated content id.
+	 * @return The Job ID of the request. This can be used to find the
+	 *         appropriate {@link JobCallback}.
 	 */
 	public JobID requestUGCDetails(long ugcId) {
 		final ClientMsgProtobuf<CMsgClientUFSGetUGCDetails.Builder> request = new ClientMsgProtobuf<CMsgClientUFSGetUGCDetails.Builder>(CMsgClientUFSGetUGCDetails.class, EMsg.ClientUFSGetUGCDetails);
@@ -37,9 +42,9 @@ public final class SteamCloud extends ClientMsgHandler {
 	@Override
 	public void handleMsg(IPacketMsg packetMsg) {
 		switch (packetMsg.getMsgType()) {
-			case ClientUFSGetUGCDetailsResponse:
-				handleUGCDetailsResponse(packetMsg);
-				break;
+		case ClientUFSGetUGCDetailsResponse:
+			handleUGCDetailsResponse(packetMsg);
+			break;
 		}
 	}
 

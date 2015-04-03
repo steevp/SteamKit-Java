@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.Random;
 
 import lombok.Getter;
-
 import uk.co.thomasc.steamkit.base.ClientMsgProtobuf;
 import uk.co.thomasc.steamkit.base.IClientMsg;
 import uk.co.thomasc.steamkit.base.IPacketMsg;
@@ -56,7 +55,8 @@ import uk.co.thomasc.steamkit.util.util.MsgUtil;
 import uk.co.thomasc.steamkit.util.util.NetHelpers;
 
 /**
- * This base client handles the underlying connection to a CM server. This class should not be use directly, but through the {@link SteamClient} class.
+ * This base client handles the underlying connection to a CM server. This class
+ * should not be use directly, but through the {@link SteamClient} class.
  */
 public abstract class CMClient {
 	final short PortCM_PublicEncrypted = 27017;
@@ -67,32 +67,21 @@ public abstract class CMClient {
 	 */
 	public static final InetAddress[] Servers;
 	static {
-		InetAddress[] temp = null;
+		String[] addrs = new String[] {"208.78.164.13", "208.78.164.10", "208.78.164.12", "208.78.164.14", "208.78.164.9", "72.165.61.188", "208.64.200.201", "208.64.200.205", "72.165.61.187", "208.64.200.203", "72.165.61.185", "72.165.61.175", "72.165.61.174", "208.64.201.176", "208.64.200.202", "208.64.201.169", "208.64.200.137", "208.64.200.204", "72.165.61.186", "208.78.164.11", "81.171.115.37", "81.171.115.35", "81.171.115.34", "81.171.115.36", "146.66.152.11", "146.66.152.12", "146.66.152.15", "146.66.152.10", "146.66.152.13", "146.66.152.14", "146.66.156.9", "146.66.156.10", "146.66.156.11", "209.197.29.196"};
+		InetAddress[] temp = new InetAddress[addrs.length];
 		try {
-			temp = new InetAddress[] {
-				InetAddress.getByName("72.165.61.174"),
-				InetAddress.getByName("72.165.61.175"),
-				InetAddress.getByName("72.165.61.176"),
-				InetAddress.getByName("72.165.61.185"),
-				InetAddress.getByName("72.165.61.187"),
-				InetAddress.getByName("72.165.61.188"),
-				
-				InetAddress.getByName("146.66.152.12"),
-				InetAddress.getByName("146.66.152.13"),
-				InetAddress.getByName("146.66.152.14"),
-				InetAddress.getByName("146.66.152.15"),
-				
-				InetAddress.getByName("209.197.29.196"),
-				InetAddress.getByName("209.197.29.197"),
-			};
+			for(int i = 0; i < addrs.length; i++)
+				temp[i] = InetAddress.getByName(addrs[i]);
 		} catch (final UnknownHostException e) {
 			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
 		}
 		Servers = temp;
+		uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("CMClient", "Loaded IP list, length: " + Servers.length);
 	}
 
 	/**
 	 * Returns the the local IP of this client.
+	 * 
 	 * @return The local IP.
 	 */
 	public InetAddress getLocalIP() {
@@ -102,17 +91,20 @@ public abstract class CMClient {
 	/**
 	 * The universe.
 	 */
-	@Getter private EUniverse connectedUniverse;
+	@Getter
+	private EUniverse connectedUniverse;
 
 	/**
 	 * The session ID.
 	 */
-	@Getter private Integer sessionId;
+	@Getter
+	private Integer sessionId;
 
 	/**
 	 * The SteamID.
 	 */
-	@Getter private SteamID steamId;
+	@Getter
+	private SteamID steamId;
 
 	Connection connection;
 	byte[] tempSessionKey;
@@ -127,22 +119,27 @@ public abstract class CMClient {
 	}
 
 	/**
-	 * Initializes a new instance of the {@link CMClient} class with a specific connection type.
-	 * @param type	The connection type to use.
-	 * @throws UnsupportedOperationException The provided {@link ProtocolType} is not supported. Only Tcp and Udp are available.
+	 * Initializes a new instance of the {@link CMClient} class with a specific
+	 * connection type.
+	 * 
+	 * @param type
+	 *            The connection type to use.
+	 * @throws UnsupportedOperationException
+	 *             The provided {@link ProtocolType} is not supported. Only Tcp
+	 *             and Udp are available.
 	 */
 	public CMClient(ProtocolType type) {
 		serverMap = new HashMap<EServerType, List<IPEndPoint>>();
 
 		switch (type) {
-			case Tcp:
-				connection = new TcpConnection();
-				break;
-			case Udp:
-				connection = new UdpConnection();
-				break;
-			default:
-				throw new UnsupportedOperationException("The provided protocol type is not supported. Only Tcp and Udp are available.");
+		case Tcp:
+			connection = new TcpConnection();
+			break;
+		case Udp:
+			connection = new UdpConnection();
+			break;
+		default:
+			throw new UnsupportedOperationException("The provided protocol type is not supported. Only Tcp and Udp are available.");
 		}
 
 		connection.netMsgReceived.addEventHandler(new EventHandler<NetMsgEventArgs>() {
@@ -194,10 +191,14 @@ public abstract class CMClient {
 	}
 
 	/**
-	 * Connects this client to a Steam3 server.
-	 * This begins the process of connecting and encrypting the data channel between the client and the server.
-	 * Results are returned in a {@link ConnectedCallback}
-	 * @param bEncrypted	If set to true the underlying connection to Steam will be encrypted. This is the default mode of communication. Previous versions of SteamKit always used encryption.
+	 * Connects this client to a Steam3 server. This begins the process of
+	 * connecting and encrypting the data channel between the client and the
+	 * server. Results are returned in a {@link ConnectedCallback}
+	 * 
+	 * @param bEncrypted
+	 *            If set to true the underlying connection to Steam will be
+	 *            encrypted. This is the default mode of communication. Previous
+	 *            versions of SteamKit always used encryption.
 	 */
 	public void connect(boolean bEncrypted) {
 		disconnect();
@@ -216,14 +217,15 @@ public abstract class CMClient {
 	 */
 	public void disconnect() {
 		heartBeatFunc.stop();
-
 		connection.disconnect();
 	}
 
 	/**
-	 * Sends the specified client message to the server.
-	 * This method automatically assigns the correct SessionID and SteamID of the message.
-	 * @param msg	The client message to send.
+	 * Sends the specified client message to the server. This method
+	 * automatically assigns the correct SessionID and SteamID of the message.
+	 * 
+	 * @param msg
+	 *            The client message to send.
 	 */
 	public void send(IClientMsg msg) {
 		if (sessionId != null) {
@@ -248,7 +250,9 @@ public abstract class CMClient {
 
 	/**
 	 * Returns the list of servers matching the given type
-	 * @param type	Server type requested
+	 * 
+	 * @param type
+	 *            Server type requested
 	 * @return List of server endpoints
 	 */
 	public List<IPEndPoint> getServersOfType(EServerType type) {
@@ -261,31 +265,33 @@ public abstract class CMClient {
 
 	/**
 	 * Called when a client message is received from the network.
-	 * @param packetMsg	The packet message.
-	 * @throws IOException 
+	 * 
+	 * @param packetMsg
+	 *            The packet message.
+	 * @throws IOException
 	 */
 	protected void onClientMsgReceived(IPacketMsg packetMsg) throws IOException {
 		DebugLog.writeLine("CMClient", "<- Recv'd EMsg: %s (%d) (Proto: %s)", packetMsg.getMsgType(), packetMsg.getMsgType().v(), packetMsg.isProto());
 
 		switch (packetMsg.getMsgType()) {
-			case ChannelEncryptRequest:
-				handleEncryptRequest(packetMsg);
-				break;
-			case ChannelEncryptResult:
-				handleEncryptResult(packetMsg);
-				break;
-			case Multi:
-				handleMulti(packetMsg);
-				break;
-			case ClientLogOnResponse: // we handle this to get the SteamID/SessionID and to setup heartbeating
-				handleLogOnResponse(packetMsg);
-				break;
-			case ClientLoggedOff: // to stop heartbeating when we get logged off
-				handleLoggedOff(packetMsg);
-				break;
-			case ClientServerList: // Steam server list
-				handleServerList(packetMsg);
-				break;
+		case ChannelEncryptRequest:
+			handleEncryptRequest(packetMsg);
+			break;
+		case ChannelEncryptResult:
+			handleEncryptResult(packetMsg);
+			break;
+		case Multi:
+			handleMulti(packetMsg);
+			break;
+		case ClientLogOnResponse: // we handle this to get the SteamID/SessionID and to setup heartbeating
+			handleLogOnResponse(packetMsg);
+			break;
+		case ClientLoggedOff: // to stop heartbeating when we get logged off
+			handleLoggedOff(packetMsg);
+			break;
+		case ClientServerList: // Steam server list
+			handleServerList(packetMsg);
+			break;
 		}
 	}
 
@@ -295,7 +301,8 @@ public abstract class CMClient {
 	protected abstract void onClientDisconnected(boolean newconnection);
 
 	/**
-	 * Called when the client is connected to Steam3 and is ready to send messages.
+	 * Called when the client is connected to Steam3 and is ready to send
+	 * messages.
 	 */
 	protected abstract void onClientConnected();
 
@@ -307,14 +314,18 @@ public abstract class CMClient {
 		final ByteBuffer buffer = ByteBuffer.wrap(rMsg);
 		final int rawEMsg = buffer.getInt();
 
+		DebugLog.writeLine("EMsg GET", "Got EMSG: " + rawEMsg);
+
 		final EMsg eMsg = MsgUtil.getMsg(rawEMsg);
 
-		switch (eMsg) {
-		// certain message types are always MsgHdr
+		if(eMsg != null) {
+			switch (eMsg) {
+			// certain message types are always MsgHdr
 			case ChannelEncryptRequest:
 			case ChannelEncryptResponse:
 			case ChannelEncryptResult:
 				return new PacketMsg(eMsg, data);
+			}
 		}
 
 		if (MsgUtil.isProtoBuf(rawEMsg)) {

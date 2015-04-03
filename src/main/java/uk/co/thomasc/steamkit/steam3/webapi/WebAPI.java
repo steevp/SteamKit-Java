@@ -32,13 +32,23 @@ public final class WebAPI {
 
 	/**
 	 * Manually calls the specified Web API function with the provided details.
-	 * @param func		The function name to call.
-	 * @param version	The version of the function to call.
-	 * @param args		A dictionary of string key value pairs representing arguments to be passed to the API.
-	 * @param method	The http request method. Either "POST" or "GET".
-	 * @param secure	if set to true this method will be called through the secure API.
-	 * @return A {@link KeyValue} object representing the results of the Web API call.
-	 * @throws IOException A network error occurred when performing the request.
+	 * 
+	 * @param func
+	 *            The function name to call.
+	 * @param version
+	 *            The version of the function to call.
+	 * @param args
+	 *            A dictionary of string key value pairs representing arguments
+	 *            to be passed to the API.
+	 * @param method
+	 *            The http request method. Either "POST" or "GET".
+	 * @param secure
+	 *            if set to true this method will be called through the secure
+	 *            API.
+	 * @return A {@link KeyValue} object representing the results of the Web API
+	 *         call.
+	 * @throws IOException
+	 *             A network error occurred when performing the request.
 	 */
 	public KeyValue call(String func, int version, Map<String, String> args, String method, boolean secure) throws IOException {
 		if (func == null) {
@@ -129,12 +139,13 @@ public final class WebAPI {
 		return call(func, 1);
 	}
 
-	public KeyValue authenticateUser(String steamid, String sessionKey, String encryptedLoginKey, String method) {
+	public KeyValue authenticateUser(String steamid, String sessionKey, String encryptedLoginKey, String method, String secure) {
 		final Map<String, String> map = new HashMap<String, String>();
 		map.put("steamid", steamid);
 		map.put("sessionkey", sessionKey);
 		map.put("encrypted_loginkey", encryptedLoginKey);
 		map.put("method", method);
+		map.put("secure", secure);
 		return tryInvokeMember("AuthenticateUser", map);
 	}
 
@@ -145,7 +156,7 @@ public final class WebAPI {
 		}
 		boolean secure = false;
 		if (apiArgs.containsKey("secure")) {
-			secure = Boolean.valueOf(apiArgs.remove("method"));
+			secure = Boolean.valueOf(apiArgs.remove("secure"));
 		}
 
 		final int version = 1; // assume version 1 unless specified

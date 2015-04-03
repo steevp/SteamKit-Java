@@ -8,15 +8,13 @@ import uk.co.thomasc.steamkit.util.logging.Debug;
 public class AsnKeyParser {
 	final AsnParser _parser;
 
-	/*public AsnKeyParser(String pathname) {
-		using (var reader = new BinaryReader(
-		  new FileStream(pathname, FileMode.Open, FileAccess.Read)))
-		{
-			var info = new FileInfo(pathname);
-
-			_parser = new AsnParser(reader.ReadBytes((int)info.Length));
-		}
-	}*/
+	/*
+	 * public AsnKeyParser(String pathname) { using (var reader = new
+	 * BinaryReader( new FileStream(pathname, FileMode.Open, FileAccess.Read)))
+	 * { var info = new FileInfo(pathname);
+	 * 
+	 * _parser = new AsnParser(reader.ReadBytes((int)info.Length)); } }
+	 */
 
 	public AsnKeyParser(List<Byte> contents) {
 		_parser = new AsnParser(contents);
@@ -126,79 +124,61 @@ public class AsnKeyParser {
 		return parameters;
 	}
 
-	/*public DSAParameters ParseDSAPublicKey() {
-		var parameters = new DSAParameters();
-
-		// Current value
-
-		// Current Position
-		int position = _parser.CurrentPosition();
-		// Sanity Checks
-
-		// Ignore Sequence - PublicKeyInfo
-		int length = _parser.NextSequence();
-		if (length != _parser.RemainingBytes())
-		{
-			var sb = new StringBuilder("Incorrect Sequence Size. ");
-			sb.AppendFormat("Specified: {0}, Remaining: {1}",
-							length.ToString(CultureInfo.InvariantCulture),
-							_parser.RemainingBytes().ToString(CultureInfo.InvariantCulture));
-			throw new BerDecodeException(sb.ToString(), position);
-		}
-
-		// Checkpoint
-		position = _parser.CurrentPosition();
-
-		// Ignore Sequence - AlgorithmIdentifier
-		length = _parser.NextSequence();
-		if (length > _parser.RemainingBytes())
-		{
-			var sb = new StringBuilder("Incorrect AlgorithmIdentifier Size. ");
-			sb.AppendFormat("Specified: {0}, Remaining: {1}",
-							length.ToString(CultureInfo.InvariantCulture),
-							_parser.RemainingBytes().ToString(CultureInfo.InvariantCulture));
-			throw new BerDecodeException(sb.ToString(), position);
-		}
-
-		// Checkpoint
-		position = _parser.CurrentPosition();
-
-		// Grab the OID
-		byte[] value = _parser.NextOID();
-		byte[] oid = { 0x2a, 0x86, 0x48, 0xce, 0x38, 0x04, 0x01 };
-		if (!EqualOid(value, oid))
-		{
-			throw new BerDecodeException("Expected OID 1.2.840.10040.4.1", position);
-		}
-
-
-		// Checkpoint
-		position = _parser.CurrentPosition();
-
-		// Ignore Sequence - DSS-Params
-		length = _parser.NextSequence();
-		if (length > _parser.RemainingBytes())
-		{
-			var sb = new StringBuilder("Incorrect DSS-Params Size. ");
-			sb.AppendFormat("Specified: {0}, Remaining: {1}",
-							length.ToString(CultureInfo.InvariantCulture),
-							_parser.RemainingBytes().ToString(CultureInfo.InvariantCulture));
-			throw new BerDecodeException(sb.ToString(), position);
-		}
-
-		// Next three are curve parameters
-		parameters.P = TrimLeadingZero(_parser.NextInteger());
-		parameters.Q = TrimLeadingZero(_parser.NextInteger());
-		parameters.G = TrimLeadingZero(_parser.NextInteger());
-
-		// Ignore BitString - PrivateKey
-		_parser.NextBitString();
-
-		// Public Key
-		parameters.Y = TrimLeadingZero(_parser.NextInteger());
-
-		Debug.Assert(0 == _parser.RemainingBytes());
-
-		return parameters;
-	}*/
+	/*
+	 * public DSAParameters ParseDSAPublicKey() { var parameters = new
+	 * DSAParameters();
+	 * 
+	 * // Current value
+	 * 
+	 * // Current Position int position = _parser.CurrentPosition(); // Sanity
+	 * Checks
+	 * 
+	 * // Ignore Sequence - PublicKeyInfo int length = _parser.NextSequence();
+	 * if (length != _parser.RemainingBytes()) { var sb = new
+	 * StringBuilder("Incorrect Sequence Size. ");
+	 * sb.AppendFormat("Specified: {0}, Remaining: {1}",
+	 * length.ToString(CultureInfo.InvariantCulture),
+	 * _parser.RemainingBytes().ToString(CultureInfo.InvariantCulture)); throw
+	 * new BerDecodeException(sb.ToString(), position); }
+	 * 
+	 * // Checkpoint position = _parser.CurrentPosition();
+	 * 
+	 * // Ignore Sequence - AlgorithmIdentifier length = _parser.NextSequence();
+	 * if (length > _parser.RemainingBytes()) { var sb = new
+	 * StringBuilder("Incorrect AlgorithmIdentifier Size. ");
+	 * sb.AppendFormat("Specified: {0}, Remaining: {1}",
+	 * length.ToString(CultureInfo.InvariantCulture),
+	 * _parser.RemainingBytes().ToString(CultureInfo.InvariantCulture)); throw
+	 * new BerDecodeException(sb.ToString(), position); }
+	 * 
+	 * // Checkpoint position = _parser.CurrentPosition();
+	 * 
+	 * // Grab the OID byte[] value = _parser.NextOID(); byte[] oid = { 0x2a,
+	 * 0x86, 0x48, 0xce, 0x38, 0x04, 0x01 }; if (!EqualOid(value, oid)) { throw
+	 * new BerDecodeException("Expected OID 1.2.840.10040.4.1", position); }
+	 * 
+	 * 
+	 * // Checkpoint position = _parser.CurrentPosition();
+	 * 
+	 * // Ignore Sequence - DSS-Params length = _parser.NextSequence(); if
+	 * (length > _parser.RemainingBytes()) { var sb = new
+	 * StringBuilder("Incorrect DSS-Params Size. ");
+	 * sb.AppendFormat("Specified: {0}, Remaining: {1}",
+	 * length.ToString(CultureInfo.InvariantCulture),
+	 * _parser.RemainingBytes().ToString(CultureInfo.InvariantCulture)); throw
+	 * new BerDecodeException(sb.ToString(), position); }
+	 * 
+	 * // Next three are curve parameters parameters.P =
+	 * TrimLeadingZero(_parser.NextInteger()); parameters.Q =
+	 * TrimLeadingZero(_parser.NextInteger()); parameters.G =
+	 * TrimLeadingZero(_parser.NextInteger());
+	 * 
+	 * // Ignore BitString - PrivateKey _parser.NextBitString();
+	 * 
+	 * // Public Key parameters.Y = TrimLeadingZero(_parser.NextInteger());
+	 * 
+	 * Debug.Assert(0 == _parser.RemainingBytes());
+	 * 
+	 * return parameters; }
+	 */
 }

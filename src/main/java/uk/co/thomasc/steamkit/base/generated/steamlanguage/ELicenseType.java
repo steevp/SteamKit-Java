@@ -3,12 +3,7 @@ package uk.co.thomasc.steamkit.base.generated.steamlanguage;
 import java.util.HashMap;
 
 public enum ELicenseType {
-	NoLicense(0),
-	SinglePurchase(1),
-	SinglePurchaseLimitedUse(2),
-	RecurringCharge(3),
-	RecurringChargeLimitedUse(4),
-	RecurringChargeLimitedUseWithOverages(5), ;
+	NoLicense(0), SinglePurchase(1), SinglePurchaseLimitedUse(2), RecurringCharge(3), RecurringChargeLimitedUse(4), RecurringChargeLimitedUseWithOverages(5), ;
 
 	private int code;
 

@@ -1,7 +1,6 @@
 package uk.co.thomasc.steamkit.steam3.handlers.steamgamecoordinator.callbacks;
 
 import lombok.Getter;
-
 import uk.co.thomasc.steamkit.base.PacketClientGCMsg;
 import uk.co.thomasc.steamkit.base.PacketClientGCMsgProtobuf;
 import uk.co.thomasc.steamkit.base.gc.IPacketGCMsg;
@@ -10,7 +9,8 @@ import uk.co.thomasc.steamkit.steam3.steamclient.callbackmgr.CallbackMsg;
 import uk.co.thomasc.steamkit.util.util.MsgUtil;
 
 /**
- * This callback is fired when a game coordinator message is recieved from the network.
+ * This callback is fired when a game coordinator message is recieved from the
+ * network.
  */
 public class MessageCallback extends CallbackMsg {
 	/**
@@ -28,10 +28,12 @@ public class MessageCallback extends CallbackMsg {
 	/**
 	 * Gets the AppID of the game coordinator the message is from.
 	 */
-	@Getter private final int appId;
+	@Getter
+	private final int appId;
 
 	/**
 	 * Gets a value indicating whether this message is protobuf'd.
+	 * 
 	 * @return true if this instance is protobuf'd; otherwise, false.
 	 */
 	public boolean isProto() {
@@ -41,7 +43,8 @@ public class MessageCallback extends CallbackMsg {
 	/**
 	 * Gets the actual message.
 	 */
-	@Getter private final IPacketGCMsg message;
+	@Getter
+	private final IPacketGCMsg message;
 
 	public MessageCallback(CMsgGCClient gcMsg) {
 		eMsg = gcMsg.getMsgtype();

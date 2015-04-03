@@ -3,7 +3,6 @@ package uk.co.thomasc.steamkit.base;
 import java.io.IOException;
 
 import lombok.Getter;
-
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EMsg;
 import uk.co.thomasc.steamkit.base.generated.steamlanguageinternal.ExtendedClientMsgHdr;
 import uk.co.thomasc.steamkit.util.stream.BinaryReader;
@@ -24,24 +23,30 @@ public final class PacketClientMsg implements IPacketMsg {
 	/**
 	 * Gets the network message type of this packet message.
 	 */
-	@Getter private final EMsg msgType;
+	@Getter
+	private final EMsg msgType;
 
 	/**
 	 * Gets the target job id for this packet message.
 	 */
-	@Getter private long targetJobID;
+	@Getter
+	private long targetJobID;
 
 	/**
 	 * Gets the source job id for this packet message.
 	 */
-	@Getter private long sourceJobID;
+	@Getter
+	private long sourceJobID;
 
 	byte[] payload;
 
 	/**
 	 * Initializes a new instance of the {@link PacketClientMsg} class.
-	 * @param eMsg	The network message type for this packet message.
-	 * @param data	The data.
+	 * 
+	 * @param eMsg
+	 *            The network message type for this packet message.
+	 * @param data
+	 *            The data.
 	 */
 	public PacketClientMsg(EMsg eMsg, byte[] data) {
 		msgType = eMsg;

@@ -3,10 +3,11 @@ package uk.co.thomasc.steamkit.base.gc;
 import uk.co.thomasc.steamkit.types.JobID;
 
 /**
- * Represents a simple unified interface into game coordinator messages recieved from the network.
- * This is contrasted with {@link IClientGCMsg} in that this interface is packet body agnostic
- * and only allows simple access into the header. This interface is also immutable, and the underlying
- * data cannot be modified.
+ * Represents a simple unified interface into game coordinator messages recieved
+ * from the network. This is contrasted with {@link IClientGCMsg} in that this
+ * interface is packet body agnostic and only allows simple access into the
+ * header. This interface is also immutable, and the underlying data cannot be
+ * modified.
  */
 public interface IPacketGCMsg {
 	/**
@@ -35,6 +36,7 @@ public interface IPacketGCMsg {
 
 	/**
 	 * Gets the underlying data that represents this client message.
+	 * 
 	 * @return The data.
 	 */
 	byte[] getData();

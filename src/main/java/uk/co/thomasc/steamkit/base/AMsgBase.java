@@ -5,7 +5,6 @@ import java.nio.charset.Charset;
 
 import lombok.Getter;
 import lombok.Setter;
-
 import uk.co.thomasc.steamkit.util.stream.BinaryReader;
 import uk.co.thomasc.steamkit.util.stream.BinaryWriter;
 
@@ -14,12 +13,17 @@ import uk.co.thomasc.steamkit.util.stream.BinaryWriter;
  */
 public abstract class AMsgBase {
 
-	@Setter @Getter private BinaryReader reader;
-	@Getter private final BinaryWriter outputStream;
+	@Setter
+	@Getter
+	private BinaryReader reader;
+	@Getter
+	private final BinaryWriter outputStream;
 
 	/**
 	 * Initializes a new instance of the {@link AMsgBase} class.
-	 * @param payloadReserve	The number of bytes to initialize the payload capacity to.
+	 * 
+	 * @param payloadReserve
+	 *            The number of bytes to initialize the payload capacity to.
 	 */
 	public AMsgBase(int payloadReserve) {
 		outputStream = new BinaryWriter(payloadReserve);
@@ -31,8 +35,10 @@ public abstract class AMsgBase {
 
 	/**
 	 * Writes a single 32bit integer to the message payload.
-	 * @param data	The integer.
-	 * @throws IOException 
+	 * 
+	 * @param data
+	 *            The integer.
+	 * @throws IOException
 	 */
 	public void write(int data) throws IOException {
 		outputStream.write(data);
@@ -40,8 +46,10 @@ public abstract class AMsgBase {
 
 	/**
 	 * Writes a single 64bit long to the message payload.
-	 * @param data	The long.
-	 * @throws IOException 
+	 * 
+	 * @param data
+	 *            The long.
+	 * @throws IOException
 	 */
 	public void write(long data) throws IOException {
 		outputStream.write(data);
@@ -49,19 +57,24 @@ public abstract class AMsgBase {
 
 	/**
 	 * Writes the specified byte array to the message payload.
-	 * @param data	The byte array.
-	 * @throws IOException 
+	 * 
+	 * @param data
+	 *            The byte array.
+	 * @throws IOException
 	 */
 	public void write(byte[] data) throws IOException {
 		outputStream.write(data);
 	}
 
 	/**
-	 * Writes the specified string to the message payload using the specified encoding.
-	 * This function does not write a terminating null character.
-	 * @param data		The string to write.
-	 * @param encoding	The encoding to use.
-	 * @throws IOException 
+	 * Writes the specified string to the message payload using the specified
+	 * encoding. This function does not write a terminating null character.
+	 * 
+	 * @param data
+	 *            The string to write.
+	 * @param encoding
+	 *            The encoding to use.
+	 * @throws IOException
 	 */
 	public void write(String data, Charset encoding) throws IOException {
 		if (data == null) {
@@ -71,9 +84,13 @@ public abstract class AMsgBase {
 	}
 
 	/**
-	 * Writes the specified string and a null terminator to the message payload using the specified encoding.
-	 * @param data		The string to write.
-	 * @param encoding	The encoding to use.
+	 * Writes the specified string and a null terminator to the message payload
+	 * using the specified encoding.
+	 * 
+	 * @param data
+	 *            The string to write.
+	 * @param encoding
+	 *            The encoding to use.
 	 * @throws IOException
 	 */
 	public void writeNullTermString(String data, Charset encoding) throws IOException {

@@ -17,7 +17,9 @@ public abstract class CallbackMsg {
 
 	/**
 	 * Determines whether this callback is a certain type.
-	 * @param type	The type to check against.
+	 * 
+	 * @param type
+	 *            The type to check against.
 	 * @return true if this callback is the type specified; otherwise, false
 	 */
 	public <T extends CallbackMsg> boolean isType(Class<T> type) {
@@ -25,10 +27,15 @@ public abstract class CallbackMsg {
 	}
 
 	/**
-	 * Invokes the specified handler delegate if the callback matches the type parameter.
-	 * @param type		The type to check against.
-	 * @param handler	The handler to invoke.
-	 * @throws InvalidParameterException handler is null.
+	 * Invokes the specified handler delegate if the callback matches the type
+	 * parameter.
+	 * 
+	 * @param type
+	 *            The type to check against.
+	 * @param handler
+	 *            The handler to invoke.
+	 * @throws InvalidParameterException
+	 *             handler is null.
 	 */
 	@SuppressWarnings("unchecked")
 	public <T extends CallbackMsg> void handle(Class<T> type, ActionT<T> handler) throws InvalidParameterException {

@@ -1,14 +1,16 @@
 package uk.co.thomasc.steamkit.steam3.handlers.steamfriends.types;
 
 import lombok.Getter;
-
 import uk.co.thomasc.steamkit.types.steamid.SteamID;
 
 public class AccountCache {
-	@Getter private final User localUser;
+	@Getter
+	private final User localUser;
 
-	@Getter private final AccountList<User> users;
-	@Getter private final AccountList<Clan> clans;
+	@Getter
+	private final AccountList<User> users;
+	@Getter
+	private final AccountList<Clan> clans;
 
 	public AccountCache() {
 		localUser = new User();

@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
-
 import uk.co.thomasc.steamkit.util.Passable;
 import uk.co.thomasc.steamkit.util.stream.BinaryReader;
 
@@ -22,8 +21,11 @@ import uk.co.thomasc.steamkit.util.stream.BinaryReader;
 public class KeyValue {
 	/**
 	 * Initializes a new instance of the {@link KeyValue} class.
-	 * @param name	The optional name of the root key.
-	 * @param value	The optional value assigned to the root key.
+	 * 
+	 * @param name
+	 *            The optional name of the root key.
+	 * @param value
+	 *            The optional value assigned to the root key.
 	 */
 	public KeyValue(String name, String value) {
 		this.name = name;
@@ -41,7 +43,8 @@ public class KeyValue {
 	}
 
 	/**
-	 * Represents an invalid {@link KeyValue} given when a searched for child does not exist.
+	 * Represents an invalid {@link KeyValue} given when a searched for child
+	 * does not exist.
 	 */
 	public final static KeyValue Invalid = new KeyValue();
 
@@ -58,11 +61,12 @@ public class KeyValue {
 	/**
 	 * Gets the children of this instance.
 	 */
-	@Getter private List<KeyValue> children;
+	@Getter
+	private List<KeyValue> children;
 
 	/**
-	 * Gets the child {@link KeyValue} with the specified key.
-	 * If no child with this key exists, {@link #Invalid} is returned.
+	 * Gets the child {@link KeyValue} with the specified key. If no child with
+	 * this key exists, {@link #Invalid} is returned.
 	 */
 	public KeyValue get(String key) {
 		for (final KeyValue child : children) {
@@ -75,6 +79,7 @@ public class KeyValue {
 
 	/**
 	 * Returns the value of this instance as a string.
+	 * 
 	 * @return The value of this instance as a string.
 	 */
 	public String asString() {
@@ -84,7 +89,9 @@ public class KeyValue {
 	/**
 	 * Attempts to convert and return the value of this instance as an integer.
 	 * If the conversion is invalid, the default value is returned.
-	 * @param defaultValue	The default value to return if the conversion is invalid.
+	 * 
+	 * @param defaultValue
+	 *            The default value to return if the conversion is invalid.
 	 * @return The value of this instance as an integer.
 	 */
 	public int asInteger(int defaultValue) {
@@ -100,10 +107,11 @@ public class KeyValue {
 	}
 
 	/**
-	 * Attempts to convert and return the value of this instance as a long.
-	 * If the conversion is invalid, the default value is returned.
+	 * Attempts to convert and return the value of this instance as a long. If
+	 * the conversion is invalid, the default value is returned.
 	 * 
-	 * @param defaultValue	The default value to return if the conversion is invalid.
+	 * @param defaultValue
+	 *            The default value to return if the conversion is invalid.
 	 * @return The value of this instance as an long.
 	 */
 	public long asLong(long defaultValue) {
@@ -119,9 +127,11 @@ public class KeyValue {
 	}
 
 	/**
-	 * Attempts to convert and return the value of this instance as a float.
-	 * If the conversion is invalid, the default value is returned.
-	 * @param defaultValue	The default value to return if the conversion is invalid.
+	 * Attempts to convert and return the value of this instance as a float. If
+	 * the conversion is invalid, the default value is returned.
+	 * 
+	 * @param defaultValue
+	 *            The default value to return if the conversion is invalid.
 	 * @return The value of this instance as an float.
 	 */
 	public float asFloat(float defaultValue) {
@@ -139,6 +149,7 @@ public class KeyValue {
 	/**
 	 * Attempts to convert and return the value of this instance as a boolean.
 	 * If the conversion is invalid, the default value is returned.
+	 * 
 	 * @return The value of this instance as an boolean.
 	 */
 	public boolean asBoolean() {
@@ -154,20 +165,28 @@ public class KeyValue {
 	}
 
 	/**
-	 * Attempts to load the given filename as a text {@link KeyValue}.
-	 * This method will swallow any exceptions that occur when reading, use {@link #readFileAsText(String)} if you wish to handle exceptions.
-	 * @param path	The path to the file to load.
-	 * @return a {@link KeyValue} instance if the load was successful, or null on failure.
+	 * Attempts to load the given filename as a text {@link KeyValue}. This
+	 * method will swallow any exceptions that occur when reading, use
+	 * {@link #readFileAsText(String)} if you wish to handle exceptions.
+	 * 
+	 * @param path
+	 *            The path to the file to load.
+	 * @return a {@link KeyValue} instance if the load was successful, or null
+	 *         on failure.
 	 */
 	public static KeyValue loadAsText(String path) {
 		return KeyValue.loadFromFile(path, false);
 	}
 
 	/**
-	 * Attempts to load the given filename as a binary {@link KeyValue}.
-	 * This method will swallow any exceptions that occur when reading, use {@link #readAsBinary(BinaryReader)} if you wish to handle exceptions.
-	 * @param path	The path to the file to load.
-	 * @return a {@link KeyValue} instance if the load was successful, or null on failure.
+	 * Attempts to load the given filename as a binary {@link KeyValue}. This
+	 * method will swallow any exceptions that occur when reading, use
+	 * {@link #readAsBinary(BinaryReader)} if you wish to handle exceptions.
+	 * 
+	 * @param path
+	 *            The path to the file to load.
+	 * @return a {@link KeyValue} instance if the load was successful, or null
+	 *         on failure.
 	 */
 	public static KeyValue loadAsBinary(String path) {
 		return KeyValue.loadFromFile(path, true);
@@ -197,10 +216,14 @@ public class KeyValue {
 	}
 
 	/**
-	 * Attempts to create an instance of {@link KeyValue} from the given input text.
-	 * This method will swallow any exceptions that occur when reading, use {@link #readAsText(InputStream)} if you wish to handle exceptions.
-	 * @param input	The input text to load.
-	 * @return a {@link KeyValue} instance if the load was successful, or null on failure.
+	 * Attempts to create an instance of {@link KeyValue} from the given input
+	 * text. This method will swallow any exceptions that occur when reading,
+	 * use {@link #readAsText(InputStream)} if you wish to handle exceptions.
+	 * 
+	 * @param input
+	 *            The input text to load.
+	 * @return a {@link KeyValue} instance if the load was successful, or null
+	 *         on failure.
 	 */
 	public static KeyValue loadFromString(String input) {
 		final ByteArrayInputStream stream = new ByteArrayInputStream(input.getBytes());
@@ -216,24 +239,29 @@ public class KeyValue {
 	}
 
 	/**
-	 * Populate this instance from the given {@link InputStream} as a text {@link KeyValue}.
-	 * @param input	The input {@link InputStream} to read from.
+	 * Populate this instance from the given {@link InputStream} as a text
+	 * {@link KeyValue}.
+	 * 
+	 * @param input
+	 *            The input {@link InputStream} to read from.
 	 * @return true if the read was successful; otherwise, false.
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public boolean readAsText(InputStream input) throws IOException {
 		children = new ArrayList<KeyValue>();
 
-		/*KVTextReader kvr = */new KVTextReader(this, new BufferedInputStream(input));
+		/* KVTextReader kvr = */new KVTextReader(this, new BufferedInputStream(input));
 
 		return true;
 	}
 
 	/**
 	 * Opens and reads the given filename as text.
-	 * @param filename	The file to open and read.
+	 * 
+	 * @param filename
+	 *            The file to open and read.
 	 * @return true if the read was successful; otherwise, false.
-	 * @throws {@link FileNotFoundException} , {@link IOException} 
+	 * @throws {@link FileNotFoundException} , {@link IOException}
 	 */
 	public boolean readFileAsText(String filename) throws FileNotFoundException, IOException {
 		final FileInputStream stream = new FileInputStream(new File(filename));
@@ -292,8 +320,11 @@ public class KeyValue {
 
 	/**
 	 * Saves this instance to file.
-	 * @param path		The file path to save to.
-	 * @param asBinary	If set to true, saves this instance as binary.
+	 * 
+	 * @param path
+	 *            The file path to save to.
+	 * @param asBinary
+	 *            If set to true, saves this instance as binary.
 	 */
 	public void saveToFile(String path, boolean asBinary) {
 		if (asBinary) {
@@ -363,10 +394,13 @@ public class KeyValue {
 	}
 
 	/**
-	 * Populate this instance from the given {@link BinaryReader} as a binary {@link KeyValue}.
-	 * @param input	The input {@link BinaryReader} to read from.
+	 * Populate this instance from the given {@link BinaryReader} as a binary
+	 * {@link KeyValue}.
+	 * 
+	 * @param input
+	 *            The input {@link BinaryReader} to read from.
 	 * @return true if the read was successful; otherwise, false.
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public boolean readAsBinary(BinaryReader input) throws IOException {
 		while (true) {
@@ -381,27 +415,27 @@ public class KeyValue {
 
 			try {
 				switch (type) {
-					case None:
-						current.readAsBinary(input);
-						break;
-					case String:
-						current.value = input.readString();
-						break;
-					case WideString:
-						throw new IOException("wstring is unsupported");
-					case Int32:
-					case Color:
-					case Pointer:
-						current.value = String.valueOf(input.readInt());
-						break;
-					case UInt64:
-						current.value = String.valueOf(input.readLong());
-						break;
-					case Float32:
-						current.value = String.valueOf(input.readFloat());
-						break;
-					default:
-						throw new IOException("Unknown KV type encountered.");
+				case None:
+					current.readAsBinary(input);
+					break;
+				case String:
+					current.value = input.readString();
+					break;
+				case WideString:
+					throw new IOException("wstring is unsupported");
+				case Int32:
+				case Color:
+				case Pointer:
+					current.value = String.valueOf(input.readInt());
+					break;
+				case UInt64:
+					current.value = String.valueOf(input.readLong());
+					break;
+				case Float32:
+					current.value = String.valueOf(input.readFloat());
+					break;
+				default:
+					throw new IOException("Unknown KV type encountered.");
 				}
 			} catch (final IOException e) {
 				throw new IOException(String.format("An exception ocurred while reading KV '%s'", current.name), e);

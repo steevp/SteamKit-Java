@@ -52,7 +52,7 @@ public class RSACrypto {
 	private void init(BigInteger mod, BigInteger exp, boolean oaep) {
 		try {
 			Security.insertProviderAt(new org.spongycastle.jce.provider.BouncyCastleProvider(), 1);
-			
+
 			final RSAPublicKeySpec publicKeySpec = new RSAPublicKeySpec(mod, exp);
 
 			final KeyFactory factory = KeyFactory.getInstance("RSA", "SC");

@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import lombok.Getter;
-
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EMsg;
 import uk.co.thomasc.steamkit.base.generated.steamlanguageinternal.ExtendedClientMsgHdr;
 import uk.co.thomasc.steamkit.base.generated.steamlanguageinternal.ISteamSerializableMessage;
@@ -17,7 +16,9 @@ import uk.co.thomasc.steamkit.util.stream.BinaryWriter;
 
 /**
  * Represents a struct backed client message.
- * @param <T> The body type of this message.
+ * 
+ * @param <T>
+ *            The body type of this message.
  */
 public final class ClientMsg<T extends ISteamSerializableMessage> extends MsgBase<ExtendedClientMsgHdr> {
 	/**
@@ -100,16 +101,19 @@ public final class ClientMsg<T extends ISteamSerializableMessage> extends MsgBas
 	/**
 	 * Gets the body structure of this message.
 	 */
-	@Getter private T body;
+	@Getter
+	private T body;
 
 	public ClientMsg(Class<T> clazz) {
 		this(clazz, 64);
 	}
 
 	/**
-	 * Initializes a new instance of the {@link ClientMsg} class.
-	 * This is a client send constructor.
-	 * @param payloadReserve	The number of bytes to initialize the payload capacity to.
+	 * Initializes a new instance of the {@link ClientMsg} class. This is a
+	 * client send constructor.
+	 * 
+	 * @param payloadReserve
+	 *            The number of bytes to initialize the payload capacity to.
 	 */
 	public ClientMsg(Class<T> clazz, int payloadReserve) {
 		super(ExtendedClientMsgHdr.class, payloadReserve);
@@ -131,10 +135,13 @@ public final class ClientMsg<T extends ISteamSerializableMessage> extends MsgBas
 	}
 
 	/**
-	 * Initializes a new instance of the {@link ClientMsg} class.
-	 * This a reply constructor.
-	 * @param msg				The message that this instance is a reply for.
-	 * @param payloadReserve	The number of bytes to initialize the payload capacity to.
+	 * Initializes a new instance of the {@link ClientMsg} class. This a reply
+	 * constructor.
+	 * 
+	 * @param msg
+	 *            The message that this instance is a reply for.
+	 * @param payloadReserve
+	 *            The number of bytes to initialize the payload capacity to.
 	 */
 	public ClientMsg(Class<T> clazz, MsgBase<ExtendedClientMsgHdr> msg, int payloadReserve) {
 		this(clazz, payloadReserve);
@@ -143,9 +150,11 @@ public final class ClientMsg<T extends ISteamSerializableMessage> extends MsgBas
 	}
 
 	/**
-	 * Initializes a new instance of the {@link ClientMsg} class.
-	 * This is a recieve constructor.
-	 * @param msg	The packet message to build this client message from.
+	 * Initializes a new instance of the {@link ClientMsg} class. This is a
+	 * recieve constructor.
+	 * 
+	 * @param msg
+	 *            The packet message to build this client message from.
 	 */
 	public ClientMsg(IPacketMsg msg, Class<T> clazz) {
 		this(clazz);
@@ -160,7 +169,8 @@ public final class ClientMsg<T extends ISteamSerializableMessage> extends MsgBas
 
 	/**
 	 * serializes this client message instance to a byte array.
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
 	@Override
 	public byte[] serialize() throws IOException {
@@ -175,7 +185,8 @@ public final class ClientMsg<T extends ISteamSerializableMessage> extends MsgBas
 
 	/**
 	 * Initializes this client message by deserializing the specified data.
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
 	@Override
 	public void deSerialize(byte[] data) throws IOException {
@@ -186,7 +197,14 @@ public final class ClientMsg<T extends ISteamSerializableMessage> extends MsgBas
 		// the rest of the data is the payload
 		final int payloadOffset = cs.getPosition();
 		final int payloadLen = cs.getRemaining();
-		
-		setReader(new BinaryReader(Arrays.copyOfRange(data, payloadOffset, payloadOffset + payloadLen)));
+
+		setReader(new BinaryReader(copyOfRange(data, payloadOffset, payloadOffset + payloadLen)));
 	}
+	
+	public static byte[] copyOfRange(byte[] from, int start, int end){
+        int length = end - start;
+        byte[] result = new byte[length];
+        System.arraycopy(from, start, result, 0, length);
+        return result;
+    }
 }

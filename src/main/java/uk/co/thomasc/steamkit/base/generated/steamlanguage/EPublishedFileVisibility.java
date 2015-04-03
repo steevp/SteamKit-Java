@@ -3,9 +3,7 @@ package uk.co.thomasc.steamkit.base.generated.steamlanguage;
 import java.util.HashMap;
 
 public enum EPublishedFileVisibility {
-	Public(0),
-	FriendsOnly(1),
-	Private(2), ;
+	Public(0), FriendsOnly(1), Private(2), ;
 
 	private int code;
 

@@ -37,15 +37,19 @@ import uk.co.thomasc.steamkit.types.JobID;
 import uk.co.thomasc.steamkit.util.logging.Debug;
 
 /**
- * This handler is used for interacting with apps and packages on the Steam network.
+ * This handler is used for interacting with apps and packages on the Steam
+ * network.
  */
 public final class SteamApps extends ClientMsgHandler {
 
 	/**
-	 * Requests an app ownership ticket for the specified AppID.
-	 * Results are returned in a {@link AppOwnershipTicketCallback} callback.
-	 * @param appid	The appid to request the ownership ticket of.
-	 * @return The Job ID of the request. This can be used to find the appropriate {@link JobCallback}.
+	 * Requests an app ownership ticket for the specified AppID. Results are
+	 * returned in a {@link AppOwnershipTicketCallback} callback.
+	 * 
+	 * @param appid
+	 *            The appid to request the ownership ticket of.
+	 * @return The Job ID of the request. This can be used to find the
+	 *         appropriate {@link JobCallback}.
 	 */
 	public JobID getAppOwnershipTicket(int appid) {
 		final ClientMsgProtobuf<CMsgClientGetAppOwnershipTicket.Builder> request = new ClientMsgProtobuf<CMsgClientGetAppOwnershipTicket.Builder>(CMsgClientGetAppOwnershipTicket.class, EMsg.ClientGetAppOwnershipTicket);
@@ -59,11 +63,16 @@ public final class SteamApps extends ClientMsgHandler {
 	}
 
 	/**
-	 * Requests app information for a single app. Use the overload for requesting information on a batch of apps.
-	 * Results are returned in a {@link AppInfoCallback} callback.
-	 * @param app				The app to request information for.
-	 * @param supportsBatches	if set to true, the request supports batches.
-	 * @return The Job ID of the request. This can be used to find the appropriate {@link JobCallback}.
+	 * Requests app information for a single app. Use the overload for
+	 * requesting information on a batch of apps. Results are returned in a
+	 * {@link AppInfoCallback} callback.
+	 * 
+	 * @param app
+	 *            The app to request information for.
+	 * @param supportsBatches
+	 *            if set to true, the request supports batches.
+	 * @return The Job ID of the request. This can be used to find the
+	 *         appropriate {@link JobCallback}.
 	 */
 	public JobID getAppInfo(AppDetails app, boolean supportsBatches) {
 		return getAppInfo(Arrays.asList(app), supportsBatches);
@@ -74,11 +83,16 @@ public final class SteamApps extends ClientMsgHandler {
 	}
 
 	/**
-	 * Requests app information for a single app. Use the overload for requesting information on a batch of apps.
-	 * Results are returned in a {@link AppInfoCallback} callback.
-	 * @param app				The app to request information for.
-	 * @param supportsBatches	if set to true, the request supports batches.
-	 * @return The Job ID of the request. This can be used to find the appropriate {@link JobCallback}.
+	 * Requests app information for a single app. Use the overload for
+	 * requesting information on a batch of apps. Results are returned in a
+	 * {@link AppInfoCallback} callback.
+	 * 
+	 * @param app
+	 *            The app to request information for.
+	 * @param supportsBatches
+	 *            if set to true, the request supports batches.
+	 * @return The Job ID of the request. This can be used to find the
+	 *         appropriate {@link JobCallback}.
 	 */
 	public JobID getAppInfo(int app, boolean supportsBatches) {
 		return getAppInfoI(Arrays.asList(app), supportsBatches);
@@ -89,11 +103,15 @@ public final class SteamApps extends ClientMsgHandler {
 	}
 
 	/**
-	 * Requests app information for a list of apps.
-	 * Results are returned in a {@link AppInfoCallback} callback.
-	 * @param apps				The apps to request information for.
-	 * @param supportsBatches	if set to true, the request supports batches.
-	 * @return The Job ID of the request. This can be used to find the appropriate {@link JobCallback}.
+	 * Requests app information for a list of apps. Results are returned in a
+	 * {@link AppInfoCallback} callback.
+	 * 
+	 * @param apps
+	 *            The apps to request information for.
+	 * @param supportsBatches
+	 *            if set to true, the request supports batches.
+	 * @return The Job ID of the request. This can be used to find the
+	 *         appropriate {@link JobCallback}.
 	 */
 	public JobID getAppInfoI(Collection<Integer> apps, boolean supportsBatches) {
 		final List<AppDetails> list = new ArrayList<AppDetails>();
@@ -110,11 +128,15 @@ public final class SteamApps extends ClientMsgHandler {
 	}
 
 	/**
-	 * Requests app information for a list of apps.
-	 * Results are returned in a {@link AppInfoCallback} callback.
-	 * @param apps				The apps to request information for.
-	 * @param supportsBatches	if set to true, the request supports batches.
-	 * @return The Job ID of the request. This can be used to find the appropriate {@link JobCallback}.
+	 * Requests app information for a list of apps. Results are returned in a
+	 * {@link AppInfoCallback} callback.
+	 * 
+	 * @param apps
+	 *            The apps to request information for.
+	 * @param supportsBatches
+	 *            if set to true, the request supports batches.
+	 * @return The Job ID of the request. This can be used to find the
+	 *         appropriate {@link JobCallback}.
 	 */
 	public JobID getAppInfo(Collection<AppDetails> apps, boolean supportsBatches) {
 		final ClientMsgProtobuf<CMsgClientAppInfoRequest.Builder> request = new ClientMsgProtobuf<CMsgClientAppInfoRequest.Builder>(CMsgClientAppInfoRequest.class, EMsg.ClientAppInfoRequest);
@@ -138,11 +160,16 @@ public final class SteamApps extends ClientMsgHandler {
 	}
 
 	/**
-	 * Requests package information for a single package. Use the overload for requesting information on a batch of packages.
-	 * Results are returned in a {@link PackageInfoCallback} callback.
-	 * @param packageId		The package id to request information for.
-	 * @param metaDataOnly	if set to true, request metadata only.
-	 * @return The Job ID of the request. This can be used to find the appropriate {@link JobCallback}.
+	 * Requests package information for a single package. Use the overload for
+	 * requesting information on a batch of packages. Results are returned in a
+	 * {@link PackageInfoCallback} callback.
+	 * 
+	 * @param packageId
+	 *            The package id to request information for.
+	 * @param metaDataOnly
+	 *            if set to true, request metadata only.
+	 * @return The Job ID of the request. This can be used to find the
+	 *         appropriate {@link JobCallback}.
 	 */
 	public JobID getPackageInfo(int packageId, boolean metaDataOnly) {
 		return getPackageInfo(Arrays.asList(packageId), metaDataOnly);
@@ -153,11 +180,15 @@ public final class SteamApps extends ClientMsgHandler {
 	}
 
 	/**
-	 * Requests package information for a list of packages.
-	 * Results are returned in a {@link PackageInfoCallback} callback.
-	 * @param packageId		The packages to request information for.
-	 * @param metaDataOnly	if set to true to request metadata only.
-	 * @return The Job ID of the request. This can be used to find the appropriate {@link JobCallback}.
+	 * Requests package information for a list of packages. Results are returned
+	 * in a {@link PackageInfoCallback} callback.
+	 * 
+	 * @param packageId
+	 *            The packages to request information for.
+	 * @param metaDataOnly
+	 *            if set to true to request metadata only.
+	 * @return The Job ID of the request. This can be used to find the
+	 *         appropriate {@link JobCallback}.
 	 */
 	public JobID getPackageInfo(Collection<Integer> packageId, boolean metaDataOnly) {
 		final ClientMsgProtobuf<CMsgClientPackageInfoRequest.Builder> request = new ClientMsgProtobuf<CMsgClientPackageInfoRequest.Builder>(CMsgClientPackageInfoRequest.class, EMsg.ClientPackageInfoRequest);
@@ -177,10 +208,13 @@ public final class SteamApps extends ClientMsgHandler {
 	}
 
 	/**
-	 * Requests a list of app changes since the last provided change number value.
-	 * Results are returned in a {@link AppChangesCallback} callback.
-	 * @param lastChangeNumber	The last change number value.
-	 * @param sendChangelist	if set to true, request a change list.
+	 * Requests a list of app changes since the last provided change number
+	 * value. Results are returned in a {@link AppChangesCallback} callback.
+	 * 
+	 * @param lastChangeNumber
+	 *            The last change number value.
+	 * @param sendChangelist
+	 *            if set to true, request a change list.
 	 */
 	public void getAppChanges(int lastChangeNumber, boolean sendChangelist) {
 		final ClientMsgProtobuf<CMsgClientAppInfoUpdate.Builder> request = new ClientMsgProtobuf<CMsgClientAppInfoUpdate.Builder>(CMsgClientAppInfoUpdate.class, EMsg.ClientAppInfoUpdate);
@@ -200,12 +234,15 @@ public final class SteamApps extends ClientMsgHandler {
 	}
 
 	/**
-	 * Request the depot decryption key for a specified DepotID.
-	 * Results are returned in a {@link DepotKeyCallback} callback.
+	 * Request the depot decryption key for a specified DepotID. Results are
+	 * returned in a {@link DepotKeyCallback} callback.
 	 * 
-	 * @param depotid	The DepotID to request a decryption key for.
-	 * @param appid		The AppID to request the decryption key for.
-	 * @return The Job ID of the request. This can be used to find the appropriate {@link JobCallback}.
+	 * @param depotid
+	 *            The DepotID to request a decryption key for.
+	 * @param appid
+	 *            The AppID to request the decryption key for.
+	 * @return The Job ID of the request. This can be used to find the
+	 *         appropriate {@link JobCallback}.
 	 */
 	public JobID getDepotDecryptionKey(int depotid, int appid) {
 		final ClientMsgProtobuf<CMsgClientGetDepotDecryptionKey.Builder> request = new ClientMsgProtobuf<CMsgClientGetDepotDecryptionKey.Builder>(CMsgClientGetDepotDecryptionKey.class, EMsg.ClientGetDepotDecryptionKey);
@@ -233,30 +270,30 @@ public final class SteamApps extends ClientMsgHandler {
 	@Override
 	public void handleMsg(IPacketMsg packetMsg) {
 		switch (packetMsg.getMsgType()) {
-			case ClientLicenseList:
-				handleLicenseList(packetMsg);
-				break;
-			case ClientGameConnectTokens:
-				handleGameConnectTokens(packetMsg);
-				break;
-			case ClientVACBanStatus:
-				handleVACBanStatus(packetMsg);
-				break;
-			case ClientGetAppOwnershipTicketResponse:
-				handleAppOwnershipTicketResponse(packetMsg);
-				break;
-			case ClientAppInfoResponse:
-				handleAppInfoResponse(packetMsg);
-				break;
-			case ClientPackageInfoResponse:
-				handlePackageInfoResponse(packetMsg);
-				break;
-			case ClientAppInfoChanges:
-				handleAppInfoChanges(packetMsg);
-				break;
-			case ClientGetDepotDecryptionKeyResponse:
-				handleDepotKeyResponse(packetMsg);
-				break;
+		case ClientLicenseList:
+			handleLicenseList(packetMsg);
+			break;
+		case ClientGameConnectTokens:
+			handleGameConnectTokens(packetMsg);
+			break;
+		case ClientVACBanStatus:
+			handleVACBanStatus(packetMsg);
+			break;
+		case ClientGetAppOwnershipTicketResponse:
+			handleAppOwnershipTicketResponse(packetMsg);
+			break;
+		case ClientAppInfoResponse:
+			handleAppInfoResponse(packetMsg);
+			break;
+		case ClientPackageInfoResponse:
+			handlePackageInfoResponse(packetMsg);
+			break;
+		case ClientAppInfoChanges:
+			handleAppInfoChanges(packetMsg);
+			break;
+		case ClientGetDepotDecryptionKeyResponse:
+			handleDepotKeyResponse(packetMsg);
+			break;
 		}
 	}
 

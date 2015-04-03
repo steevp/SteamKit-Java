@@ -50,14 +50,17 @@ public interface IClientMsg {
 
 	/**
 	 * serializes this client message instance to a byte array.
+	 * 
 	 * @return Data representing a client message.
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	byte[] serialize() throws IOException;
 
 	/**
 	 * Initializes this client message by deserializing the specified data.
-	 * @param data The data representing a client message.
+	 * 
+	 * @param data
+	 *            The data representing a client message.
 	 */
 	void deSerialize(byte[] data) throws IOException;
 }

@@ -1,7 +1,6 @@
 package uk.co.thomasc.steamkit.steam3.handlers.steamfriends.callbacks;
 
 import lombok.Getter;
-
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EChatRoomEnterResponse;
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EChatRoomType;
 import uk.co.thomasc.steamkit.base.generated.steamlanguageinternal.msg.MsgClientChatEnter;
@@ -15,37 +14,44 @@ public final class ChatEnterCallback extends CallbackMsg {
 	/**
 	 * Gets SteamID of the chat room.
 	 */
-	@Getter private final SteamID chatID;
+	@Getter
+	private final SteamID chatID;
 
 	/**
 	 * Gets the friend ID.
 	 */
-	@Getter private final SteamID friendID;
+	@Getter
+	private final SteamID friendID;
 
 	/**
 	 * Gets the type of the chat room.
 	 */
-	@Getter private final EChatRoomType chatRoomType;
+	@Getter
+	private final EChatRoomType chatRoomType;
 
 	/**
 	 * Gets the SteamID of the chat room owner.
 	 */
-	@Getter private final SteamID ownerID;
+	@Getter
+	private final SteamID ownerID;
 
 	/**
 	 * Gets clan SteamID that owns this chat room.
 	 */
-	@Getter private final SteamID clanID;
+	@Getter
+	private final SteamID clanID;
 
 	/**
 	 * Gets the chat flags.
 	 */
-	@Getter private final byte chatFlags;
+	@Getter
+	private final byte chatFlags;
 
 	/**
 	 * Gets the chat enter response.
 	 */
-	@Getter private final EChatRoomEnterResponse enterResponse;
+	@Getter
+	private final EChatRoomEnterResponse enterResponse;
 
 	public ChatEnterCallback(MsgClientChatEnter msg) {
 		chatID = msg.getSteamIdChat();

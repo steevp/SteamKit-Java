@@ -3,7 +3,6 @@ package uk.co.thomasc.steamkit.steam3.handlers.steamapps.types;
 import java.io.IOException;
 
 import lombok.Getter;
-
 import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientPackageInfoResponse;
 import uk.co.thomasc.steamkit.types.keyvalue.KeyValue;
 import uk.co.thomasc.steamkit.util.stream.BinaryReader;
@@ -15,27 +14,32 @@ public final class Package {
 	/**
 	 * Gets the status of this package.
 	 */
-	@Getter private final PackageStatus status;
+	@Getter
+	private final PackageStatus status;
 
 	/**
 	 * Gets the PackageID for this package.
 	 */
-	@Getter private final int packageID;
+	@Getter
+	private final int packageID;
 
 	/**
 	 * Gets the last change number for this package.
 	 */
-	@Getter private int changeNumber;
+	@Getter
+	private int changeNumber;
 
 	/**
 	 * Gets a hash of the package data for caching purposes.
 	 */
-	@Getter private byte[] hash;
+	@Getter
+	private byte[] hash;
 
 	/**
 	 * Gets the data for this package.
 	 */
-	@Getter private KeyValue data;
+	@Getter
+	private KeyValue data;
 
 	public Package(CMsgClientPackageInfoResponse.Package pack, PackageStatus status) {
 		this.status = status;

@@ -3,7 +3,6 @@ package uk.co.thomasc.steamkit.steam3.handlers.steamfriends.callbacks;
 import java.util.Arrays;
 
 import lombok.Getter;
-
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EChatEntryType;
 import uk.co.thomasc.steamkit.base.generated.steamlanguageinternal.msg.MsgClientChatMsg;
 import uk.co.thomasc.steamkit.steam3.steamclient.callbackmgr.CallbackMsg;
@@ -16,22 +15,26 @@ public final class ChatMsgCallback extends CallbackMsg {
 	/**
 	 * Gets the SteamID of the chatter.
 	 */
-	@Getter private final SteamID chatterID;
+	@Getter
+	private final SteamID chatterID;
 
 	/**
 	 * Gets the SteamID of the chat room.
 	 */
-	@Getter private final SteamID chatRoomID;
+	@Getter
+	private final SteamID chatRoomID;
 
 	/**
 	 * Gets chat entry type.
 	 */
-	@Getter private final EChatEntryType chatMsgType;
+	@Getter
+	private final EChatEntryType chatMsgType;
 
 	/**
 	 * Gets the message.
 	 */
-	@Getter private String message = "";
+	@Getter
+	private String message = "";
 
 	public ChatMsgCallback(MsgClientChatMsg msg, byte[] payload) {
 		chatterID = msg.getSteamIdChatter();
@@ -40,7 +43,14 @@ public final class ChatMsgCallback extends CallbackMsg {
 		chatMsgType = msg.chatMsgType;
 
 		if (payload != null && payload.length > 0) {
-			message = new String(Arrays.copyOfRange(payload, 0, payload.length - 1));
+			message = new String(copyOfRange(payload, 0, payload.length - 1));
 		}
 	}
+	
+	public static byte[] copyOfRange(byte[] from, int start, int end){
+        int length = end - start;
+        byte[] result = new byte[length];
+        System.arraycopy(from, start, result, 0, length);
+        return result;
+    }
 }

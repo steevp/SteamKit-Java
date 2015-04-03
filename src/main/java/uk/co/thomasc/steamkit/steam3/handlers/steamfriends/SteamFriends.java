@@ -7,9 +7,6 @@ import java.util.Collection;
 import java.util.List;
 
 import lombok.Getter;
-
-import com.google.protobuf.ByteString;
-
 import uk.co.thomasc.steamkit.base.ClientMsg;
 import uk.co.thomasc.steamkit.base.ClientMsgProtobuf;
 import uk.co.thomasc.steamkit.base.IPacketMsg;
@@ -61,15 +58,19 @@ import uk.co.thomasc.steamkit.types.JobID;
 import uk.co.thomasc.steamkit.types.gameid.GameID;
 import uk.co.thomasc.steamkit.types.steamid.SteamID;
 
+import com.google.protobuf.ByteString;
+
 /**
  * This handler handles all interaction with other users on the Steam3 network.
  */
 public final class SteamFriends extends ClientMsgHandler {
 	private final Object listLock = new Object();
-	@Getter private final List<SteamID> friendList;
-	@Getter private final List<SteamID> clanList;
+	@Getter
+	private final List<SteamID> friendList;
+	@Getter
+	private final List<SteamID> clanList;
 
-	AccountCache cache;
+	public AccountCache cache;
 
 	public SteamFriends() {
 		friendList = new ArrayList<SteamID>();
@@ -80,6 +81,7 @@ public final class SteamFriends extends ClientMsgHandler {
 
 	/**
 	 * Gets the local user's persona name.
+	 * 
 	 * @return The name.
 	 */
 	public String getPersonaName() {
@@ -88,7 +90,9 @@ public final class SteamFriends extends ClientMsgHandler {
 
 	/**
 	 * Sets the local user's persona name and broadcasts it over the network.
-	 * @param name	The name.
+	 * 
+	 * @param name
+	 *            The name.
 	 */
 	public void setPersonaName(String name) {
 		// cache the local name right away, so that early calls to SetPersonaState don't reset the set name
@@ -103,6 +107,7 @@ public final class SteamFriends extends ClientMsgHandler {
 
 	/**
 	 * Gets the local user's persona state.
+	 * 
 	 * @return The persona state.
 	 */
 	public EPersonaState getPersonaState() {
@@ -111,7 +116,9 @@ public final class SteamFriends extends ClientMsgHandler {
 
 	/**
 	 * Sets the local user's persona state and broadcasts it over the network.
-	 * @param state	The state.
+	 * 
+	 * @param state
+	 *            The state.
 	 */
 	public void setPersonaState(EPersonaState state) {
 		cache.getLocalUser().personaState = state;
@@ -125,6 +132,7 @@ public final class SteamFriends extends ClientMsgHandler {
 
 	/**
 	 * Gets the friend count of the local user.
+	 * 
 	 * @return The number of friends.
 	 */
 	public int getFriendCount() {
@@ -135,8 +143,11 @@ public final class SteamFriends extends ClientMsgHandler {
 
 	/**
 	 * Gets a friend by index.
-	 * @param index	The index.
-	 * @return A valid steamid of a friend if the index is in range; otherwise a steamid representing 0.
+	 * 
+	 * @param index
+	 *            The index.
+	 * @return A valid steamid of a friend if the index is in range; otherwise a
+	 *         steamid representing 0.
 	 */
 	public SteamID getFriendByIndex(int index) {
 		synchronized (listLock) {
@@ -150,7 +161,9 @@ public final class SteamFriends extends ClientMsgHandler {
 
 	/**
 	 * Gets the persona name of a friend.
-	 * @param steamId	The steam id.
+	 * 
+	 * @param steamId
+	 *            The steam id.
 	 * @return The name.
 	 */
 	public String getFriendPersonaName(SteamID steamId) {
@@ -159,7 +172,9 @@ public final class SteamFriends extends ClientMsgHandler {
 
 	/**
 	 * Gets the persona state of a friend.
-	 * @param steamId	The steam id.
+	 * 
+	 * @param steamId
+	 *            The steam id.
 	 * @return The persona state.
 	 */
 	public EPersonaState getFriendPersonaState(SteamID steamId) {
@@ -168,7 +183,9 @@ public final class SteamFriends extends ClientMsgHandler {
 
 	/**
 	 * Gets the relationship of a friend.
-	 * @param steamId	The steam id.
+	 * 
+	 * @param steamId
+	 *            The steam id.
 	 * @return The relationship of the friend to the local user.
 	 */
 	public EFriendRelationship getFriendRelationship(SteamID steamId) {
@@ -177,8 +194,11 @@ public final class SteamFriends extends ClientMsgHandler {
 
 	/**
 	 * Gets the game name of a friend playing a game.
-	 * @param steamId	The steam id.
-	 * @return The game name of a friend playing a game, or null if they haven't been cached yet.
+	 * 
+	 * @param steamId
+	 *            The steam id.
+	 * @return The game name of a friend playing a game, or null if they haven't
+	 *         been cached yet.
 	 */
 	public String getFriendGamePlayedName(SteamID steamId) {
 		return cache.getUser(steamId).gameName;
@@ -186,8 +206,11 @@ public final class SteamFriends extends ClientMsgHandler {
 
 	/**
 	 * Gets the GameID of a friend playing a game.
-	 * @param steamId	The steam id.
-	 * @return The gameid of a friend playing a game, or 0 if they haven't been cached yet.
+	 * 
+	 * @param steamId
+	 *            The steam id.
+	 * @return The gameid of a friend playing a game, or 0 if they haven't been
+	 *         cached yet.
 	 */
 	public GameID getFriendGamePlayed(SteamID steamId) {
 		return cache.getUser(steamId).gameId;
@@ -195,7 +218,9 @@ public final class SteamFriends extends ClientMsgHandler {
 
 	/**
 	 * Gets a SHA-1 hash representing the friend's avatar.
-	 * @param steamId	The SteamID of the friend to get the avatar of.
+	 * 
+	 * @param steamId
+	 *            The SteamID of the friend to get the avatar of.
 	 * @return A byte array representing a SHA-1 hash of the friend's avatar.
 	 */
 	public byte[] getFriendAvatar(SteamID steamId) {
@@ -204,6 +229,7 @@ public final class SteamFriends extends ClientMsgHandler {
 
 	/**
 	 * Gets the count of clans the local user is a member of.
+	 * 
 	 * @return The number of clans this user is a member of.
 	 */
 	public int getClanCount() {
@@ -214,8 +240,11 @@ public final class SteamFriends extends ClientMsgHandler {
 
 	/**
 	 * Gets a clan SteamID by index.
-	 * @param index	The index.
-	 * @return A valid steamid of a clan if the index is in range; otherwise a steamid representing 0.
+	 * 
+	 * @param index
+	 *            The index.
+	 * @return A valid steamid of a clan if the index is in range; otherwise a
+	 *         steamid representing 0.
 	 */
 	public SteamID getClanByIndex(int index) {
 		synchronized (listLock) {
@@ -229,7 +258,9 @@ public final class SteamFriends extends ClientMsgHandler {
 
 	/**
 	 * Gets the name of a clan.
-	 * @param steamId	The clan SteamID.
+	 * 
+	 * @param steamId
+	 *            The clan SteamID.
 	 * @return The name.
 	 */
 	public String getClanName(SteamID steamId) {
@@ -238,7 +269,9 @@ public final class SteamFriends extends ClientMsgHandler {
 
 	/**
 	 * Gets the relationship of a clan.
-	 * @param steamId	The clan steamid.
+	 * 
+	 * @param steamId
+	 *            The clan steamid.
 	 * @return The relationship of the clan to the local user.
 	 */
 	public EClanRelationship getClanRelationship(SteamID steamId) {
@@ -247,8 +280,11 @@ public final class SteamFriends extends ClientMsgHandler {
 
 	/**
 	 * Gets a SHA-1 hash representing the clan's avatar.
-	 * @param steamId	The SteamID of the clan to get the avatar of.
-	 * @return A byte array representing a SHA-1 hash of the clan's avatar, or null if the clan could not be found.
+	 * 
+	 * @param steamId
+	 *            The SteamID of the clan to get the avatar of.
+	 * @return A byte array representing a SHA-1 hash of the clan's avatar, or
+	 *         null if the clan could not be found.
 	 */
 	public byte[] getClanAvatar(SteamID steamId) {
 		return cache.getClans().getAccount(steamId).avatarHash;
@@ -256,9 +292,13 @@ public final class SteamFriends extends ClientMsgHandler {
 
 	/**
 	 * Sends a chat message to a friend.
-	 * @param target	The target to send to.
-	 * @param type		The type of message to send.
-	 * @param message	The message to send.
+	 * 
+	 * @param target
+	 *            The target to send to.
+	 * @param type
+	 *            The type of message to send.
+	 * @param message
+	 *            The message to send.
 	 */
 	public void sendChatMessage(SteamID target, EChatEntryType type, String message) {
 		final ClientMsgProtobuf<CMsgClientFriendMsg.Builder> chatMsg = new ClientMsgProtobuf<CMsgClientFriendMsg.Builder>(CMsgClientFriendMsg.class, EMsg.ClientFriendMsg);
@@ -272,7 +312,9 @@ public final class SteamFriends extends ClientMsgHandler {
 
 	/**
 	 * Sends a friend request to a user.
-	 * @param accountNameOrEmail	The account name or email of the user.
+	 * 
+	 * @param accountNameOrEmail
+	 *            The account name or email of the user.
 	 */
 	public void addFriend(String accountNameOrEmail) {
 		final ClientMsgProtobuf<CMsgClientAddFriend.Builder> addFriend = new ClientMsgProtobuf<CMsgClientAddFriend.Builder>(CMsgClientAddFriend.class, EMsg.ClientAddFriend);
@@ -284,7 +326,9 @@ public final class SteamFriends extends ClientMsgHandler {
 
 	/**
 	 * Sends a friend request to a user.
-	 * @param steamId	The SteamID of the friend to add.
+	 * 
+	 * @param steamId
+	 *            The SteamID of the friend to add.
 	 */
 	public void addFriend(SteamID steamId) {
 		final ClientMsgProtobuf<CMsgClientAddFriend.Builder> addFriend = new ClientMsgProtobuf<CMsgClientAddFriend.Builder>(CMsgClientAddFriend.class, EMsg.ClientAddFriend);
@@ -296,7 +340,9 @@ public final class SteamFriends extends ClientMsgHandler {
 
 	/**
 	 * Removes a friend from your friends list.
-	 * @param steamId	The SteamID of the friend to remove.
+	 * 
+	 * @param steamId
+	 *            The SteamID of the friend to remove.
 	 */
 	public void removeFriend(SteamID steamId) {
 		final ClientMsgProtobuf<CMsgClientRemoveFriend.Builder> removeFriend = new ClientMsgProtobuf<CMsgClientRemoveFriend.Builder>(CMsgClientRemoveFriend.class, EMsg.ClientRemoveFriend);
@@ -308,7 +354,9 @@ public final class SteamFriends extends ClientMsgHandler {
 
 	/**
 	 * Attempts to join a chat room.
-	 * @param steamId	The SteamID of the chat room.
+	 * 
+	 * @param steamId
+	 *            The SteamID of the chat room.
 	 */
 	public void joinChat(SteamID steamId) {
 		final SteamID chatId = steamId.clone(); // copy the steamid so we don't modify it
@@ -329,7 +377,9 @@ public final class SteamFriends extends ClientMsgHandler {
 
 	/**
 	 * Attempts to leave a chat room.
-	 * @param steamId	The SteamID of the chat room.
+	 * 
+	 * @param steamId
+	 *            The SteamID of the chat room.
 	 */
 	public void leaveChat(SteamID steamId) {
 		final SteamID chatId = steamId.clone(); // copy the steamid so we don't modify it
@@ -358,9 +408,13 @@ public final class SteamFriends extends ClientMsgHandler {
 
 	/**
 	 * Sends a message to a chat room.
-	 * @param steamIdChat	The SteamID of the chat room.
-	 * @param type			The message type.
-	 * @param message		The message.
+	 * 
+	 * @param steamIdChat
+	 *            The SteamID of the chat room.
+	 * @param type
+	 *            The message type.
+	 * @param message
+	 *            The message.
 	 */
 	public void sendChatRoomMessage(SteamID steamIdChat, EChatEntryType type, String message) {
 		final SteamID chatId = steamIdChat.clone(); // copy the steamid so we don't modify it
@@ -388,8 +442,11 @@ public final class SteamFriends extends ClientMsgHandler {
 
 	/**
 	 * Kicks the specified chat member from the given chat room.
-	 * @param steamIdChat	The SteamID of chat room to kick the member from.
-	 * @param steamIdMember	The SteamID of the member to kick from the chat.
+	 * 
+	 * @param steamIdChat
+	 *            The SteamID of chat room to kick the member from.
+	 * @param steamIdMember
+	 *            The SteamID of the member to kick from the chat.
 	 */
 	public void kickChatMember(SteamID steamIdChat, SteamID steamIdMember) {
 		final SteamID chatId = steamIdChat.clone(); // copy the steamid so we don't modify it
@@ -412,8 +469,11 @@ public final class SteamFriends extends ClientMsgHandler {
 
 	/**
 	 * Bans the specified chat member from the given chat room.
-	 * @param steamIdChat	The SteamID of chat room to ban the member from.
-	 * @param steamIdMember	The SteamID of the member to ban from the chat.
+	 * 
+	 * @param steamIdChat
+	 *            The SteamID of chat room to ban the member from.
+	 * @param steamIdMember
+	 *            The SteamID of the member to ban from the chat.
 	 */
 	public void banChatMember(SteamID steamIdChat, SteamID steamIdMember) {
 		final SteamID chatId = steamIdChat.clone(); // copy the steamid so we don't modify it
@@ -438,16 +498,19 @@ public final class SteamFriends extends ClientMsgHandler {
 	final int defaultInfoRequest = EClientPersonaStateFlag.PlayerName.v() | EClientPersonaStateFlag.Presence.v() | EClientPersonaStateFlag.SourceID.v() | EClientPersonaStateFlag.GameExtraInfo.v();
 
 	/**
-	 * Requests persona state for a list of specified SteamID.
-	 * Results are returned in {@link PersonaStateCallback}.
-	 * @param steamIdList	A list of SteamIDs to request the info of.
-	 * @param requestedInfo	The requested info flags.
+	 * Requests persona state for a list of specified SteamID. Results are
+	 * returned in {@link PersonaStateCallback}.
+	 * 
+	 * @param steamIdList
+	 *            A list of SteamIDs to request the info of.
+	 * @param requestedInfo
+	 *            The requested info flags.
 	 */
 	public void requestFriendInfo(Collection<SteamID> steamIdList, int requestedInfo) {
 		final ClientMsgProtobuf<CMsgClientRequestFriendData.Builder> request = new ClientMsgProtobuf<CMsgClientRequestFriendData.Builder>(CMsgClientRequestFriendData.class, EMsg.ClientRequestFriendData);
 
 		for (final SteamID steamId : steamIdList) {
-			request.getBody().getFriendsList().add(steamId.convertToLong());
+			request.getBody().addFriends(steamId.convertToLong());
 		}
 		request.getBody().setPersonaStateRequested(requestedInfo);
 
@@ -463,10 +526,13 @@ public final class SteamFriends extends ClientMsgHandler {
 	}
 
 	/**
-	 * Requests persona state for a specified SteamID.
-	 * Results are returned in {@link PersonaStateCallback}.
-	 * @param steamId		A SteamID to request the info of.
-	 * @param requestedInfo	The requested info flags.
+	 * Requests persona state for a specified SteamID. Results are returned in
+	 * {@link PersonaStateCallback}.
+	 * 
+	 * @param steamId
+	 *            A SteamID to request the info of.
+	 * @param requestedInfo
+	 *            The requested info flags.
 	 */
 	public void requestFriendInfo(SteamID steamId, int requestedInfo) {
 		final List<SteamID> temp = new ArrayList<SteamID>();
@@ -483,11 +549,16 @@ public final class SteamFriends extends ClientMsgHandler {
 	}
 
 	/**
-	 * Ignores or unignores a friend on Steam.
-	 * Results are returned in a {@link IgnoreFriendCallback}.
-	 * @param steamId	The SteamID of the friend to ignore or unignore.
-	 * @param setIgnore	if set to true, the friend will be ignored; otherwise, they will be unignored.
-	 * @return The Job ID of the request. This can be used to find the appropriate {@link JobCallback}.
+	 * Ignores or unignores a friend on Steam. Results are returned in a
+	 * {@link IgnoreFriendCallback}.
+	 * 
+	 * @param steamId
+	 *            The SteamID of the friend to ignore or unignore.
+	 * @param setIgnore
+	 *            if set to true, the friend will be ignored; otherwise, they
+	 *            will be unignored.
+	 * @return The Job ID of the request. This can be used to find the
+	 *         appropriate {@link JobCallback}.
 	 */
 	public JobID ignoreFriend(SteamID steamId, boolean setIgnore) {
 		final ClientMsg<MsgClientSetIgnoreFriend> ignore = new ClientMsg<MsgClientSetIgnoreFriend>(MsgClientSetIgnoreFriend.class);
@@ -512,39 +583,39 @@ public final class SteamFriends extends ClientMsgHandler {
 	@Override
 	public void handleMsg(IPacketMsg packetMsg) {
 		switch (packetMsg.getMsgType()) {
-			case ClientPersonaState:
-				handlePersonaState(packetMsg);
-				break;
-			case ClientFriendsList:
-				handleFriendsList(packetMsg);
-				break;
-			case ClientFriendMsgIncoming:
-				handleFriendMsg(packetMsg);
-				break;
-			case ClientAccountInfo:
-				handleAccountInfo(packetMsg);
-				break;
-			case ClientAddFriendResponse:
-				handleFriendResponse(packetMsg);
-				break;
-			case ClientChatEnter:
-				handleChatEnter(packetMsg);
-				break;
-			case ClientChatMsg:
-				handleChatMsg(packetMsg);
-				break;
-			case ClientChatMemberInfo:
-				handleChatMemberInfo(packetMsg);
-				break;
-			case ClientChatActionResult:
-				handleChatActionResult(packetMsg);
-				break;
-			case ClientChatInvite:
-				handleChatInvite(packetMsg);
-				break;
-			case ClientSetIgnoreFriendResponse:
-				handleIgnoreFriendResponse(packetMsg);
-				break;
+		case ClientPersonaState:
+			handlePersonaState(packetMsg);
+			break;
+		case ClientFriendsList:
+			handleFriendsList(packetMsg);
+			break;
+		case ClientFriendMsgIncoming:
+			handleFriendMsg(packetMsg);
+			break;
+		case ClientAccountInfo:
+			handleAccountInfo(packetMsg);
+			break;
+		case ClientAddFriendResponse:
+			handleFriendResponse(packetMsg);
+			break;
+		case ClientChatEnter:
+			handleChatEnter(packetMsg);
+			break;
+		case ClientChatMsg:
+			handleChatMsg(packetMsg);
+			break;
+		case ClientChatMemberInfo:
+			handleChatMemberInfo(packetMsg);
+			break;
+		case ClientChatActionResult:
+			handleChatActionResult(packetMsg);
+			break;
+		case ClientChatInvite:
+			handleChatInvite(packetMsg);
+			break;
+		case ClientSetIgnoreFriendResponse:
+			handleIgnoreFriendResponse(packetMsg);
+			break;
 		}
 	}
 
@@ -654,10 +725,11 @@ public final class SteamFriends extends ClientMsgHandler {
 					cacheFriend.name = friend.getPlayerName();
 				}
 
-				if ((flags & EClientPersonaStateFlag.Presence.v()) == EClientPersonaStateFlag.Presence.v()) {
+				//if ((flags & EClientPersonaStateFlag.Presence.v()) == EClientPersonaStateFlag.Presence.v()) {
+				if (friend.getAvatarHash() != null)
 					cacheFriend.avatarHash = friend.getAvatarHash().toByteArray();
-					cacheFriend.personaState = EPersonaState.f(friend.getPersonaState());
-				}
+				cacheFriend.personaState = EPersonaState.f(friend.getPersonaState());
+				//}
 
 				if ((flags & EClientPersonaStateFlag.GameExtraInfo.v()) == EClientPersonaStateFlag.GameExtraInfo.v()) {
 					cacheFriend.gameName = friend.getGameName();
@@ -714,7 +786,7 @@ public final class SteamFriends extends ClientMsgHandler {
 
 		try {
 			byte[] payload = membInfo.getReader().readBytes();
-			
+
 			final ChatMemberInfoCallback callback = new ChatMemberInfoCallback(membInfo.getBody(), payload);
 			getClient().postCallback(callback);
 		} catch (IOException e) {

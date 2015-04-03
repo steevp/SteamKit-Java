@@ -18,11 +18,10 @@ public class Utils {
 		} else if (os.indexOf("nix") >= 0) {
 			return EOSType.LinuxUnknown;
 		}
-		//return EOSType.Unknown;
-		return EOSType.Win7;
+		return EOSType.Unknown;
 	}
 
-	public static byte[] generateMachineID() {
+	private static byte[] generateMachineID() {
 		// Java can't really do much here :/
 		// TODO: Make this better?
 

@@ -2,8 +2,6 @@ package uk.co.thomasc.steamkit.steam3.handlers.steamgamecoordinator;
 
 import java.io.IOException;
 
-import com.google.protobuf.ByteString;
-
 import uk.co.thomasc.steamkit.base.ClientMsgProtobuf;
 import uk.co.thomasc.steamkit.base.IPacketMsg;
 import uk.co.thomasc.steamkit.base.gc.ClientGCMsg;
@@ -19,15 +17,20 @@ import uk.co.thomasc.steamkit.steam3.handlers.steamgamecoordinator.callbacks.Cra
 import uk.co.thomasc.steamkit.steam3.handlers.steamgamecoordinator.callbacks.MessageCallback;
 import uk.co.thomasc.steamkit.util.util.MsgUtil;
 
+import com.google.protobuf.ByteString;
+
 /**
  * This handler handles all game coordinator messaging.
  */
 public final class SteamGameCoordinator extends ClientMsgHandler {
-	
+
 	/**
 	 * Tells the game coordinator to craft items together
-	 * @param recipe The crafting recipe to use
-	 * @param items The items to craft together
+	 * 
+	 * @param recipe
+	 *            The crafting recipe to use
+	 * @param items
+	 *            The items to craft together
 	 */
 	public void craft(int appId, ECraftingRecipe recipe, long... items) {
 		final ClientGCMsg<GCMsgCraftItem> msg = new ClientGCMsg<GCMsgCraftItem>(GCMsgCraftItem.class);
@@ -39,15 +42,18 @@ public final class SteamGameCoordinator extends ClientMsgHandler {
 
 		send(msg, appId);
 	}
-	
+
 	public void craft(ECraftingRecipe recipe, long... items) {
 		craft(440, recipe, items);
 	}
-	
+
 	/**
 	 * Sends a game coordinator message for a specific appid.
-	 * @param msg	The GC message to send.
-	 * @param appId	The app id of the game coordinator to send to.
+	 * 
+	 * @param msg
+	 *            The GC message to send.
+	 * @param appId
+	 *            The app id of the game coordinator to send to.
 	 */
 	public void send(IClientGCMsg msg, int appId) {
 		final ClientMsgProtobuf<CMsgGCClient.Builder> clientMsg = new ClientMsgProtobuf<CMsgGCClient.Builder>(CMsgGCClient.class, EMsg.ClientToGC);
@@ -65,7 +71,9 @@ public final class SteamGameCoordinator extends ClientMsgHandler {
 
 	/**
 	 * Handles a client message. This should not be called directly.
-	 * @param packetMsg	The packet message that contains the data.
+	 * 
+	 * @param packetMsg
+	 *            The packet message that contains the data.
 	 */
 	@Override
 	public void handleMsg(IPacketMsg packetMsg) {
@@ -74,12 +82,12 @@ public final class SteamGameCoordinator extends ClientMsgHandler {
 
 			final MessageCallback callback = new MessageCallback(msg.getBody().build());
 			getClient().postCallback(callback);
-			
+
 			if (callback.getEMsg() == EGCMsgBase.CraftResponse) {
 				final ClientGCMsg<GCMsgCraftItemResponse> craftMsg = new ClientGCMsg<GCMsgCraftItemResponse>(GCMsgCraftItemResponse.class);
 				try {
 					craftMsg.deSerialize(msg.getBody().getPayload().toByteArray());
-					
+
 					final CraftResponseCallback craftCallback = new CraftResponseCallback(craftMsg.getBody());
 					getClient().postCallback(craftCallback);
 				} catch (IOException e) {

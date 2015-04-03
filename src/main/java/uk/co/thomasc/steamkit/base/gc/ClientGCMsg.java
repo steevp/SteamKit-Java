@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import lombok.Getter;
-
 import uk.co.thomasc.steamkit.base.generated.steamlanguageinternal.IGCSerializableMessage;
 import uk.co.thomasc.steamkit.base.generated.steamlanguageinternal.MsgGCHdr;
 import uk.co.thomasc.steamkit.types.JobID;
@@ -16,12 +15,15 @@ import uk.co.thomasc.steamkit.util.stream.BinaryWriter;
 
 /**
  * Represents a struct backed game coordinator message.
- * @param <T>	The body type of this message.
+ * 
+ * @param <T>
+ *            The body type of this message.
  */
 public final class ClientGCMsg<T extends IGCSerializableMessage> extends GCMsgBase<MsgGCHdr> {
 	/**
 	 * Gets a value indicating whether this gc message is protobuf backed.
-	 * @return true if this instance is protobuf backed; otherwise, false. 
+	 * 
+	 * @return true if this instance is protobuf backed; otherwise, false.
 	 */
 	@Override
 	public boolean isProto() {
@@ -32,6 +34,7 @@ public final class ClientGCMsg<T extends IGCSerializableMessage> extends GCMsgBa
 
 	/**
 	 * Gets the network message type of this gc message.
+	 * 
 	 * @return The network message type.
 	 */
 	@Override
@@ -41,6 +44,7 @@ public final class ClientGCMsg<T extends IGCSerializableMessage> extends GCMsgBa
 
 	/**
 	 * Gets the target job id for this gc message.
+	 * 
 	 * @return The target job id
 	 */
 	@Override
@@ -50,7 +54,9 @@ public final class ClientGCMsg<T extends IGCSerializableMessage> extends GCMsgBa
 
 	/**
 	 * Sets the target job id for this gc message.
-	 * @param value The target job id
+	 * 
+	 * @param value
+	 *            The target job id
 	 */
 	@Override
 	public void setTargetJobID(JobID value) {
@@ -59,6 +65,7 @@ public final class ClientGCMsg<T extends IGCSerializableMessage> extends GCMsgBa
 
 	/**
 	 * Gets the source job id for this gc message.
+	 * 
 	 * @return The source job id
 	 */
 	@Override
@@ -68,7 +75,9 @@ public final class ClientGCMsg<T extends IGCSerializableMessage> extends GCMsgBa
 
 	/**
 	 * Sets the source job id for this gc message.
-	 * @param value The source job id
+	 * 
+	 * @param value
+	 *            The source job id
 	 */
 	@Override
 	public void setSourceJobID(JobID value) {
@@ -78,12 +87,15 @@ public final class ClientGCMsg<T extends IGCSerializableMessage> extends GCMsgBa
 	/**
 	 * Gets the body structure of this message.
 	 */
-	@Getter private T body;
+	@Getter
+	private T body;
 
 	/**
-	 * Initializes a new instance of the {@link ClientGCMsg} class.
-	 * This is a client send constructor.
-	 * @param payloadReserve	The number of bytes to initialize the payload capacity to.
+	 * Initializes a new instance of the {@link ClientGCMsg} class. This is a
+	 * client send constructor.
+	 * 
+	 * @param payloadReserve
+	 *            The number of bytes to initialize the payload capacity to.
 	 */
 	public ClientGCMsg(Class<T> clazz, int payloadReserve) {
 		super(MsgGCHdr.class, payloadReserve);
@@ -105,10 +117,13 @@ public final class ClientGCMsg<T extends IGCSerializableMessage> extends GCMsgBa
 	}
 
 	/**
-	 * Initializes a new instance of the {@link ClientGCMsg} class.
-	 * This a reply constructor.
-	 * @param msg				The message that this instance is a reply for.
-	 * @param payloadReserve	The number of bytes to initialize the payload capacity to.
+	 * Initializes a new instance of the {@link ClientGCMsg} class. This a reply
+	 * constructor.
+	 * 
+	 * @param msg
+	 *            The message that this instance is a reply for.
+	 * @param payloadReserve
+	 *            The number of bytes to initialize the payload capacity to.
 	 */
 	public ClientGCMsg(Class<T> clazz, GCMsgBase<MsgGCHdr> msg, int payloadReserve) {
 		this(clazz, payloadReserve);
@@ -121,9 +136,11 @@ public final class ClientGCMsg<T extends IGCSerializableMessage> extends GCMsgBa
 	}
 
 	/**
-	 * Initializes a new instance of the {@link ClientGCMsg} class.
-	 * This is a recieve constructor.
-	 * @param msg	The packet message to build this gc message from.
+	 * Initializes a new instance of the {@link ClientGCMsg} class. This is a
+	 * recieve constructor.
+	 * 
+	 * @param msg
+	 *            The packet message to build this gc message from.
 	 */
 	public ClientGCMsg(Class<T> clazz, IPacketGCMsg msg) {
 		this(clazz);
@@ -138,6 +155,7 @@ public final class ClientGCMsg<T extends IGCSerializableMessage> extends GCMsgBa
 
 	/**
 	 * Serializes this gc message instance to a byte array.
+	 * 
 	 * @return Data representing a client message.
 	 */
 	@Override
@@ -153,7 +171,9 @@ public final class ClientGCMsg<T extends IGCSerializableMessage> extends GCMsgBa
 
 	/**
 	 * Initializes this gc message by deserializing the specified data.
-	 * @param data	The data representing a client message.
+	 * 
+	 * @param data
+	 *            The data representing a client message.
 	 */
 	@Override
 	public void deSerialize(byte[] data) throws IOException {
@@ -165,6 +185,13 @@ public final class ClientGCMsg<T extends IGCSerializableMessage> extends GCMsgBa
 		final int payloadOffset = cs.getPosition();
 		final int payloadLen = cs.getRemaining();
 
-		setReader(new BinaryReader(new ByteArrayInputStream(Arrays.copyOfRange(data, payloadOffset, payloadOffset + payloadLen))));
+		setReader(new BinaryReader(new ByteArrayInputStream(copyOfRange(data, payloadOffset, payloadOffset + payloadLen))));
 	}
+	
+	public static byte[] copyOfRange(byte[] from, int start, int end){
+        int length = end - start;
+        byte[] result = new byte[length];
+        System.arraycopy(from, start, result, 0, length);
+        return result;
+    }
 }

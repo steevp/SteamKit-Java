@@ -19,7 +19,9 @@ public final class JobID extends UInt64Handle {
 
 	/**
 	 * Initializes a new instance of the {@link JobID} class.
-	 * @param jobId	The job ID.
+	 * 
+	 * @param jobId
+	 *            The job ID.
 	 */
 	public JobID(long jobId) {
 		super(jobId);

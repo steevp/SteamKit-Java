@@ -1,5 +1,8 @@
 package uk.co.thomasc.steamkit.util.logging;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,4 +28,11 @@ public class DebugLog {
 		}
 	}
 
+	public static void printStackTrace(String category, Throwable throwable) {
+		Writer writer = new StringWriter();
+		PrintWriter printWriter = new PrintWriter(writer);
+		throwable.printStackTrace(printWriter);
+		String s = writer.toString();
+		writeLine(category, "Stack Trace: %s", s);
+	}
 }

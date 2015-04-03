@@ -23,7 +23,10 @@ public abstract class Connection {
 
 	/**
 	 * Raises the {@link #netMsgReceived} event.
-	 * @param e	The {@link NetMsgEventArgs} instance containing the event data.
+	 * 
+	 * @param e
+	 *            The {@link NetMsgEventArgs} instance containing the event
+	 *            data.
 	 */
 	protected void onNetMsgReceived(NetMsgEventArgs e) {
 		if (netMsgReceived != null) {
@@ -55,7 +58,9 @@ public abstract class Connection {
 
 	/**
 	 * Connects to the specified end point.
-	 * @param endPoint	The end point.
+	 * 
+	 * @param endPoint
+	 *            The end point.
 	 */
 	public abstract void connect(IPEndPoint endPoint);
 
@@ -66,13 +71,16 @@ public abstract class Connection {
 
 	/**
 	 * Sends the specified client net message.
-	 * @param clientMsg	The client net message.
-	 * @throws IOException 
+	 * 
+	 * @param clientMsg
+	 *            The client net message.
+	 * @throws IOException
 	 */
 	public abstract void send(IClientMsg clientMsg) throws IOException;
 
 	/**
 	 * Gets the local IP.
+	 * 
 	 * @return The local IP
 	 */
 	public abstract InetAddress getLocalIP();

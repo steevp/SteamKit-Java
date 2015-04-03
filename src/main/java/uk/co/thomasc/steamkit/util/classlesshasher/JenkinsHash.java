@@ -3,12 +3,12 @@ package uk.co.thomasc.steamkit.util.classlesshasher;
 /**
  * Hash algorithm by Bob Jenkins, 1996.
  * 
- * You may use this code any way you wish, private, educational, or commercial.  It's free.
- * See: http://burtleburtle.net/bob/hash/doobs.html
- *
- * Use for hash table lookup, or anything where one collision in 2^^32
- * is acceptable.  Do NOT use for cryptographic purposes.
- *
+ * You may use this code any way you wish, private, educational, or commercial.
+ * It's free. See: http://burtleburtle.net/bob/hash/doobs.html
+ * 
+ * Use for hash table lookup, or anything where one collision in 2^^32 is
+ * acceptable. Do NOT use for cryptographic purposes.
+ * 
  * Java port by Gray Watson http://256.com/gray/
  */
 public class JenkinsHash {
@@ -33,28 +33,28 @@ public class JenkinsHash {
 	}
 
 	/**
-	 * Do addition and turn into 4 bytes. 
+	 * Do addition and turn into 4 bytes.
 	 */
 	private long add(long val, long add) {
 		return val + add & JenkinsHash.MAX_VALUE;
 	}
 
 	/**
-	 * Do subtraction and turn into 4 bytes. 
+	 * Do subtraction and turn into 4 bytes.
 	 */
 	private long subtract(long val, long subtract) {
 		return val - subtract & JenkinsHash.MAX_VALUE;
 	}
 
 	/**
-	 * Left shift val by shift bits and turn in 4 bytes. 
+	 * Left shift val by shift bits and turn in 4 bytes.
 	 */
 	private long xor(long val, long xor) {
 		return (val ^ xor) & JenkinsHash.MAX_VALUE;
 	}
 
 	/**
-	 * Left shift val by shift bits.  Cut down to 4 bytes. 
+	 * Left shift val by shift bits. Cut down to 4 bytes.
 	 */
 	private long leftShift(long val, int shift) {
 		return val << shift & JenkinsHash.MAX_VALUE;
@@ -101,13 +101,15 @@ public class JenkinsHash {
 	}
 
 	/**
-	 * Hash a variable-length key into a 32-bit value.  Every bit of the
-	 * key affects every bit of the return value.  Every 1-bit and 2-bit
-	 * delta achieves avalanche.  The best hash table sizes are powers of 2.
-	 *
-	 * @param buffer Byte array that we are hashing on.
-	 * @param initialValue Initial value of the hash if we are continuing from
-	 * a previous run.  0 if none.
+	 * Hash a variable-length key into a 32-bit value. Every bit of the key
+	 * affects every bit of the return value. Every 1-bit and 2-bit delta
+	 * achieves avalanche. The best hash table sizes are powers of 2.
+	 * 
+	 * @param buffer
+	 *            Byte array that we are hashing on.
+	 * @param initialValue
+	 *            Initial value of the hash if we are continuing from a previous
+	 *            run. 0 if none.
 	 * @return Hash value for the buffer.
 	 */
 	public long hash(byte[] buffer, long initialValue) {
@@ -135,30 +137,30 @@ public class JenkinsHash {
 
 		// all the case statements fall through to the next on purpose
 		switch (len) {
-			case 11:
-				c = add(c, leftShift(byteToLong(buffer[pos + 10]), 24));
-			case 10:
-				c = add(c, leftShift(byteToLong(buffer[pos + 9]), 16));
-			case 9:
-				c = add(c, leftShift(byteToLong(buffer[pos + 8]), 8));
-				// the first byte of c is reserved for the length
-			case 8:
-				b = add(b, leftShift(byteToLong(buffer[pos + 7]), 24));
-			case 7:
-				b = add(b, leftShift(byteToLong(buffer[pos + 6]), 16));
-			case 6:
-				b = add(b, leftShift(byteToLong(buffer[pos + 5]), 8));
-			case 5:
-				b = add(b, byteToLong(buffer[pos + 4]));
-			case 4:
-				a = add(a, leftShift(byteToLong(buffer[pos + 3]), 24));
-			case 3:
-				a = add(a, leftShift(byteToLong(buffer[pos + 2]), 16));
-			case 2:
-				a = add(a, leftShift(byteToLong(buffer[pos + 1]), 8));
-			case 1:
-				a = add(a, byteToLong(buffer[pos + 0]));
-				// case 0: nothing left to add
+		case 11:
+			c = add(c, leftShift(byteToLong(buffer[pos + 10]), 24));
+		case 10:
+			c = add(c, leftShift(byteToLong(buffer[pos + 9]), 16));
+		case 9:
+			c = add(c, leftShift(byteToLong(buffer[pos + 8]), 8));
+			// the first byte of c is reserved for the length
+		case 8:
+			b = add(b, leftShift(byteToLong(buffer[pos + 7]), 24));
+		case 7:
+			b = add(b, leftShift(byteToLong(buffer[pos + 6]), 16));
+		case 6:
+			b = add(b, leftShift(byteToLong(buffer[pos + 5]), 8));
+		case 5:
+			b = add(b, byteToLong(buffer[pos + 4]));
+		case 4:
+			a = add(a, leftShift(byteToLong(buffer[pos + 3]), 24));
+		case 3:
+			a = add(a, leftShift(byteToLong(buffer[pos + 2]), 16));
+		case 2:
+			a = add(a, leftShift(byteToLong(buffer[pos + 1]), 8));
+		case 1:
+			a = add(a, byteToLong(buffer[pos + 0]));
+			// case 0: nothing left to add
 		}
 		hashMix();
 
@@ -167,7 +169,9 @@ public class JenkinsHash {
 
 	/**
 	 * See hash(byte[] buffer, long initialValue)
-	 * @param buffer Byte array that we are hashing on.
+	 * 
+	 * @param buffer
+	 *            Byte array that we are hashing on.
 	 * @return Hash value for the buffer.
 	 */
 	public long hash(byte[] buffer) {

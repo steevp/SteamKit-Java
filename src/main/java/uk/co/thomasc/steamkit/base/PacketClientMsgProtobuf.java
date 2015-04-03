@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import lombok.Getter;
 import lombok.Setter;
-
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EMsg;
 import uk.co.thomasc.steamkit.base.generated.steamlanguageinternal.MsgHdrProtoBuf;
 import uk.co.thomasc.steamkit.util.stream.BinaryReader;
@@ -24,18 +23,25 @@ public final class PacketClientMsgProtobuf implements IPacketMsg {
 	/**
 	 * The message type.
 	 */
-	@Getter @Setter private EMsg msgType;
+	@Getter
+	@Setter
+	private EMsg msgType;
 
-	@Getter private final long targetJobID;
+	@Getter
+	private final long targetJobID;
 
-	@Getter private final long sourceJobID;
+	@Getter
+	private final long sourceJobID;
 
 	byte[] payload;
 
 	/**
 	 * Initializes a new instance of the {@link PacketClientMsgProtobuf} class.
-	 * @param eMsg	The network message type for this packet message.
-	 * @param data	The data.
+	 * 
+	 * @param eMsg
+	 *            The network message type for this packet message.
+	 * @param data
+	 *            The data.
 	 */
 	public PacketClientMsgProtobuf(EMsg eMsg, byte[] data) {
 		msgType = eMsg;

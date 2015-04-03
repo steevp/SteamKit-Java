@@ -14,8 +14,9 @@ public final class QueryDetails {
 	public int appId;
 
 	/**
-	 * Gets or sets the filter used for querying the master server.
-	 * Check https://developer.valvesoftware.com/wiki/Master_Server_Query_Protocol for details on how the filter is structured.
+	 * Gets or sets the filter used for querying the master server. Check
+	 * https://developer.valvesoftware.com/wiki/Master_Server_Query_Protocol for
+	 * details on how the filter is structured.
 	 */
 	public String filter;
 
@@ -25,8 +26,8 @@ public final class QueryDetails {
 	public ERegionCode region;
 
 	/**
-	 * Gets or sets the IP address that will be GeoIP located.
-	 * This is done to return servers closer to this location.
+	 * Gets or sets the IP address that will be GeoIP located. This is done to
+	 * return servers closer to this location.
 	 */
 	public InetAddress geoLocatedIP;
 

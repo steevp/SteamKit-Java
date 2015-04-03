@@ -13,7 +13,8 @@ public class SteamID {
 	static Pattern SteamIDRegex = Pattern.compile("STEAM_([0-5]):([0-1]):(\\d+)", Pattern.CASE_INSENSITIVE);
 
 	/**
-	 * The account instance value when representing all instanced {@link SteamID}
+	 * The account instance value when representing all instanced
+	 * {@link SteamID}
 	 */
 	public static final int AllInstances = 0;
 	/**
@@ -34,12 +35,14 @@ public class SteamID {
 	 */
 	public static final int AccountIDMask = 0xFFFFFFFF;
 	/**
-	 * Masking value used for packing chat instance flags into a {@link SteamID}.
+	 * Masking value used for packing chat instance flags into a {@link SteamID}
+	 * .
 	 */
 	public static final int AccountInstanceMask = 0x000FFFFF;
 
 	/**
-	 * Represents various flags a chat {@link SteamID} may have, packed into its instance.
+	 * Represents various flags a chat {@link SteamID} may have, packed into its
+	 * instance.
 	 */
 	public enum ChatInstanceFlags {
 		/**
@@ -86,9 +89,13 @@ public class SteamID {
 
 	/**
 	 * Initializes a new instance of the {@link SteamID} class.
-	 * @param unAccountID	The account ID.
-	 * @param eUniverse		The universe.
-	 * @param eAccountType	The account type.
+	 * 
+	 * @param unAccountID
+	 *            The account ID.
+	 * @param eUniverse
+	 *            The universe.
+	 * @param eAccountType
+	 *            The account type.
 	 */
 	public SteamID(int unAccountID, EUniverse eUniverse, EAccountType eAccountType) {
 		this();
@@ -97,10 +104,15 @@ public class SteamID {
 
 	/**
 	 * Initializes a new instance of the {@link SteamID} class.
-	 * @param unAccountID	The account ID.
-	 * @param unInstance	The instance.
-	 * @param eUniverse		The universe.
-	 * @param eAccountType	The account type.
+	 * 
+	 * @param unAccountID
+	 *            The account ID.
+	 * @param unInstance
+	 *            The instance.
+	 * @param eUniverse
+	 *            The universe.
+	 * @param eAccountType
+	 *            The account type.
 	 */
 	public SteamID(int unAccountID, int unInstance, EUniverse eUniverse, EAccountType eAccountType) {
 		this();
@@ -109,25 +121,34 @@ public class SteamID {
 
 	/**
 	 * Initializes a new instance of the {@link SteamID} class.
-	 * @param id	The 64bit integer to assign this SteamID from.
+	 * 
+	 * @param id
+	 *            The 64bit integer to assign this SteamID from.
 	 */
 	public SteamID(long id) {
 		steamid = new BitVector64(id);
 	}
 
 	/**
-	 * Initializes a new instance of the {@link SteamID} class from a rendered form.
-	 * This constructor assumes the rendered SteamID is in the public universe.
-	 * @param steamId	A "STEAM_" rendered form of the SteamID.
+	 * Initializes a new instance of the {@link SteamID} class from a rendered
+	 * form. This constructor assumes the rendered SteamID is in the public
+	 * universe.
+	 * 
+	 * @param steamId
+	 *            A "STEAM_" rendered form of the SteamID.
 	 */
 	public SteamID(String steamId) {
 		this(steamId, EUniverse.Public);
 	}
 
 	/**
-	 * Initializes a new instance of the {@link SteamID} class from a rendered form and universe.
-	 * @param steamId	A "STEAM_" rendered form of the SteamID.
-	 * @param eUniverse	The universe the SteamID belongs to.
+	 * Initializes a new instance of the {@link SteamID} class from a rendered
+	 * form and universe.
+	 * 
+	 * @param steamId
+	 *            A "STEAM_" rendered form of the SteamID.
+	 * @param eUniverse
+	 *            The universe the SteamID belongs to.
 	 */
 	public SteamID(String steamId, EUniverse eUniverse) {
 		setFromString(steamId, eUniverse);
@@ -135,9 +156,13 @@ public class SteamID {
 
 	/**
 	 * Sets the various components of this SteamID instance.
-	 * @param unAccountID	The account ID.
-	 * @param eUniverse		The universe.
-	 * @param eAccountType	The account type.
+	 * 
+	 * @param unAccountID
+	 *            The account ID.
+	 * @param eUniverse
+	 *            The universe.
+	 * @param eAccountType
+	 *            The account type.
 	 */
 	public void set(int unAccountID, EUniverse eUniverse, EAccountType eAccountType) {
 		setAccountID(unAccountID);
@@ -153,10 +178,15 @@ public class SteamID {
 
 	/**
 	 * Sets the various components of this SteamID instance.
-	 * @param unAccountID	The account ID.
-	 * @param unInstance	The instance.
-	 * @param eUniverse		The universe.
-	 * @param eAccountType	The account type.
+	 * 
+	 * @param unAccountID
+	 *            The account ID.
+	 * @param unInstance
+	 *            The instance.
+	 * @param eUniverse
+	 *            The universe.
+	 * @param eAccountType
+	 *            The account type.
 	 */
 	public void instancedSet(int unAccountID, int unInstance, EUniverse eUniverse, EAccountType eAccountType) {
 		setAccountID(unAccountID);
@@ -166,10 +196,15 @@ public class SteamID {
 	}
 
 	/**
-	 * Sets the various components of this SteamID from a rendered form and universe.
-	 * @param steamId	A "STEAM_" rendered form of the SteamID.
-	 * @param eUniverse	The universe the SteamID belongs to.
-	 * @return	True if this instance was successfully assigned, or false if the given string was in an invalid format.
+	 * Sets the various components of this SteamID from a rendered form and
+	 * universe.
+	 * 
+	 * @param steamId
+	 *            A "STEAM_" rendered form of the SteamID.
+	 * @param eUniverse
+	 *            The universe the SteamID belongs to.
+	 * @return True if this instance was successfully assigned, or false if the
+	 *         given string was in an invalid format.
 	 */
 	public boolean setFromString(String steamId, EUniverse eUniverse) {
 		if (steamId == null || steamId.isEmpty()) {
@@ -195,7 +230,9 @@ public class SteamID {
 
 	/**
 	 * Sets the various components of this SteamID from a 64bit integer form.
-	 * @param ulSteamID	The 64bit integer to assign this SteamID from.
+	 * 
+	 * @param ulSteamID
+	 *            The 64bit integer to assign this SteamID from.
 	 */
 	public void setFromUInt64(long ulSteamID) {
 		steamid.setData(ulSteamID);
@@ -203,6 +240,7 @@ public class SteamID {
 
 	/**
 	 * Converts this SteamID into it's 64bit integer form.
+	 * 
 	 * @return A 64bit integer representing this SteamID.
 	 */
 	public long convertToLong() {
@@ -210,7 +248,9 @@ public class SteamID {
 	}
 
 	/**
-	 * Returns a static account key used for grouping accounts with differing instances.
+	 * Returns a static account key used for grouping accounts with differing
+	 * instances.
+	 * 
 	 * @return A 64bit static account key.
 	 */
 	public long getStaticAccountKey() {
@@ -218,7 +258,9 @@ public class SteamID {
 	}
 
 	/**
-	 * Gets a value indicating whether this instance is a blank anonymous account
+	 * Gets a value indicating whether this instance is a blank anonymous
+	 * account
+	 * 
 	 * @return true if this instance is a blank anon account; otherwise, false.
 	 */
 	public boolean isBlankAnonAccount() {
@@ -227,6 +269,7 @@ public class SteamID {
 
 	/**
 	 * Gets a value indicating whether this instance is a game server account.
+	 * 
 	 * @return true if this instance is a game server account; otherwise, false
 	 */
 	public boolean isGameServerAccount() {
@@ -234,24 +277,33 @@ public class SteamID {
 	}
 
 	/**
-	 * Gets a value indicating whether this instance is a persistent game server account.
-	 * @return true if this instance is a persistent game server account; otherwise, false
+	 * Gets a value indicating whether this instance is a persistent game server
+	 * account.
+	 * 
+	 * @return true if this instance is a persistent game server account;
+	 *         otherwise, false
 	 */
 	public boolean isPersistentGameServerAccount() {
 		return getAccountType() == EAccountType.GameServer;
 	}
 
 	/**
-	 * Gets a value indicating whether this instance is an anonymous game server account.
-	 * @return true if this instance is an anon game server account; otherwise, false.
+	 * Gets a value indicating whether this instance is an anonymous game server
+	 * account.
+	 * 
+	 * @return true if this instance is an anon game server account; otherwise,
+	 *         false.
 	 */
 	public boolean isAnonGameServerAccount() {
 		return getAccountType() == EAccountType.AnonGameServer;
 	}
 
 	/**
-	 * Gets a value indicating whether this instance is a content server account.
-	 * @return true if this instance is a content server account; otherwise, false.
+	 * Gets a value indicating whether this instance is a content server
+	 * account.
+	 * 
+	 * @return true if this instance is a content server account; otherwise,
+	 *         false.
 	 */
 	public boolean isContentServerAccount() {
 		return getAccountType() == EAccountType.ContentServer;
@@ -259,6 +311,7 @@ public class SteamID {
 
 	/**
 	 * Gets a value indicating whether this instance is a clan account.
+	 * 
 	 * @return true if this instance is a clan account; otherwise, false.
 	 */
 	public boolean isClanAccount() {
@@ -267,6 +320,7 @@ public class SteamID {
 
 	/**
 	 * Gets a value indicating whether this instance is a chat account.
+	 * 
 	 * @return true if this instance is a chat account; otherwise, false.
 	 */
 	public boolean isChatAccount() {
@@ -275,6 +329,7 @@ public class SteamID {
 
 	/**
 	 * Gets a value indicating whether this instance is a lobby.
+	 * 
 	 * @return true if this instance is a lobby; otherwise, false.
 	 */
 	public boolean IsLobby() {
@@ -283,6 +338,7 @@ public class SteamID {
 
 	/**
 	 * Gets a value indicating whether this instance is an individual account.
+	 * 
 	 * @return true if this instance is an individual account; otherwise, false.
 	 */
 	public boolean isIndividualAccount() {
@@ -291,6 +347,7 @@ public class SteamID {
 
 	/**
 	 * Gets a value indicating whether this instance is an anonymous account.
+	 * 
 	 * @return true if this instance is an anon account; otherwise, false.
 	 */
 	public boolean isAnonAccount() {
@@ -298,7 +355,9 @@ public class SteamID {
 	}
 
 	/**
-	 * Gets a value indicating whether this instance is an anonymous user account.
+	 * Gets a value indicating whether this instance is an anonymous user
+	 * account.
+	 * 
 	 * @return true if this instance is an anon user account; otherwise, false.
 	 */
 	public boolean isAnonUserAccount() {
@@ -307,7 +366,9 @@ public class SteamID {
 
 	/**
 	 * Gets a value indicating whether this instance is a console user account.
-	 * @return true if this instance is a console user account; otherwise, false.
+	 * 
+	 * @return true if this instance is a console user account; otherwise,
+	 *         false.
 	 */
 	public boolean isConsoleUserAccount() {
 		return getAccountType() == EAccountType.ConsoleUser;
@@ -315,6 +376,7 @@ public class SteamID {
 
 	/**
 	 * Gets a value indicating whether this instance is valid.
+	 * 
 	 * @return true if this instance is valid; otherwise, false.
 	 */
 	public boolean IsValid() {
@@ -349,15 +411,19 @@ public class SteamID {
 
 	/**
 	 * Gets the account id.
+	 * 
 	 * @return The account id.
 	 */
 	public long getAccountID() {
-		return steamid.getMask((short) 0, 0xFFFFFFFF);
+		long mask = steamid.getMask((short) 0, 0xFFFFFFFFL);
+		return mask;
 	}
 
 	/**
 	 * Sets the account id.
-	 * @param value	The account id.
+	 * 
+	 * @param value
+	 *            The account id.
 	 */
 	public void setAccountID(long value) {
 		steamid.setMask((short) 0, 0xFFFFFFFF, value);
@@ -365,6 +431,7 @@ public class SteamID {
 
 	/**
 	 * Gets the account instance.
+	 * 
 	 * @return The account instance.
 	 */
 	public long getAccountInstance() {
@@ -373,7 +440,9 @@ public class SteamID {
 
 	/**
 	 * Sets the account instance.
-	 * @param value	The account instance.
+	 * 
+	 * @param value
+	 *            The account instance.
 	 */
 	public void setAccountInstance(long value) {
 		steamid.setMask((short) 32, 0xFFFFF, value);
@@ -385,6 +454,7 @@ public class SteamID {
 
 	/**
 	 * Gets the account type.
+	 * 
 	 * @return The account type.
 	 */
 	public EAccountType getAccountType() {
@@ -393,7 +463,9 @@ public class SteamID {
 
 	/**
 	 * Sets the account type.
-	 * @param value	The account type.
+	 * 
+	 * @param value
+	 *            The account type.
 	 */
 	public void setAccountType(EAccountType value) {
 		steamid.setMask((short) 52, 0xF, value.v());
@@ -401,6 +473,7 @@ public class SteamID {
 
 	/**
 	 * Gets the account universe.
+	 * 
 	 * @return The account universe.
 	 */
 	public EUniverse getAccountUniverse() {
@@ -409,7 +482,9 @@ public class SteamID {
 
 	/**
 	 * Sets the account universe.
-	 * @param value	The account universe.
+	 * 
+	 * @param value
+	 *            The account universe.
 	 */
 	public void setAccountUniverse(EUniverse value) {
 		steamid.setMask((short) 56, 0xFF, value.v());
@@ -417,19 +492,20 @@ public class SteamID {
 
 	/**
 	 * Renders this instance into it's "STEAM_" represenation.
+	 * 
 	 * @return A string "STEAM_" representation of this SteamID.
 	 */
 	public String render() {
 		switch (getAccountType()) {
-			case Invalid:
-			case Individual:
-				if (getAccountUniverse().v() <= EUniverse.Public.v()) {
-					return String.format("STEAM_0:%d:%d", getAccountID() & 1, (int) getAccountID() >> 1);
-				} else {
-					return String.format("STEAM_%d:%d:%d", getAccountID() & 1, (int) getAccountID() >> 1, getAccountUniverse().v());
-				}
-			default:
-				return super.toString();
+		case Invalid:
+		case Individual:
+			if (getAccountUniverse().v() <= EUniverse.Public.v()) {
+				return String.format("STEAM_0:%d:%d", getAccountID() & 1, (int) getAccountID() >> 1);
+			} else {
+				return String.format("STEAM_%d:%d:%d", getAccountID() & 1, (int) getAccountID() >> 1, getAccountUniverse().v());
+			}
+		default:
+			return super.toString();
 		}
 	}
 

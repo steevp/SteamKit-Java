@@ -34,14 +34,17 @@ public interface IClientGCMsg {
 
 	/**
 	 * serializes this client message instance to a byte array.
+	 * 
 	 * @return Data representing a client message.
 	 */
 	byte[] serialize() throws IOException;
 
 	/**
 	 * Initializes this client message by deserializing the specified data.
-	 * @param data The data representing a client message.
-	 * @throws IOException 
+	 * 
+	 * @param data
+	 *            The data representing a client message.
+	 * @throws IOException
 	 */
 	void deSerialize(byte[] data) throws IOException;
 }

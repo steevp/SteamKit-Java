@@ -1,7 +1,5 @@
 package uk.co.thomasc.steamkit.steam3.handlers.steamuser;
 
-import com.google.protobuf.ByteString;
-
 import uk.co.thomasc.steamkit.base.ClientMsgProtobuf;
 import uk.co.thomasc.steamkit.base.IPacketMsg;
 import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientAccountInfo;
@@ -35,13 +33,17 @@ import uk.co.thomasc.steamkit.types.steamid.SteamID;
 import uk.co.thomasc.steamkit.util.util.NetHelpers;
 import uk.co.thomasc.steamkit.util.util.Utils;
 
+import com.google.protobuf.ByteString;
+
 /**
  * This handler handles all user log on/log off related actions and callbacks.
  */
 public final class SteamUser extends ClientMsgHandler {
 
 	/**
-	 * Gets the SteamID of this client. This value is assigned after a logon attempt has succeeded.
+	 * Gets the SteamID of this client. This value is assigned after a logon
+	 * attempt has succeeded.
+	 * 
 	 * @return The SteamID.
 	 */
 	public SteamID getSteamId() {
@@ -49,13 +51,16 @@ public final class SteamUser extends ClientMsgHandler {
 	}
 
 	/**
-	 * Logs the client into the Steam3 network.
-	 * The client should already have been connected at this point.
-	 * Results are returned in a {@link LoggedOnCallback}.
-	 * @param details	The details to use for logging on.
-	 * @exception IllegalArgumentException Username and password are not set or are not provided.
+	 * Logs the client into the Steam3 network. The client should already have
+	 * been connected at this point. Results are returned in a
+	 * {@link LoggedOnCallback}.
+	 * 
+	 * @param details
+	 *            The details to use for logging on.
+	 * @exception IllegalArgumentException
+	 *                Username and password are not set or are not provided.
 	 */
-	public void logOn(LogOnDetails details) {
+	public void logOn(LogOnDetails details, String machineID) {
 		if (details == null) {
 			throw new IllegalArgumentException("details");
 		}
@@ -88,16 +93,16 @@ public final class SteamUser extends ClientMsgHandler {
 
 		// this is not a proper machine id that Steam accepts
 		// but it's good enough for identifying a machine
-		logon.getBody().setMachineId(ByteString.copyFrom(Utils.generateMachineID()));
+		logon.getBody().setMachineId(ByteString.copyFromUtf8(machineID));//ByteString.copyFrom(Utils.generateMachineID()));
 
 		// steam guard
 		if (details.authCode.length() > 0) {
 			logon.getBody().setAuthCode(details.authCode);
 		}
-		
-		if(details.sentryFileHash != null){
+
+		if (details.sentryFileHash != null) {
 			logon.getBody().setShaSentryfile(ByteString.copyFrom(details.sentryFileHash));
-		}else{
+		} else {
 			logon.getBody().clearShaSentryfile();
 		}
 
@@ -107,11 +112,11 @@ public final class SteamUser extends ClientMsgHandler {
 	}
 
 	/**
-	 * Logs the client into the Steam3 network as an anonymous user.
-	 * The client should already have been connected at this point.
-	 * Results are returned in a {@link LoggedOnCallback}.
+	 * Logs the client into the Steam3 network as an anonymous user. The client
+	 * should already have been connected at this point. Results are returned in
+	 * a {@link LoggedOnCallback}.
 	 */
-	public void logOnAnonymous() {
+	public void logOnAnonymous(String machineID) {
 		final ClientMsgProtobuf<CMsgClientLogon.Builder> logon = new ClientMsgProtobuf<CMsgClientLogon.Builder>(CMsgClientLogon.class, EMsg.ClientLogon);
 
 		final SteamID auId = new SteamID(0, 0, getClient().getConnectedUniverse(), EAccountType.AnonUser);
@@ -124,15 +129,14 @@ public final class SteamUser extends ClientMsgHandler {
 
 		// this is not a proper machine id that Steam accepts
 		// but it's good enough for identifying a machine
-		logon.getBody().setMachineId(ByteString.copyFrom(Utils.generateMachineID()));
+		logon.getBody().setMachineId(ByteString.copyFromUtf8(machineID));
 
 		getClient().send(logon);
 	}
 
 	/**
-	 * Logs the user off of the Steam3 network.
-	 * This method does not disconnect the client.
-	 * Results are returned in a {@link LoggedOffCallback}.
+	 * Logs the user off of the Steam3 network. This method does not disconnect
+	 * the client. Results are returned in a {@link LoggedOffCallback}.
 	 */
 	public void logOff() {
 		final ClientMsgProtobuf<?> logOff = new ClientMsgProtobuf<CMsgClientLogOff.Builder>(CMsgClientLogOff.class, EMsg.ClientLogOff);
@@ -140,9 +144,11 @@ public final class SteamUser extends ClientMsgHandler {
 	}
 
 	/**
-	 * Sends a machine auth response.
-	 * This should normally be used in response to a {@link UpdateMachineAuthCallback}.
-	 * @param details	The details pertaining to the response.
+	 * Sends a machine auth response. This should normally be used in response
+	 * to a {@link UpdateMachineAuthCallback}.
+	 * 
+	 * @param details
+	 *            The details pertaining to the response.
 	 */
 	public void sendMachineAuthResponse(MachineAuthDetails details) {
 		final ClientMsgProtobuf<CMsgClientUpdateMachineAuthResponse.Builder> response = new ClientMsgProtobuf<CMsgClientUpdateMachineAuthResponse.Builder>(CMsgClientUpdateMachineAuthResponse.class, EMsg.ClientUpdateMachineAuthResponse);
@@ -174,27 +180,27 @@ public final class SteamUser extends ClientMsgHandler {
 	@Override
 	public void handleMsg(IPacketMsg packetMsg) {
 		switch (packetMsg.getMsgType()) {
-			case ClientLogOnResponse:
-				handleLogOnResponse(packetMsg);
-				break;
-			case ClientNewLoginKey:
-				handleLoginKey(packetMsg);
-				break;
-			case ClientSessionToken:
-				handleSessionToken(packetMsg);
-				break;
-			case ClientLoggedOff:
-				handleLoggedOff(packetMsg);
-				break;
-			case ClientUpdateMachineAuth:
-				handleUpdateMachineAuth(packetMsg);
-				break;
-			case ClientAccountInfo:
-				handleAccountInfo(packetMsg);
-				break;
-			case ClientWalletInfoUpdate:
-				handleWalletInfo(packetMsg);
-				break;
+		case ClientLogOnResponse:
+			handleLogOnResponse(packetMsg);
+			break;
+		case ClientNewLoginKey:
+			handleLoginKey(packetMsg);
+			break;
+		case ClientSessionToken:
+			handleSessionToken(packetMsg);
+			break;
+		case ClientLoggedOff:
+			handleLoggedOff(packetMsg);
+			break;
+		case ClientUpdateMachineAuth:
+			handleUpdateMachineAuth(packetMsg);
+			break;
+		case ClientAccountInfo:
+			handleAccountInfo(packetMsg);
+			break;
+		case ClientWalletInfoUpdate:
+			handleWalletInfo(packetMsg);
+			break;
 		}
 	}
 

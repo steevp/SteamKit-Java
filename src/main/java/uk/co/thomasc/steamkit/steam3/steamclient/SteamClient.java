@@ -34,8 +34,9 @@ import uk.co.thomasc.steamkit.types.JobID;
 import uk.co.thomasc.steamkit.util.cSharp.ip.ProtocolType;
 
 /**
- * Represents a single client that connects to the Steam3 network.
- * This class is also responsible for handling the registration of client message handlers and callbacks.
+ * Represents a single client that connects to the Steam3 network. This class is
+ * also responsible for handling the registration of client message handlers and
+ * callbacks.
  */
 public final class SteamClient extends CMClient {
 	Map<Class<? extends ClientMsgHandler>, ClientMsgHandler> handlers;
@@ -50,8 +51,11 @@ public final class SteamClient extends CMClient {
 	}
 
 	/**
-	 * Initializes a new instance of the {@link SteamClient} class with a specific connection type.
-	 * @param type	The connection type to use.
+	 * Initializes a new instance of the {@link SteamClient} class with a
+	 * specific connection type.
+	 * 
+	 * @param type
+	 *            The connection type to use.
 	 */
 	public SteamClient(ProtocolType type) {
 		super(type);
@@ -73,8 +77,11 @@ public final class SteamClient extends CMClient {
 
 	/**
 	 * Adds a new handler to the internal list of message handlers.
-	 * @param handler	The handler to add.
-	 * @throws IllegalArgumentException A handler of that type is already registered.
+	 * 
+	 * @param handler
+	 *            The handler to add.
+	 * @throws IllegalArgumentException
+	 *             A handler of that type is already registered.
 	 */
 	public void addHandler(ClientMsgHandler handler) throws InvalidOpenTypeException {
 		if (handlers.containsKey(handler.getClass())) {
@@ -87,7 +94,9 @@ public final class SteamClient extends CMClient {
 
 	/**
 	 * Removes a registered handler by name.
-	 * @param handler	The handler name to remove.
+	 * 
+	 * @param handler
+	 *            The handler name to remove.
 	 */
 	public void removeHandler(Class<? extends ClientMsgHandler> handler) {
 		if (!handlers.containsKey(handler.getClass())) {
@@ -99,16 +108,20 @@ public final class SteamClient extends CMClient {
 
 	/**
 	 * Removes a registered handler.
-	 * @param handler	The handler to remove.
+	 * 
+	 * @param handler
+	 *            The handler to remove.
 	 */
 	public void removeHandler(ClientMsgHandler handler) {
 		removeHandler(handler.getClass());
 	}
 
 	/**
-	 * Returns a registered handler.
-	 * T - The type of the handler to cast to. Must derive from ClientMsgHandler.
-	 * @return A registered handler on success, or null if the handler could not be found.
+	 * Returns a registered handler. T - The type of the handler to cast to.
+	 * Must derive from ClientMsgHandler.
+	 * 
+	 * @return A registered handler on success, or null if the handler could not
+	 *         be found.
 	 */
 	@SuppressWarnings("unchecked")
 	public <T extends ClientMsgHandler> T getHandler(Class<T> type) {
@@ -120,9 +133,11 @@ public final class SteamClient extends CMClient {
 	}
 
 	/**
-	 * Gets the next callback object in the queue.
-	 * This function does not dequeue the callback, you must call FreeLastCallback after processing it.
-	 * @return The next callback in the queue, or null if no callback is waiting.
+	 * Gets the next callback object in the queue. This function does not
+	 * dequeue the callback, you must call FreeLastCallback after processing it.
+	 * 
+	 * @return The next callback in the queue, or null if no callback is
+	 *         waiting.
 	 */
 	public CallbackMsg getCallback() {
 		return getCallback(false);
@@ -130,8 +145,12 @@ public final class SteamClient extends CMClient {
 
 	/**
 	 * Gets the next callback object in the queue, and optionally frees it.
-	 * @param freeLast	if set to true this function also frees the last callback if one existed.
-	 * @return The next callback in the queue, or null if no callback is waiting.
+	 * 
+	 * @param freeLast
+	 *            if set to true this function also frees the last callback if
+	 *            one existed.
+	 * @return The next callback in the queue, or null if no callback is
+	 *         waiting.
 	 */
 	public CallbackMsg getCallback(boolean freeLast) {
 		synchronized (callbackLock) {
@@ -145,7 +164,9 @@ public final class SteamClient extends CMClient {
 
 	/**
 	 * Blocks the calling thread until a callback object is posted to the queue.
-	 * This function does not dequeue the callback, you must call FreeLastCallback after processing it.
+	 * This function does not dequeue the callback, you must call
+	 * FreeLastCallback after processing it.
+	 * 
 	 * @return The callback object from the queue.
 	 */
 	public CallbackMsg waitForCallback() {
@@ -153,10 +174,14 @@ public final class SteamClient extends CMClient {
 	}
 
 	/**
-	 * Blocks the calling thread until a callback object is posted to the queue, or null after the timeout has elapsed.
-	 * This function does not dequeue the callback, you must call FreeLastCallback after processing it.
-	 * @param timeout	The length of time to block.
-	 * @return A callback object from the queue if a callback has been posted, or null if the timeout has elapsed.
+	 * Blocks the calling thread until a callback object is posted to the queue,
+	 * or null after the timeout has elapsed. This function does not dequeue the
+	 * callback, you must call FreeLastCallback after processing it.
+	 * 
+	 * @param timeout
+	 *            The length of time to block.
+	 * @return A callback object from the queue if a callback has been posted,
+	 *         or null if the timeout has elapsed.
 	 */
 	public CallbackMsg waitForCallback(long timeout) {
 		synchronized (callbackLock) {
@@ -176,8 +201,11 @@ public final class SteamClient extends CMClient {
 	}
 
 	/**
-	 * Blocks the calling thread until a callback object is posted to the queue, and optionally frees it.
-	 * @param freeLast	if set to true this function also frees the last callback.
+	 * Blocks the calling thread until a callback object is posted to the queue,
+	 * and optionally frees it.
+	 * 
+	 * @param freeLast
+	 *            if set to true this function also frees the last callback.
 	 * @return The callback object from the queue.
 	 */
 	public CallbackMsg waitForCallback(boolean freeLast) {
@@ -195,10 +223,15 @@ public final class SteamClient extends CMClient {
 	}
 
 	/**
-	 * Blocks the calling thread until a callback object is posted to the queue, and optionally frees it.
-	 * @param freeLast	if set to true this function also frees the last callback.
-	 * @param timeout	The length of time to block.
-	 * @return A callback object from the queue if a callback has been posted, or null if the timeout has elapsed.
+	 * Blocks the calling thread until a callback object is posted to the queue,
+	 * and optionally frees it.
+	 * 
+	 * @param freeLast
+	 *            if set to true this function also frees the last callback.
+	 * @param timeout
+	 *            The length of time to block.
+	 * @return A callback object from the queue if a callback has been posted,
+	 *         or null if the timeout has elapsed.
 	 */
 	public CallbackMsg waitForCallback(boolean freeLast, long timeout) {
 		synchronized (callbackLock) {
@@ -231,8 +264,11 @@ public final class SteamClient extends CMClient {
 	}
 
 	/**
-	 * Posts a callback to the queue. This is normally used directly by client message handlers.
-	 * @param msg	The message.
+	 * Posts a callback to the queue. This is normally used directly by client
+	 * message handlers.
+	 * 
+	 * @param msg
+	 *            The message.
 	 */
 	public void postCallback(CallbackMsg msg) {
 		if (msg == null) {
@@ -246,8 +282,9 @@ public final class SteamClient extends CMClient {
 	}
 
 	/**
-	 * Returns the next available JobID for job based messages.
-	 * This function is thread-safe.
+	 * Returns the next available JobID for job based messages. This function is
+	 * thread-safe.
+	 * 
 	 * @return The next available JobID.
 	 */
 	public JobID getNextJobID() {
@@ -256,8 +293,10 @@ public final class SteamClient extends CMClient {
 
 	/**
 	 * Called when a client message is received from the network.
-	 * @param packetMsg	The packet message.
-	 * @throws IOException 
+	 * 
+	 * @param packetMsg
+	 *            The packet message.
+	 * @throws IOException
 	 */
 	@Override
 	protected void onClientMsgReceived(IPacketMsg packetMsg) throws IOException {
@@ -265,7 +304,7 @@ public final class SteamClient extends CMClient {
 		super.onClientMsgReceived(packetMsg);
 
 		if (packetMsg.getMsgType() == EMsg.ChannelEncryptResult) {
-			handleEncryptResult(packetMsg); // we're interested in this client message to post the connected callback
+			handleEncryptResult_2(packetMsg); // we're interested in this client message to post the connected callback
 		}
 
 		// pass along the clientmsg to all registered handlers
@@ -284,14 +323,15 @@ public final class SteamClient extends CMClient {
 	}
 
 	/**
-	 * Called when the client is connected to Steam3 and is ready to send messages.
+	 * Called when the client is connected to Steam3 and is ready to send
+	 * messages.
 	 */
 	@Override
 	protected void onClientConnected() {
 		postCallback(new ConnectedCallback(EResult.OK));
 	}
 
-	protected void handleEncryptResult(IPacketMsg packetMsg) { // Not an override, I know :S
+	protected void handleEncryptResult_2(IPacketMsg packetMsg) { // Not an override, I know :S
 		final Msg<MsgChannelEncryptResult> encResult = new Msg<MsgChannelEncryptResult>(packetMsg, MsgChannelEncryptResult.class);
 
 		postCallback(new ConnectedCallback(encResult.getBody()));

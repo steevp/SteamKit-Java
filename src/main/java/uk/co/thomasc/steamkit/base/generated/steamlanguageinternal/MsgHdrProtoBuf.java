@@ -3,7 +3,6 @@ package uk.co.thomasc.steamkit.base.generated.steamlanguageinternal;
 import java.io.IOException;
 
 import lombok.Setter;
-
 import uk.co.thomasc.steamkit.base.generated.SteammessagesBase.CMsgProtoBufHeader;
 import uk.co.thomasc.steamkit.base.generated.SteammessagesBase.CMsgProtoBufHeader.Builder;
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EMsg;
@@ -13,7 +12,8 @@ import uk.co.thomasc.steamkit.util.util.MsgUtil;
 
 public class MsgHdrProtoBuf implements ISteamSerializableHeader {
 	// Static size: 4
-	@Setter public EMsg msg = EMsg.Invalid;
+	@Setter
+	public EMsg msg = EMsg.Invalid;
 	// Static size: 4
 	public int headerLength = 0;
 	// Static size: 0

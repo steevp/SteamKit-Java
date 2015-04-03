@@ -52,7 +52,7 @@ class AsnParser {
 	public byte[] Next() throws BerDecodeException {
 		final int position = currentPosition();
 
-		/*byte b = */GetNextOctet();
+		/* byte b = */GetNextOctet();
 
 		final int length = GetLength();
 		if (length > remainingBytes()) {

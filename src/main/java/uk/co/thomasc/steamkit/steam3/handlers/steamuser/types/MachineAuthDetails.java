@@ -9,8 +9,8 @@ import uk.co.thomasc.steamkit.steam3.steamclient.callbackmgr.JobCallback;
  */
 public final class MachineAuthDetails {
 	/**
-	 * Gets or sets the target Job ID for the request.
-	 * This is provided in the {@link JobCallback} for a {@link UpdateMachineAuthCallback}.
+	 * Gets or sets the target Job ID for the request. This is provided in the
+	 * {@link JobCallback} for a {@link UpdateMachineAuthCallback}.
 	 */
 	public long jobId;
 
@@ -40,7 +40,8 @@ public final class MachineAuthDetails {
 	public int fileSize;
 
 	/**
-	 * Gets or sets the last error that occurred while writing the sentry file, or 0 if no error occurred.
+	 * Gets or sets the last error that occurred while writing the sentry file,
+	 * or 0 if no error occurred.
 	 */
 	public int lastError;
 

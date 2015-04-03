@@ -20,7 +20,9 @@ public final class SteamTrading extends ClientMsgHandler {
 
 	/**
 	 * Proposes a trade to another client.
-	 * @param user	The client to trade.
+	 * 
+	 * @param user
+	 *            The client to trade.
 	 */
 	public void trade(SteamID user) {
 		final ClientMsgProtobuf<CMsgTrading_InitiateTradeRequest.Builder> tradeReq = new ClientMsgProtobuf<CMsgTrading_InitiateTradeRequest.Builder>(CMsgTrading_InitiateTradeRequest.class, EMsg.EconTrading_InitiateTradeRequest);
@@ -32,8 +34,11 @@ public final class SteamTrading extends ClientMsgHandler {
 
 	/**
 	 * Responds to a trade proposal.
-	 * @param tradeId		The trade id of the received proposal.
-	 * @param acceptTrade	if set to true, the trade will be accepted.
+	 * 
+	 * @param tradeId
+	 *            The trade id of the received proposal.
+	 * @param acceptTrade
+	 *            if set to true, the trade will be accepted.
 	 */
 	public void respondToTrade(int tradeId, boolean acceptTrade) {
 		final ClientMsgProtobuf<CMsgTrading_InitiateTradeResponse.Builder> tradeResp = new ClientMsgProtobuf<CMsgTrading_InitiateTradeResponse.Builder>(CMsgTrading_InitiateTradeResponse.class, EMsg.EconTrading_InitiateTradeResponse);
@@ -46,7 +51,9 @@ public final class SteamTrading extends ClientMsgHandler {
 
 	/**
 	 * Cancels an already sent trade proposal.
-	 * @param user	The user.
+	 * 
+	 * @param user
+	 *            The user.
 	 */
 	public void cancelTrade(SteamID user) {
 		final ClientMsgProtobuf<CMsgTrading_CancelTradeRequest.Builder> cancelTrade = new ClientMsgProtobuf<CMsgTrading_CancelTradeRequest.Builder>(CMsgTrading_CancelTradeRequest.class, EMsg.EconTrading_CancelTradeRequest);
@@ -62,15 +69,15 @@ public final class SteamTrading extends ClientMsgHandler {
 	@Override
 	public void handleMsg(IPacketMsg packetMsg) {
 		switch (packetMsg.getMsgType()) {
-			case EconTrading_InitiateTradeProposed:
-				handleTradeProposed(packetMsg);
-				break;
-			case EconTrading_InitiateTradeResult:
-				handleTradeResult(packetMsg);
-				break;
-			case EconTrading_StartSession:
-				handleStartSession(packetMsg);
-				break;
+		case EconTrading_InitiateTradeProposed:
+			handleTradeProposed(packetMsg);
+			break;
+		case EconTrading_InitiateTradeResult:
+			handleTradeResult(packetMsg);
+			break;
+		case EconTrading_StartSession:
+			handleStartSession(packetMsg);
+			break;
 		}
 	}
 

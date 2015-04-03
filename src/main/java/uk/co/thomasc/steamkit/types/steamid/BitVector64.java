@@ -4,7 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 public class BitVector64 {
-	@Getter @Setter private Long data;
+	@Getter
+	@Setter
+	private Long data;
 
 	public BitVector64() {
 	}
@@ -13,8 +15,8 @@ public class BitVector64 {
 		data = value;
 	}
 
-	public long getMask(short bitoffset, int valuemask) {
-		return data >> bitoffset & valuemask;
+	public long getMask(short bitoffset, long valuemask) {
+		return (data >> bitoffset) & valuemask;
 	}
 
 	public void setMask(short bitoffset, long valuemask, long value) {

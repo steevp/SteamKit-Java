@@ -8,11 +8,11 @@ import java.util.zip.DataFormatException;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.Inflater;
 
-import com.google.protobuf.CodedOutputStream;
-
 import uk.co.thomasc.steamkit.util.crypto.CryptoHelper;
 import uk.co.thomasc.steamkit.util.stream.BinaryReader;
 import uk.co.thomasc.steamkit.util.stream.BinaryWriter;
+
+import com.google.protobuf.CodedOutputStream;
 
 @SuppressWarnings("unused")
 public class ZipUtil {

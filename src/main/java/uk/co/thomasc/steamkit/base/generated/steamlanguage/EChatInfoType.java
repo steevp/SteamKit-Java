@@ -3,9 +3,7 @@ package uk.co.thomasc.steamkit.base.generated.steamlanguage;
 import java.util.HashMap;
 
 public enum EChatInfoType {
-	StateChange(1),
-	InfoUpdate(2),
-	MemberLimitChange(3), ;
+	StateChange(1), InfoUpdate(2), MemberLimitChange(3), ;
 
 	private int code;
 

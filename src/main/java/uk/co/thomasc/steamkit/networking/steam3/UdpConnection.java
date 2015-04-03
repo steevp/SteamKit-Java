@@ -48,8 +48,9 @@ public class UdpConnection extends Connection {
 	private final int AHEAD_COUNT = 5;
 
 	/**
-	 * Contains information about the state of the connection, used to filter out packets that are
-	 * unexpected or not valid given the state of the connection.
+	 * Contains information about the state of the connection, used to filter
+	 * out packets that are unexpected or not valid given the state of the
+	 * connection.
 	 */
 	private UdpState state;
 
@@ -79,8 +80,9 @@ public class UdpConnection extends Connection {
 	private int outSeqAcked;
 
 	/**
-	 * The sequence number we plan on acknowledging receiving with the next Ack. All packets below or equal
-	 * to inSeq *must* have been received, but not necessarily handled.
+	 * The sequence number we plan on acknowledging receiving with the next Ack.
+	 * All packets below or equal to inSeq *must* have been received, but not
+	 * necessarily handled.
 	 */
 	private int inSeq;
 
@@ -109,7 +111,9 @@ public class UdpConnection extends Connection {
 
 	/**
 	 * Connects to the specified CM server.
-	 * @param endPoint	The CM server.
+	 * 
+	 * @param endPoint
+	 *            The CM server.
 	 */
 	@Override
 	public void connect(IPEndPoint endPoint) {
@@ -135,8 +139,8 @@ public class UdpConnection extends Connection {
 	}
 
 	/**
-	 * Disconnects this instance, blocking until the queue of messages is empty or the connection
-	 * is otherwise terminated.
+	 * Disconnects this instance, blocking until the queue of messages is empty
+	 * or the connection is otherwise terminated.
 	 */
 	@Override
 	public void disconnect() {
@@ -154,15 +158,19 @@ public class UdpConnection extends Connection {
 		try {
 			netThread.join();
 		} catch (final InterruptedException e) {
-		};
+		}
+		;
 
 		// Advance this the same way that steam does, when a socket gets reused.
 		sourceConnId += 256;
 	}
 
 	/**
-	 * Serializes and sends the provided message to the server in as many packets as is necessary.
-	 * @param clientMsg	The ClientMsg
+	 * Serializes and sends the provided message to the server in as many
+	 * packets as is necessary.
+	 * 
+	 * @param clientMsg
+	 *            The ClientMsg
 	 */
 	@Override
 	public void send(IClientMsg clientMsg) {
@@ -184,8 +192,11 @@ public class UdpConnection extends Connection {
 	}
 
 	/**
-	 * Sends the data sequenced as a single message, splitting it into multiple parts if necessary.
-	 * @param ms	The data to send.
+	 * Sends the data sequenced as a single message, splitting it into multiple
+	 * parts if necessary.
+	 * 
+	 * @param ms
+	 *            The data to send.
 	 */
 	private void sendData(BinaryReader ms) {
 		final UdpPacket[] packets = new UdpPacket[ms.getRemaining() / UdpPacket.MAX_PAYLOAD + 1];
@@ -203,7 +214,9 @@ public class UdpConnection extends Connection {
 
 	/**
 	 * Sends the packet as a sequenced, reliable packet.
-	 * @param packet	The packet.
+	 * 
+	 * @param packet
+	 *            The packet.
 	 */
 	private void sendSequenced(UdpPacket packet) {
 		packet.getHeader().seqThis = outSeq;
@@ -217,7 +230,9 @@ public class UdpConnection extends Connection {
 
 	/**
 	 * Sends the packets as one sequenced, reliable net message.
-	 * @param packets	The packets that make up the single net message
+	 * 
+	 * @param packets
+	 *            The packets that make up the single net message
 	 */
 	private void sendSequenced(UdpPacket[] packets) {
 		final int msgStart = outSeq;
@@ -233,7 +248,9 @@ public class UdpConnection extends Connection {
 
 	/**
 	 * Sends a packet immediately.
-	 * @param packet	The packet.
+	 * 
+	 * @param packet
+	 *            The packet.
 	 */
 	private void sendPacket(UdpPacket packet) {
 		packet.getHeader().sourceConnID = sourceConnId;
@@ -269,15 +286,16 @@ public class UdpConnection extends Connection {
 	}
 
 	/**
-	 * Sends a datagram Ack, used when an Ack needs to be sent but there is no data response to piggy-back on.
+	 * Sends a datagram Ack, used when an Ack needs to be sent but there is no
+	 * data response to piggy-back on.
 	 */
 	private void sendAck() {
 		sendPacket(new UdpPacket(EUdpPacketType.Datagram));
 	}
 
 	/**
-	 * Sends or resends sequenced messages, if necessary. Also responsible for throttling
-	 * the rate at which they are sent.
+	 * Sends or resends sequenced messages, if necessary. Also responsible for
+	 * throttling the rate at which they are sent.
 	 */
 	private void sendPendingMessages() {
 		if (new Date().compareTo(nextResend) > 0 && outSeqSent > outSeqAcked) {
@@ -302,7 +320,9 @@ public class UdpConnection extends Connection {
 
 	/**
 	 * Returns the number of message parts in the next message.
-	 * @return Non-zero number of message parts if a message is ready to be handled, 0 otherwise
+	 * 
+	 * @return Non-zero number of message parts if a message is ready to be
+	 *         handled, 0 otherwise
 	 */
 	private int readyMessageParts() {
 		// Make sure that the first packet of the next message to handle is present
@@ -324,6 +344,7 @@ public class UdpConnection extends Connection {
 
 	/**
 	 * Dispatches up to one message to the rest of SteamKit
+	 * 
 	 * @return True if a message was dispatched, false otherwise
 	 */
 	private boolean dispatchMessage() {
@@ -360,7 +381,8 @@ public class UdpConnection extends Connection {
 
 	class NetLoop implements Runnable {
 		/**
-		 * Processes incoming packets, maintains connection consistency, and oversees outgoing packets.
+		 * Processes incoming packets, maintains connection consistency, and
+		 * oversees outgoing packets.
 		 */
 		@Override
 		public void run() {
@@ -417,7 +439,7 @@ public class UdpConnection extends Connection {
 						cl.add(Calendar.SECOND, TIMEOUT_DELAY);
 						timeOut = cl.getTime();
 
-						final BinaryReader ms = new BinaryReader(Arrays.copyOfRange(packet.getData(), 0, packet.getLength()));
+						final BinaryReader ms = new BinaryReader(copyOfRange(packet.getData(), 0, packet.getLength()));
 						final UdpPacket pkt = new UdpPacket(ms);
 
 						receivePacket(pkt);
@@ -463,8 +485,11 @@ public class UdpConnection extends Connection {
 	}
 
 	/**
-	 * Receives the packet, performs all sanity checks and then passes it along as necessary.
-	 * @param packet	The packet.
+	 * Receives the packet, performs all sanity checks and then passes it along
+	 * as necessary.
+	 * 
+	 * @param packet
+	 *            The packet.
 	 */
 	private void receivePacket(UdpPacket packet) {
 		// Check for a malformed packet
@@ -515,30 +540,32 @@ public class UdpConnection extends Connection {
 		}
 
 		switch (packet.getHeader().packetType) {
-			case Challenge:
-				receiveChallenge(packet);
-				break;
-			case Accept:
-				receiveAccept(packet);
-				break;
-			case Data:
-				receiveData(packet);
-				break;
-			case Disconnect:
-				DebugLog.writeLine("UdpConnection", "Disconnected by server");
-				state = UdpState.Disconnected;
-				return;
-			case Datagram:
-				break;
-			default:
-				DebugLog.writeLine("UdpConnection", "Received unexpected packet type " + packet.getHeader().packetType);
-				break;
+		case Challenge:
+			receiveChallenge(packet);
+			break;
+		case Accept:
+			receiveAccept(packet);
+			break;
+		case Data:
+			receiveData(packet);
+			break;
+		case Disconnect:
+			DebugLog.writeLine("UdpConnection", "Disconnected by server");
+			state = UdpState.Disconnected;
+			return;
+		case Datagram:
+			break;
+		default:
+			DebugLog.writeLine("UdpConnection", "Received unexpected packet type " + packet.getHeader().packetType);
+			break;
 		}
 	}
 
 	/**
 	 * Receives the challenge and responds with a Connect request
-	 * @param packet	The packet.
+	 * 
+	 * @param packet
+	 *            The packet.
 	 */
 	private void receiveChallenge(UdpPacket packet) {
 		if (state != UdpState.ChallengeReqSent) {
@@ -569,8 +596,9 @@ public class UdpConnection extends Connection {
 	}
 
 	/**
-	 * Receives the notification of an accepted connection and sets the connection id that will be used for the
-	 * connection's duration.
+	 * Receives the notification of an accepted connection and sets the
+	 * connection id that will be used for the connection's duration.
+	 * 
 	 * @param packet
 	 */
 	private void receiveAccept(UdpPacket packet) {
@@ -588,8 +616,11 @@ public class UdpConnection extends Connection {
 	}
 
 	/**
-	 * Receives typical data packets before dispatching them for consumption by the rest of SteamKit
-	 * @param packet	The packet.
+	 * Receives typical data packets before dispatching them for consumption by
+	 * the rest of SteamKit
+	 * 
+	 * @param packet
+	 *            The packet.
 	 */
 	private void receiveData(UdpPacket packet) {
 		// Data packets are unexpected if a valid connection has not been established
@@ -614,4 +645,11 @@ public class UdpConnection extends Connection {
 	public InetAddress getLocalIP() {
 		return sock.getLocalAddress();
 	}
+	
+	public static byte[] copyOfRange(byte[] from, int start, int end){
+        int length = end - start;
+        byte[] result = new byte[length];
+        System.arraycopy(from, start, result, 0, length);
+        return result;
+    }
 }

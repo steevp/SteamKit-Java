@@ -3,11 +3,7 @@ package uk.co.thomasc.steamkit.base.generated.steamlanguage;
 import java.util.HashMap;
 
 public enum EChatMemberStateChange {
-	Entered(0x01),
-	Left(0x02),
-	Disconnected(0x04),
-	Kicked(0x08),
-	Banned(0x10), ;
+	Entered(0x01), Left(0x02), Disconnected(0x04), Kicked(0x08), Banned(0x10), ;
 
 	private byte code;
 

@@ -1,7 +1,6 @@
 package uk.co.thomasc.steamkit.steam3.handlers.steamfriends.callbacks;
 
 import lombok.Getter;
-
 import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientChatInvite;
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EChatRoomType;
 import uk.co.thomasc.steamkit.steam3.steamclient.callbackmgr.CallbackMsg;
@@ -15,37 +14,44 @@ public final class ChatInviteCallback extends CallbackMsg {
 	/**
 	 * Gets the SteamID of the user who was invited to the chat.
 	 */
-	@Getter private final SteamID invitedID;
+	@Getter
+	private final SteamID invitedID;
 
 	/**
 	 * Gets the chat room SteamID.
 	 */
-	@Getter private final SteamID chatRoomID;
+	@Getter
+	private final SteamID chatRoomID;
 
 	/**
 	 * Gets the SteamID of the user who performed the invitation.
 	 */
-	@Getter private final SteamID patronID;
+	@Getter
+	private final SteamID patronID;
 
 	/**
 	 * Gets the chat room type.
 	 */
-	@Getter private final EChatRoomType chatRoomType;
+	@Getter
+	private final EChatRoomType chatRoomType;
 
 	/**
 	 * Gets the SteamID of the chat friend.
 	 */
-	@Getter private final SteamID friendChatID;
+	@Getter
+	private final SteamID friendChatID;
 
 	/**
 	 * Gets the name of the chat room.
 	 */
-	@Getter private final String chatRoomName;
+	@Getter
+	private final String chatRoomName;
 
 	/**
 	 * Gets the GameID associated with this chat room, if it's a game lobby.
 	 */
-	@Getter private final GameID gameID;
+	@Getter
+	private final GameID gameID;
 
 	public ChatInviteCallback(CMsgClientChatInvite invite) {
 		invitedID = new SteamID(invite.getSteamIdInvited());

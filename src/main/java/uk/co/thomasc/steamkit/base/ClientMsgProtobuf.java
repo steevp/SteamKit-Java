@@ -2,15 +2,10 @@ package uk.co.thomasc.steamkit.base;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
 import lombok.Getter;
-
-import com.google.protobuf.AbstractMessage;
-import com.google.protobuf.GeneratedMessage;
-
 import uk.co.thomasc.steamkit.base.generated.SteammessagesBase.CMsgProtoBufHeader.Builder;
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EMsg;
 import uk.co.thomasc.steamkit.base.generated.steamlanguageinternal.MsgHdrProtoBuf;
@@ -20,9 +15,14 @@ import uk.co.thomasc.steamkit.util.logging.Debug;
 import uk.co.thomasc.steamkit.util.stream.BinaryReader;
 import uk.co.thomasc.steamkit.util.stream.BinaryWriter;
 
+import com.google.protobuf.AbstractMessage;
+import com.google.protobuf.GeneratedMessage;
+
 /**
  * Represents a protobuf backed client message.
- * @param <U> The builder for T
+ * 
+ * @param <U>
+ *            The builder for T
  */
 public final class ClientMsgProtobuf<U extends GeneratedMessage.Builder<U>> extends MsgBase<MsgHdrProtoBuf> {
 
@@ -116,7 +116,8 @@ public final class ClientMsgProtobuf<U extends GeneratedMessage.Builder<U>> exte
 	/**
 	 * Gets the body structure of this message.
 	 */
-	@Getter private U body;
+	@Getter
+	private U body;
 
 	private Class<? extends AbstractMessage> clazz;
 
@@ -125,11 +126,15 @@ public final class ClientMsgProtobuf<U extends GeneratedMessage.Builder<U>> exte
 	}
 
 	/**
-	 * Initializes a new instance of the {@link ClientMsgProtobuf} class.
-	 * This is a client send constructor.
-	 * @param eMsg				The network message type this client message represents.
-	 * @param clazz				The class of T
-	 * @param payloadReserve	The number of bytes to initialize the payload capacity to.
+	 * Initializes a new instance of the {@link ClientMsgProtobuf} class. This
+	 * is a client send constructor.
+	 * 
+	 * @param eMsg
+	 *            The network message type this client message represents.
+	 * @param clazz
+	 *            The class of T
+	 * @param payloadReserve
+	 *            The number of bytes to initialize the payload capacity to.
 	 */
 	@SuppressWarnings("unchecked")
 	public ClientMsgProtobuf(Class<? extends AbstractMessage> clazz, EMsg eMsg, int payloadReserve) {
@@ -153,11 +158,15 @@ public final class ClientMsgProtobuf<U extends GeneratedMessage.Builder<U>> exte
 	}
 
 	/**
-	 * Initializes a new instance of the {@link ClientMsgProtobuf} class.
-	 * This a reply constructor.
-	 * @param eMsg				The network message type this client message represents.
-	 * @param msg				The message that this instance is a reply for.
-	 * @param payloadReserve	The number of bytes to initialize the payload capacity to.
+	 * Initializes a new instance of the {@link ClientMsgProtobuf} class. This a
+	 * reply constructor.
+	 * 
+	 * @param eMsg
+	 *            The network message type this client message represents.
+	 * @param msg
+	 *            The message that this instance is a reply for.
+	 * @param payloadReserve
+	 *            The number of bytes to initialize the payload capacity to.
 	 */
 	public ClientMsgProtobuf(Class<? extends AbstractMessage> clazz, EMsg eMsg, MsgBase<MsgHdrProtoBuf> msg, int payloadReserve) {
 		this(clazz, eMsg, payloadReserve);
@@ -166,9 +175,11 @@ public final class ClientMsgProtobuf<U extends GeneratedMessage.Builder<U>> exte
 	}
 
 	/**
-	 * Initializes a new instance of the {@link ClientMsgProtobuf} class.
-	 * This is a recieve constructor.
-	 * @param msg	The packet message to build this client message from.
+	 * Initializes a new instance of the {@link ClientMsgProtobuf} class. This
+	 * is a recieve constructor.
+	 * 
+	 * @param msg
+	 *            The packet message to build this client message from.
 	 */
 	public ClientMsgProtobuf(Class<? extends AbstractMessage> clazz, IPacketMsg msg) {
 		this(clazz, msg.getMsgType());
@@ -184,7 +195,8 @@ public final class ClientMsgProtobuf<U extends GeneratedMessage.Builder<U>> exte
 
 	/**
 	 * serializes this client message instance to a byte array.
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
 	@Override
 	public byte[] serialize() throws IOException {
@@ -199,7 +211,8 @@ public final class ClientMsgProtobuf<U extends GeneratedMessage.Builder<U>> exte
 
 	/**
 	 * Initializes this client message by deserializing the specified data.
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -218,6 +231,13 @@ public final class ClientMsgProtobuf<U extends GeneratedMessage.Builder<U>> exte
 		final int payloadOffset = is.getPosition();
 		final int payloadLen = is.getRemaining();
 
-		setReader(new BinaryReader(new ByteArrayInputStream(Arrays.copyOfRange(data, payloadOffset, payloadOffset + payloadLen))));
+		setReader(new BinaryReader(new ByteArrayInputStream(copyOfRange(data, payloadOffset, payloadOffset + payloadLen))));
 	}
+	
+	public static byte[] copyOfRange(byte[] from, int start, int end){
+        int length = end - start;
+        byte[] result = new byte[length];
+        System.arraycopy(from, start, result, 0, length);
+        return result;
+    }
 }

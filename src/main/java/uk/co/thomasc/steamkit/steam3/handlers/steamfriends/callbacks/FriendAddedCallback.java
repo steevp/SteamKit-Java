@@ -1,7 +1,6 @@
 package uk.co.thomasc.steamkit.steam3.handlers.steamfriends.callbacks;
 
 import lombok.Getter;
-
 import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientAddFriendResponse;
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EResult;
 import uk.co.thomasc.steamkit.steam3.steamclient.callbackmgr.CallbackMsg;
@@ -14,17 +13,20 @@ public final class FriendAddedCallback extends CallbackMsg {
 	/**
 	 * Gets the result of the request.
 	 */
-	@Getter private final EResult result;
+	@Getter
+	private final EResult result;
 
 	/**
 	 * Gets the SteamID of the friend that was added.
 	 */
-	@Getter private final SteamID steamID;
+	@Getter
+	private final SteamID steamID;
 
 	/**
 	 * Gets the persona name of the friend.
 	 */
-	@Getter private final String personaName;
+	@Getter
+	private final String personaName;
 
 	public FriendAddedCallback(CMsgClientAddFriendResponse msg) {
 		result = EResult.f(msg.getEresult());

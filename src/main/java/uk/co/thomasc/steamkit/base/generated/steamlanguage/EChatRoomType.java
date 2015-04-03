@@ -3,9 +3,7 @@ package uk.co.thomasc.steamkit.base.generated.steamlanguage;
 import java.util.HashMap;
 
 public enum EChatRoomType {
-	Friend(1),
-	MUC(2),
-	Lobby(3), ;
+	Friend(1), MUC(2), Lobby(3), ;
 
 	private int code;
 

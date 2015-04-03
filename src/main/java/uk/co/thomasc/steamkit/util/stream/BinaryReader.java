@@ -45,14 +45,15 @@ public class BinaryReader {
 	}
 
 	public int getPosition() {
-		/*try {
-			Field f = CodedInputStream.class.getDeclaredField("totalBytesRetired");
-			f.setAccessible(true);
-			return (int) f.get(reader);
-		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-			uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
-		}
-		return 0;*/
+		/*
+		 * try { Field f =
+		 * CodedInputStream.class.getDeclaredField("totalBytesRetired");
+		 * f.setAccessible(true); return (int) f.get(reader); } catch
+		 * (NoSuchFieldException | SecurityException | IllegalArgumentException
+		 * | IllegalAccessException e) {
+		 * uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX",
+		 * "Exception: %s", e); } return 0;
+		 */
 		return reader.getTotalBytesRead();
 	}
 

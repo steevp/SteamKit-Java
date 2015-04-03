@@ -7,10 +7,10 @@ public class WebHelpers {
 		}
 
 		switch (ch) {
-			case '-':
-			case '.':
-			case '_':
-				return true;
+		case '-':
+		case '.':
+		case '_':
+			return true;
 		}
 
 		return false;

@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import lombok.Getter;
 import lombok.Setter;
-
 import uk.co.thomasc.steamkit.base.gc.IPacketGCMsg;
 import uk.co.thomasc.steamkit.base.generated.steamlanguageinternal.MsgGCHdr;
 import uk.co.thomasc.steamkit.types.JobID;
@@ -26,24 +25,32 @@ public final class PacketClientGCMsg implements IPacketGCMsg {
 	/**
 	 * Gets the network message type of this packet message.
 	 */
-	@Getter private final int msgType;
+	@Getter
+	private final int msgType;
 
 	/**
 	 * Gets the target job id for this packet message.
 	 */
-	@Getter @Setter private JobID targetJobID;
+	@Getter
+	@Setter
+	private JobID targetJobID;
 
 	/**
 	 * Gets the source job id for this packet message.
 	 */
-	@Getter @Setter private JobID sourceJobID;
+	@Getter
+	@Setter
+	private JobID sourceJobID;
 
 	byte[] payload;
 
 	/**
 	 * Initializes a new instance of the {@link PacketClientGCMsg} class.
-	 * @param eMsg	The network message type for this packet message.
-	 * @param data	The data.
+	 * 
+	 * @param eMsg
+	 *            The network message type for this packet message.
+	 * @param data
+	 *            The data.
 	 */
 	public PacketClientGCMsg(int eMsg, byte[] data) {
 		msgType = eMsg;
@@ -65,6 +72,7 @@ public final class PacketClientGCMsg implements IPacketGCMsg {
 
 	/**
 	 * Gets the underlying data that represents this packet message.
+	 * 
 	 * @return The data.
 	 */
 	@Override
