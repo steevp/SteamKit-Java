@@ -1,7 +1,10 @@
 package uk.co.thomasc.steamkit.steam3.handlers.steamuser;
 
+import com.google.protobuf.nano.MessageNano;
+
 import uk.co.thomasc.steamkit.base.ClientMsgProtobuf;
 import uk.co.thomasc.steamkit.base.IPacketMsg;
+import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver;
 import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientAccountInfo;
 import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientLogOff;
 import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientLoggedOff;
@@ -10,18 +13,26 @@ import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClien
 import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientNewLoginKey;
 import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientNewLoginKeyAccepted;
 import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientSessionToken;
-import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientUpdateMachineAuth;
-import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientUpdateMachineAuthResponse;
 import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver.CMsgClientWalletInfoUpdate;
+import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver2.CMsgClientServiceMethod;
+import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver2.CMsgClientPurchaseResponse;
+import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver2.CMsgClientRegisterKey;
+import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver2.CMsgClientUpdateMachineAuth;
+import uk.co.thomasc.steamkit.base.generated.SteammessagesClientserver2.CMsgClientUpdateMachineAuthResponse;
+import uk.co.thomasc.steamkit.base.generated.SteammessagesTwofactorSteamclient.CTwoFactor_Status_Request;
+import uk.co.thomasc.steamkit.base.generated.SteammessagesTwofactorSteamclient.CTwoFactor_FinalizeAddAuthenticator_Request;
+import uk.co.thomasc.steamkit.base.generated.SteammessagesTwofactorSteamclient.CTwoFactor_AddAuthenticator_Request;
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EAccountType;
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EMsg;
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EResult;
 import uk.co.thomasc.steamkit.base.generated.steamlanguageinternal.msg.MsgClientLogon;
 import uk.co.thomasc.steamkit.steam3.handlers.ClientMsgHandler;
+import uk.co.thomasc.steamkit.steam3.handlers.steamunifiedmessages.SteamUnifiedMessages;
 import uk.co.thomasc.steamkit.steam3.handlers.steamuser.callbacks.AccountInfoCallback;
 import uk.co.thomasc.steamkit.steam3.handlers.steamuser.callbacks.LoggedOffCallback;
 import uk.co.thomasc.steamkit.steam3.handlers.steamuser.callbacks.LoggedOnCallback;
 import uk.co.thomasc.steamkit.steam3.handlers.steamuser.callbacks.LoginKeyCallback;
+import uk.co.thomasc.steamkit.steam3.handlers.steamuser.callbacks.PurchaseResponseCallback;
 import uk.co.thomasc.steamkit.steam3.handlers.steamuser.callbacks.SessionTokenCallback;
 import uk.co.thomasc.steamkit.steam3.handlers.steamuser.callbacks.UpdateMachineAuthCallback;
 import uk.co.thomasc.steamkit.steam3.handlers.steamuser.callbacks.WalletInfoCallback;
@@ -32,8 +43,6 @@ import uk.co.thomasc.steamkit.types.JobID;
 import uk.co.thomasc.steamkit.types.steamid.SteamID;
 import uk.co.thomasc.steamkit.util.util.NetHelpers;
 import uk.co.thomasc.steamkit.util.util.Utils;
-
-import com.google.protobuf.ByteString;
 
 /**
  * This handler handles all user log on/log off related actions and callbacks.
@@ -64,49 +73,61 @@ public final class SteamUser extends ClientMsgHandler {
 		if (details == null) {
 			throw new IllegalArgumentException("details");
 		}
-		if (details.username.length() == 0 || details.password.length() == 0) {
+		/*if (details.username.length() == 0 || details.password.length() == 0) {
 			throw new IllegalArgumentException("LogOn requires a username and password to be set in 'details'.");
-		}
+		}*/
 
-		final ClientMsgProtobuf<CMsgClientLogon.Builder> logon = new ClientMsgProtobuf<CMsgClientLogon.Builder>(CMsgClientLogon.class, EMsg.ClientLogon);
+		final ClientMsgProtobuf<CMsgClientLogon> logon = new ClientMsgProtobuf<CMsgClientLogon>(CMsgClientLogon.class, EMsg.ClientLogon);
 
 		final SteamID steamId = new SteamID(0, details.accountInstance, getClient().getConnectedUniverse(), EAccountType.Individual);
 
 		final int localIp = (int) NetHelpers.getIPAddress(getClient().getLocalIP());
 
-		logon.getProtoHeader().setClientSessionid(0);
-		logon.getProtoHeader().setSteamid(steamId.convertToLong());
+		logon.getProtoHeader().clientSessionid = 0;
+		logon.getProtoHeader().steamid = steamId.convertToLong();
 
-		logon.getBody().setObfustucatedPrivateIp(localIp ^ MsgClientLogon.ObfuscationMask);
+		logon.getBody().obfustucatedPrivateIp = localIp ^ MsgClientLogon.ObfuscationMask;
 
-		logon.getBody().setAccountName(details.username);
-		logon.getBody().setPassword(details.password);
+		if(details.username.length() > 0)
+			logon.getBody().accountName = details.username;
+		if(details.password.length() > 0)
+			logon.getBody().password = details.password;
+		if(details.loginkey.length() > 0)
+			logon.getBody().loginKey = details.loginkey;
 
-		logon.getBody().setProtocolVersion(MsgClientLogon.CurrentProtocol);
-		logon.getBody().setClientOsType(Utils.getOSType().v());
-		logon.getBody().setClientLanguage("english");
 
-		logon.getBody().setSteam2TicketRequest(details.requestSteam2Ticket);
+		logon.getBody().protocolVersion = MsgClientLogon.CurrentProtocol;
+		logon.getBody().clientOsType = Utils.getOSType().v();
+		logon.getBody().clientLanguage = "english";
+
+		logon.getBody().steam2TicketRequest = details.requestSteam2Ticket;
+		logon.getBody().shouldRememberPassword = details.shouldRememberPassword;
+
+		logon.getBody().machineName = "ICE";
 
 		// we're now using the latest steamclient package version, this is required to get a proper sentry file for steam guard
-		logon.getBody().setClientPackageVersion(1771); // TODO: determine if this is still required
+		logon.getBody().clientPackageVersion = 1771; // TODO: determine if this is still required
 
 		// this is not a proper machine id that Steam accepts
 		// but it's good enough for identifying a machine
-		logon.getBody().setMachineId(ByteString.copyFromUtf8(machineID));//ByteString.copyFrom(Utils.generateMachineID()));
+		logon.getBody().machineId = machineID.getBytes();//ByteString.copyFrom(Utils.generateMachineID());
 
 		// steam guard
 		if (details.authCode.length() > 0) {
-			logon.getBody().setAuthCode(details.authCode);
+			logon.getBody().authCode = details.authCode;
+		}
+
+		if(details.twoFactorCode.length() > 0) {
+			logon.getBody().twoFactorCode = details.twoFactorCode;
 		}
 
 		if (details.sentryFileHash != null) {
-			logon.getBody().setShaSentryfile(ByteString.copyFrom(details.sentryFileHash));
+			logon.getBody().shaSentryfile = details.sentryFileHash;
 		} else {
-			logon.getBody().clearShaSentryfile();
+			logon.getBody().shaSentryfile = new byte[0];
 		}
 
-		logon.getBody().setEresultSentryfile((details.sentryFileHash != null ? EResult.OK : EResult.FileNotFound).v());
+		logon.getBody().eresultSentryfile = (details.sentryFileHash != null ? EResult.OK : EResult.FileNotFound).v();
 
 		getClient().send(logon);
 	}
@@ -117,19 +138,19 @@ public final class SteamUser extends ClientMsgHandler {
 	 * a {@link LoggedOnCallback}.
 	 */
 	public void logOnAnonymous(String machineID) {
-		final ClientMsgProtobuf<CMsgClientLogon.Builder> logon = new ClientMsgProtobuf<CMsgClientLogon.Builder>(CMsgClientLogon.class, EMsg.ClientLogon);
+		final ClientMsgProtobuf<CMsgClientLogon> logon = new ClientMsgProtobuf<CMsgClientLogon>(CMsgClientLogon.class, EMsg.ClientLogon);
 
 		final SteamID auId = new SteamID(0, 0, getClient().getConnectedUniverse(), EAccountType.AnonUser);
 
-		logon.getProtoHeader().setClientSessionid(0);
-		logon.getProtoHeader().setSteamid(auId.convertToLong());
+		logon.getProtoHeader().clientSessionid = 0;
+		logon.getProtoHeader().steamid = auId.convertToLong();
 
-		logon.getBody().setProtocolVersion(MsgClientLogon.CurrentProtocol);
-		logon.getBody().setClientOsType(Utils.getOSType().v());
+		logon.getBody().protocolVersion = MsgClientLogon.CurrentProtocol;
+		logon.getBody().clientOsType = Utils.getOSType().v();
 
 		// this is not a proper machine id that Steam accepts
 		// but it's good enough for identifying a machine
-		logon.getBody().setMachineId(ByteString.copyFromUtf8(machineID));
+		logon.getBody().machineId = machineID.getBytes();
 
 		getClient().send(logon);
 	}
@@ -139,8 +160,31 @@ public final class SteamUser extends ClientMsgHandler {
 	 * the client. Results are returned in a {@link LoggedOffCallback}.
 	 */
 	public void logOff() {
-		final ClientMsgProtobuf<?> logOff = new ClientMsgProtobuf<CMsgClientLogOff.Builder>(CMsgClientLogOff.class, EMsg.ClientLogOff);
+		final ClientMsgProtobuf<?> logOff = new ClientMsgProtobuf<CMsgClientLogOff>(CMsgClientLogOff.class, EMsg.ClientLogOff);
 		getClient().send(logOff);
+	}
+
+	/**
+	 * Set the currently playing game of the user
+	 * @param appid		The appid of the game to "play" -- 0 for no game.
+	 */
+	public void setPlayingGame(int appid) {
+		ClientMsgProtobuf<SteammessagesClientserver.CMsgClientGamesPlayed> playGame;
+		playGame = new ClientMsgProtobuf<SteammessagesClientserver.CMsgClientGamesPlayed>(SteammessagesClientserver.CMsgClientGamesPlayed.class, EMsg.ClientGamesPlayed);
+		SteammessagesClientserver.CMsgClientGamesPlayed.GamePlayed gamePlayed = new SteammessagesClientserver.CMsgClientGamesPlayed.GamePlayed();
+		gamePlayed.gameId = appid;
+		playGame.getBody().gamesPlayed = new SteammessagesClientserver.CMsgClientGamesPlayed.GamePlayed[]{gamePlayed};
+		getClient().send(playGame);
+	}
+
+	/**
+	 * Requests to register a product key to this account
+	 * @param key		The product key
+	 */
+	public void registerProductKey(String key) {
+		ClientMsgProtobuf<CMsgClientRegisterKey> registerKey = new ClientMsgProtobuf<CMsgClientRegisterKey>(CMsgClientRegisterKey.class, EMsg.ClientRegisterKey);
+		registerKey.getBody().key = key;
+		getClient().send(registerKey);
 	}
 
 	/**
@@ -151,28 +195,93 @@ public final class SteamUser extends ClientMsgHandler {
 	 *            The details pertaining to the response.
 	 */
 	public void sendMachineAuthResponse(MachineAuthDetails details) {
-		final ClientMsgProtobuf<CMsgClientUpdateMachineAuthResponse.Builder> response = new ClientMsgProtobuf<CMsgClientUpdateMachineAuthResponse.Builder>(CMsgClientUpdateMachineAuthResponse.class, EMsg.ClientUpdateMachineAuthResponse);
+		final ClientMsgProtobuf<CMsgClientUpdateMachineAuthResponse> response = new ClientMsgProtobuf<CMsgClientUpdateMachineAuthResponse>(CMsgClientUpdateMachineAuthResponse.class, EMsg.ClientUpdateMachineAuthResponse);
 
 		// so we respond to the correct message
-		response.getProtoHeader().setJobidTarget(details.jobId);
+		response.getProtoHeader().jobidTarget = details.jobId;
 
-		response.getBody().setCubwrote(details.bytesWritten);
-		response.getBody().setEresult(details.result.v());
+		response.getBody().cubwrote = details.bytesWritten;
+		response.getBody().eresult = details.result.v();
 
-		response.getBody().setFilename(details.fileName);
-		response.getBody().setFilesize(details.fileSize);
+		response.getBody().filename = details.fileName;
+		response.getBody().filesize = details.fileSize;
 
-		response.getBody().setGetlasterror(details.lastError);
-		response.getBody().setOffset(details.offset);
+		response.getBody().getlasterror = details.lastError;
+		response.getBody().offset = details.offset;
 
-		response.getBody().setShaFile(ByteString.copyFrom(details.sentryFileHash));
+		response.getBody().shaFile = details.sentryFileHash;
 
-		response.getBody().setOtpIdentifier(details.oneTimePassword.identifier);
-		response.getBody().setOtpType(details.oneTimePassword.type);
-		response.getBody().setOtpValue(details.oneTimePassword.value);
+		response.getBody().otpIdentifier = details.oneTimePassword.identifier;
+		response.getBody().otpType = details.oneTimePassword.type;
+		response.getBody().otpValue = details.oneTimePassword.value;
 
 		getClient().send(response);
 	}
+
+	/**
+	 * Start the process to enable TOTP two-factor authentication for your account
+	 *
+	 * @param device_identifier		An identifier for the device.
+	 * @return 		Whether or not the two-factor authentication request was actually sent.
+	 * 				The request may still fail but at least it sent.
+	 */
+	public boolean enableTwoFactor(String device_identifier) {
+		// ClientServiceMethod??
+		// https://github.com/DoctorMcKay/node-steam-user/blob/master/components/messages.js#L190
+		//CTwoFactor_AddAuthenticator_Request
+		CTwoFactor_AddAuthenticator_Request proto = new CTwoFactor_AddAuthenticator_Request();
+		proto.steamid = getClient().getSteamId().convertToLong();
+		proto.authenticatorTime = (System.currentTimeMillis() / 1000L);
+		proto.authenticatorType = 1;
+		proto.deviceIdentifier = device_identifier;
+		proto.smsPhoneId = "1";
+
+		SteamUnifiedMessages steamUnifiedMessages = getClient().getHandler(SteamUnifiedMessages.class);
+		if(steamUnifiedMessages != null) {
+			steamUnifiedMessages.sendUnifiedMessage("TwoFactor.AddAuthenticator#1", proto, false);
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Finalize the authenticator adding process
+	 * @return 		Whether or not the two-factor authentication request was actually sent.
+	 * 				The request may still fail but at least it sent.
+	 */
+	public boolean finalizeTwoFactor(String activationCode, String authenticatorCode) {
+		CTwoFactor_FinalizeAddAuthenticator_Request proto = new CTwoFactor_FinalizeAddAuthenticator_Request();
+		proto.steamid = getClient().getSteamId().convertToLong();
+		proto.authenticatorTime = (System.currentTimeMillis() / 1000L);
+		proto.activationCode = activationCode;
+		proto.authenticatorCode = authenticatorCode;
+
+		SteamUnifiedMessages steamUnifiedMessages = getClient().getHandler(SteamUnifiedMessages.class);
+		if(steamUnifiedMessages != null) {
+			steamUnifiedMessages.sendUnifiedMessage("TwoFactor.FinalizeAddAuthenticator#1", proto, false);
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Request two-factor authentication status
+	 *
+	 * @return 		Whether or not the two-factor authentication request was actually sent.
+	 */
+	public boolean requestTwoFactorStatus() {
+		CTwoFactor_Status_Request proto = new CTwoFactor_Status_Request();
+		proto.steamid = getClient().getSteamId().convertToLong();
+
+		SteamUnifiedMessages steamUnifiedMessages = getClient().getHandler(SteamUnifiedMessages.class);
+		if(steamUnifiedMessages != null) {
+			steamUnifiedMessages.sendUnifiedMessage("TwoFactor.Status#1", proto, false);
+			return true;
+		}
+		return false;
+	}
+
+	/**
 
 	/**
 	 * Handles a client message. This should not be called directly.
@@ -201,62 +310,72 @@ public final class SteamUser extends ClientMsgHandler {
 		case ClientWalletInfoUpdate:
 			handleWalletInfo(packetMsg);
 			break;
+		case ClientPurchaseResponse:
+			handlePurchaseResponse(packetMsg);
+			break;
 		}
 	}
 
 	void handleLoggedOff(IPacketMsg packetMsg) {
-		final ClientMsgProtobuf<CMsgClientLoggedOff.Builder> loggedOff = new ClientMsgProtobuf<CMsgClientLoggedOff.Builder>(CMsgClientLoggedOff.class, packetMsg);
+		final ClientMsgProtobuf<CMsgClientLoggedOff> loggedOff = new ClientMsgProtobuf<CMsgClientLoggedOff>(CMsgClientLoggedOff.class, packetMsg);
 
-		getClient().postCallback(new LoggedOffCallback(loggedOff.getBody().build()));
+		getClient().postCallback(new LoggedOffCallback(loggedOff.getBody()));
 	}
 
 	void handleUpdateMachineAuth(IPacketMsg packetMsg) {
-		final ClientMsgProtobuf<CMsgClientUpdateMachineAuth.Builder> machineAuth = new ClientMsgProtobuf<CMsgClientUpdateMachineAuth.Builder>(CMsgClientUpdateMachineAuth.class, packetMsg);
+		final ClientMsgProtobuf<CMsgClientUpdateMachineAuth> machineAuth = new ClientMsgProtobuf<CMsgClientUpdateMachineAuth>(CMsgClientUpdateMachineAuth.class, packetMsg);
 
-		final UpdateMachineAuthCallback innerCallback = new UpdateMachineAuthCallback(machineAuth.getBody().build());
+		final UpdateMachineAuthCallback innerCallback = new UpdateMachineAuthCallback(machineAuth.getBody());
 		final JobCallback<?> callback = new JobCallback<UpdateMachineAuthCallback>(new JobID(packetMsg.getSourceJobID()), innerCallback);
 		getClient().postCallback(callback);
 	}
 
 	void handleSessionToken(IPacketMsg packetMsg) {
-		final ClientMsgProtobuf<CMsgClientSessionToken.Builder> sessToken = new ClientMsgProtobuf<CMsgClientSessionToken.Builder>(CMsgClientSessionToken.class, packetMsg);
+		final ClientMsgProtobuf<CMsgClientSessionToken> sessToken = new ClientMsgProtobuf<CMsgClientSessionToken>(CMsgClientSessionToken.class, packetMsg);
 
-		final SessionTokenCallback callback = new SessionTokenCallback(sessToken.getBody().build());
+		final SessionTokenCallback callback = new SessionTokenCallback(sessToken.getBody());
 		getClient().postCallback(callback);
 	}
 
 	void handleLoginKey(IPacketMsg packetMsg) {
-		final ClientMsgProtobuf<CMsgClientNewLoginKey.Builder> loginKey = new ClientMsgProtobuf<CMsgClientNewLoginKey.Builder>(CMsgClientNewLoginKey.class, packetMsg);
+		final ClientMsgProtobuf<CMsgClientNewLoginKey> loginKey = new ClientMsgProtobuf<CMsgClientNewLoginKey>(CMsgClientNewLoginKey.class, packetMsg);
 
-		final ClientMsgProtobuf<CMsgClientNewLoginKeyAccepted.Builder> resp = new ClientMsgProtobuf<CMsgClientNewLoginKeyAccepted.Builder>(CMsgClientNewLoginKeyAccepted.class, EMsg.ClientNewLoginKeyAccepted);
-		resp.getBody().setUniqueId(loginKey.getBody().getUniqueId());
+		final ClientMsgProtobuf<CMsgClientNewLoginKeyAccepted> resp = new ClientMsgProtobuf<CMsgClientNewLoginKeyAccepted>(CMsgClientNewLoginKeyAccepted.class, EMsg.ClientNewLoginKeyAccepted);
+		resp.getBody().uniqueId = loginKey.getBody().uniqueId;
 
 		getClient().send(resp);
 
-		final LoginKeyCallback callback = new LoginKeyCallback(loginKey.getBody().build());
+		final LoginKeyCallback callback = new LoginKeyCallback(loginKey.getBody());
 		getClient().postCallback(callback);
 	}
 
 	void handleLogOnResponse(IPacketMsg packetMsg) {
 		if (packetMsg.isProto()) {
-			final ClientMsgProtobuf<CMsgClientLogonResponse.Builder> logonResp = new ClientMsgProtobuf<CMsgClientLogonResponse.Builder>(CMsgClientLogonResponse.class, packetMsg);
+			final ClientMsgProtobuf<CMsgClientLogonResponse> logonResp = new ClientMsgProtobuf<CMsgClientLogonResponse>(CMsgClientLogonResponse.class, packetMsg);
 
-			final LoggedOnCallback callback = new LoggedOnCallback(logonResp.getBody().build());
+			final LoggedOnCallback callback = new LoggedOnCallback(logonResp.getBody());
 			getClient().postCallback(callback);
 		}
 	}
 
 	void handleAccountInfo(IPacketMsg packetMsg) {
-		final ClientMsgProtobuf<CMsgClientAccountInfo.Builder> accInfo = new ClientMsgProtobuf<CMsgClientAccountInfo.Builder>(CMsgClientAccountInfo.class, packetMsg);
+		final ClientMsgProtobuf<CMsgClientAccountInfo> accInfo = new ClientMsgProtobuf<CMsgClientAccountInfo>(CMsgClientAccountInfo.class, packetMsg);
 
-		final AccountInfoCallback callback = new AccountInfoCallback(accInfo.getBody().build());
+		final AccountInfoCallback callback = new AccountInfoCallback(accInfo.getBody());
 		getClient().postCallback(callback);
 	}
 
 	void handleWalletInfo(IPacketMsg packetMsg) {
-		final ClientMsgProtobuf<CMsgClientWalletInfoUpdate.Builder> walletInfo = new ClientMsgProtobuf<CMsgClientWalletInfoUpdate.Builder>(CMsgClientWalletInfoUpdate.class, packetMsg);
+		final ClientMsgProtobuf<CMsgClientWalletInfoUpdate> walletInfo = new ClientMsgProtobuf<CMsgClientWalletInfoUpdate>(CMsgClientWalletInfoUpdate.class, packetMsg);
 
-		final WalletInfoCallback callback = new WalletInfoCallback(walletInfo.getBody().build());
+		final WalletInfoCallback callback = new WalletInfoCallback(walletInfo.getBody());
+		getClient().postCallback(callback);
+	}
+
+	void handlePurchaseResponse(IPacketMsg packetMsg) {
+		final ClientMsgProtobuf<CMsgClientPurchaseResponse> purchaseResp = new ClientMsgProtobuf<CMsgClientPurchaseResponse>(CMsgClientPurchaseResponse.class, packetMsg);
+
+		final PurchaseResponseCallback callback = new PurchaseResponseCallback(purchaseResp.getBody());
 		getClient().postCallback(callback);
 	}
 }

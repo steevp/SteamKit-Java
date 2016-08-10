@@ -24,8 +24,8 @@ import uk.co.thomasc.steamkit.util.crypto.asnkeyparser.AsnKeyParser;
 import uk.co.thomasc.steamkit.util.crypto.asnkeyparser.BerDecodeException;
 
 public class RSACrypto {
-	Cipher cipher;
-	RSAPublicKey RSAkey;
+	public Cipher cipher;
+	public RSAPublicKey RSAkey;
 
 	public RSACrypto(byte[] key) {
 		try {
