@@ -14,246 +14,246 @@ import uk.co.thomasc.steamkit.util.stream.BinaryReader;
 import uk.co.thomasc.steamkit.util.stream.BinaryWriter;
 
 public class TcpConnection extends Connection {
-	final static int MAGIC = 0x31305456; // "VT01"
+    final static int MAGIC = 0x31305456; // "VT01"
 
-	boolean isConnected;
+    boolean isConnected;
 
-	Socket sock;
+    Socket sock;
 
-	BinaryReader netReader;
-	BinaryWriter netWriter;
+    BinaryReader netReader;
+    BinaryWriter netWriter;
 
-	Thread netThread;
+    Thread netThread;
 
-	/**
-	 * Connects to the specified end point.
-	 * 
-	 * @param endPoint
-	 *            The end point.
-	 */
-	@Override
-	public void connect(IPEndPoint endPoint) {
-		// if we're connected, disconnect
-		disconnect();
+    /**
+     * Connects to the specified end point.
+     *
+     * @param endPoint
+     *            The end point.
+     */
+    @Override
+    public void connect(IPEndPoint endPoint) {
+        // if we're connected, disconnect
+        disconnect();
 
-		DebugLog.writeLine("TcpConnection", "Connecting to %s...", endPoint);
-		Socket socket = null;
-		try {
-			socket = new Socket();
-			socket.connect(new InetSocketAddress(endPoint.getIpAddress(), endPoint.getPort()), 15000); // 15 second timeout
-		} catch (final IOException e) {
-			DebugLog.writeLine("TcpConnection", "Error connecting (1): %s", e);
-		}
+        DebugLog.writeLine("TcpConnection", "Connecting to %s...", endPoint);
+        Socket socket = null;
+        try {
+            socket = new Socket();
+            socket.connect(new InetSocketAddress(endPoint.getIpAddress(), endPoint.getPort()), 15000); // 15 second timeout
+        } catch (final IOException e) {
+            DebugLog.writeLine("TcpConnection", "Error connecting (1): %s", e);
+        }
 
-		try {
-			connectCompleted(socket);
-		} catch (final IOException e) {
-			DebugLog.writeLine("TcpConnection", "Error connecting (2): %s", e);
-		}
-	}
+        try {
+            connectCompleted(socket);
+        } catch (final IOException e) {
+            DebugLog.writeLine("TcpConnection", "Error connecting (2): %s", e);
+        }
+    }
 
-	void connectCompleted(Socket socket) throws IOException {
+    void connectCompleted(Socket socket) throws IOException {
 
-		sock = socket;
+        sock = socket;
 
-		if (sock == null || !sock.isConnected()) {
-			onDisconnected(false);
-			return;
-		}
+        if (sock == null || !sock.isConnected()) {
+            onDisconnected(false);
+            return;
+        }
 
-		DebugLog.writeLine("TcpConnection", "Connected!");
+        DebugLog.writeLine("TcpConnection", "Connected!");
 
-		isConnected = true;
+        isConnected = true;
 
-		netReader = new BinaryReader(sock.getInputStream());
-		netWriter = new BinaryWriter(sock.getOutputStream());
+        netReader = new BinaryReader(sock.getInputStream());
+        netWriter = new BinaryWriter(sock.getOutputStream());
 
-		// initialize our network thread
-		netThread = new Thread(new NetLoop());
-		netThread.setName("TcpConnection Thread");
-		netThread.start();
+        // initialize our network thread
+        netThread = new Thread(new NetLoop());
+        netThread.setName("TcpConnection Thread");
+        netThread.start();
 
-		onConnected(EventArgs.Empty);
-	}
+        onConnected(EventArgs.Empty);
+    }
 
-	/**
-	 * Disconnects this instance.
-	 */
-	@Override
-	public void disconnect() {
-		if (!isConnected) {
-			return;
-		}
+    /**
+     * Disconnects this instance.
+     */
+    @Override
+    public void disconnect() {
+        if (!isConnected) {
+            return;
+        }
 
-		isConnected = false;
+        isConnected = false;
 
-		// wait for our network thread to terminate
-		try {
-			netThread.join();
-		} catch (final InterruptedException e) {
-		}
-		;
-		netThread = null;
+        // wait for our network thread to terminate
+        try {
+            netThread.join();
+        } catch (final InterruptedException e) {
+        }
+        ;
+        netThread = null;
 
-		cleanup();
+        cleanup();
 
-		onDisconnected(true);
-	}
+        onDisconnected(true);
+    }
 
-	/**
-	 * Sends the specified client net message.
-	 * 
-	 * @param clientMsg
-	 *            The client net message.
-	 * @throws IOException
-	 */
-	@Override
-	public void send(IClientMsg clientMsg) {
-		try {
-			if (!isConnected) {
-				DebugLog.writeLine("TcpConnection", "Attempting to send client message when not connected: %s", clientMsg.getMsgType());
-				return;
-			}
+    /**
+     * Sends the specified client net message.
+     *
+     * @param clientMsg
+     *            The client net message.
+     * @throws IOException
+     */
+    @Override
+    public void send(IClientMsg clientMsg) {
+        try {
+            if (!isConnected) {
+                DebugLog.writeLine("TcpConnection", "Attempting to send client message when not connected: %s", clientMsg.getMsgType());
+                return;
+            }
 
-			byte[] data = clientMsg.serialize();
+            byte[] data = clientMsg.serialize();
 
-			// encrypt outgoing traffic if we need to
-			if (netFilter != null) {
-				data = netFilter.processOutgoing(data);
-			}
+            // encrypt outgoing traffic if we need to
+            if (netFilter != null) {
+                data = netFilter.processOutgoing(data);
+            }
 
-			synchronized (sock) {
-				// write header
-				netWriter.write(data.length);
-				netWriter.write(TcpConnection.MAGIC);
+            synchronized (sock) {
+                // write header
+                netWriter.write(data.length);
+                netWriter.write(TcpConnection.MAGIC);
 
-				netWriter.write(data);
+                netWriter.write(data);
 
-				netWriter.flush();
-			}
-		} catch (final IOException ex) {
-			DebugLog.writeLine("TcpConnection", "Socket exception occurred while writing packet: %s", ex);
+                netWriter.flush();
+            }
+        } catch (final IOException ex) {
+            DebugLog.writeLine("TcpConnection", "Socket exception occurred while writing packet: %s", ex);
 
-			// signal that our connection is dead
-			isConnected = false;
+            // signal that our connection is dead
+            isConnected = false;
 
-			cleanup();
+            cleanup();
 
-			onDisconnected(false);
-			return;
-		}
-	}
+            onDisconnected(false);
+            return;
+        }
+    }
 
-	class NetLoop implements Runnable {
-		/**
-		 * Nets the loop.
-		 */
-		@Override
-		public void run() {
-			// poll for readable data every 100ms
-			//final int POLL_MS = 100; 
+    class NetLoop implements Runnable {
+        /**
+         * Nets the loop.
+         */
+        @Override
+        public void run() {
+            // poll for readable data every 100ms
+            //final int POLL_MS = 100;
 
-			while (true) {
-				try {
-					Thread.sleep(100);
-				} catch (final InterruptedException e1) {
-					uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e1);
-				}
+            while (true) {
+                try {
+                    Thread.sleep(100);
+                } catch (final InterruptedException e1) {
+                    uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e1);
+                }
 
-				if (!isConnected) {
-					break;
-				}
+                if (!isConnected) {
+                    break;
+                }
 
-				boolean canRead = false;
-				try {
-					canRead = !netReader.isAtEnd();
-				} catch (final IOException e) {
-				}
-				;
+                boolean canRead = false;
+                try {
+                    canRead = !netReader.isAtEnd();
+                } catch (final IOException e) {
+                }
+                ;
 
-				if (!canRead) {
-					// nothing to read yet
-					continue;
-				}
+                if (!canRead) {
+                    // nothing to read yet
+                    continue;
+                }
 
-				// read the packet off the network
-				readPacket();
-			}
-		}
-	}
+                // read the packet off the network
+                readPacket();
+            }
+        }
+    }
 
-	void readPacket() {
-		// the tcp packet header is considerably less complex than the udp one
-		// it only consists of the packet length, followed by the "VT01" magic
-		int packetLen = 0;
-		int packetMagic = 0;
+    void readPacket() {
+        // the tcp packet header is considerably less complex than the udp one
+        // it only consists of the packet length, followed by the "VT01" magic
+        int packetLen = 0;
+        int packetMagic = 0;
 
-		byte[] packData = null;
+        byte[] packData = null;
 
-		try {
-			try {
-				packetLen = netReader.readInt();
-				packetMagic = netReader.readInt();
-			} catch (final IOException ex) {
-				throw new IOException("Connection lost while reading packet header.", ex);
-			}
+        try {
+            try {
+                packetLen = netReader.readInt();
+                packetMagic = netReader.readInt();
+            } catch (final IOException ex) {
+                throw new IOException("Connection lost while reading packet header.", ex);
+            }
 
-			if (packetMagic != TcpConnection.MAGIC) {
-				throw new IOException("Got a packet with invalid magic!");
-			}
+            if (packetMagic != TcpConnection.MAGIC) {
+                throw new IOException("Got a packet with invalid magic!");
+            }
 
-			// rest of the packet is the physical data
-			packData = netReader.readBytes(packetLen);
+            // rest of the packet is the physical data
+            packData = netReader.readBytes(packetLen);
 
-			if (packData.length != packetLen) {
-				throw new IOException("Connection lost while reading packet payload");
-			}
+            if (packData.length != packetLen) {
+                throw new IOException("Connection lost while reading packet payload");
+            }
 
-			// decrypt the data off the wire if needed
-			if (netFilter != null) {
-				packData = netFilter.processIncoming(packData);
-			}
-		} catch (final IOException ex) {
-			DebugLog.writeLine("TcpConnection", "Socket exception occurred while reading packet: %s", ex);
+            // decrypt the data off the wire if needed
+            if (netFilter != null) {
+                packData = netFilter.processIncoming(packData);
+            }
+        } catch (final IOException ex) {
+            DebugLog.writeLine("TcpConnection", "Socket exception occurred while reading packet: %s", ex);
 
-			// signal that our connection is dead
-			isConnected = false;
+            // signal that our connection is dead
+            isConnected = false;
 
-			cleanup();
+            cleanup();
 
-			onDisconnected(false);
-			return;
-		}
+            onDisconnected(false);
+            return;
+        }
 
-		onNetMsgReceived(new NetMsgEventArgs(packData, new IPEndPoint(sock.getInetAddress().getHostAddress(), sock.getPort())));
-	}
+        onNetMsgReceived(new NetMsgEventArgs(packData, new IPEndPoint(sock.getInetAddress().getHostAddress(), sock.getPort())));
+    }
 
-	void cleanup() {
-		if (sock != null) {
-			// cleanup socket
-			try {
-				if (sock.isConnected()) {
-					sock.shutdownInput();
-					sock.shutdownOutput();
-				}
-				sock.close();
-			} catch (final IOException e) {
-			}
-			;
+    void cleanup() {
+        if (sock != null) {
+            // cleanup socket
+            try {
+                if (sock.isConnected()) {
+                    sock.shutdownInput();
+                    sock.shutdownOutput();
+                }
+                sock.close();
+            } catch (final IOException e) {
+            }
+            ;
 
-			sock = null;
-		}
-	}
+            sock = null;
+        }
+    }
 
-	@Override
-	public InetAddress getLocalIP() {
-		if (sock == null) {
-			try {
-				return InetAddress.getLocalHost();
-			} catch (UnknownHostException e) {
-				uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
-			} // Return a InetAddress. The request will fail anyway so it doesn't matter
-		}
-		return sock.getLocalAddress();
-	}
+    @Override
+    public InetAddress getLocalIP() {
+        if (sock == null) {
+            try {
+                return InetAddress.getLocalHost();
+            } catch (UnknownHostException e) {
+                uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
+            } // Return a InetAddress. The request will fail anyway so it doesn't matter
+        }
+        return sock.getLocalAddress();
+    }
 }
