@@ -1,13 +1,5 @@
 package uk.co.thomasc.steamkit.steam3.steamclient;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
-import java.util.concurrent.atomic.AtomicLong;
-
 import uk.co.thomasc.steamkit.base.ClientMsgProtobuf;
 import uk.co.thomasc.steamkit.base.IPacketMsg;
 import uk.co.thomasc.steamkit.base.Msg;
@@ -36,6 +28,10 @@ import uk.co.thomasc.steamkit.steam3.steamclient.callbacks.ConnectedCallback;
 import uk.co.thomasc.steamkit.steam3.steamclient.callbacks.DisconnectedCallback;
 import uk.co.thomasc.steamkit.types.JobID;
 import uk.co.thomasc.steamkit.util.cSharp.ip.ProtocolType;
+
+import java.io.IOException;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Represents a single client that connects to the Steam3 network. This class is
