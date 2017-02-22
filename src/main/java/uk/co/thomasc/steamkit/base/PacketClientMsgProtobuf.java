@@ -41,7 +41,7 @@ public final class PacketClientMsgProtobuf implements IPacketMsg {
         try {
             protobufHeader.deSerialize(ms);
         } catch (final IOException e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
+            e.printStackTrace();
         }
         targetJobID = protobufHeader.proto.jobidTarget;
         sourceJobID = protobufHeader.proto.jobidSource;

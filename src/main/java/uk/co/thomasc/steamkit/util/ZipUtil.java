@@ -1,6 +1,9 @@
 package uk.co.thomasc.steamkit.util;
 
 import com.google.protobuf.CodedOutputStream;
+import uk.co.thomasc.steamkit.util.crypto.CryptoHelper;
+import uk.co.thomasc.steamkit.util.stream.BinaryReader;
+import uk.co.thomasc.steamkit.util.stream.BinaryWriter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -9,10 +12,6 @@ import java.nio.ByteBuffer;
 import java.util.zip.DataFormatException;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.Inflater;
-
-import uk.co.thomasc.steamkit.util.crypto.CryptoHelper;
-import uk.co.thomasc.steamkit.util.stream.BinaryReader;
-import uk.co.thomasc.steamkit.util.stream.BinaryWriter;
 
 @SuppressWarnings("unused")
 public class ZipUtil {
@@ -82,12 +81,12 @@ public class ZipUtil {
             try {
                 position = f.getInt(writer);
             } catch (Exception e) {
-                uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
+                e.printStackTrace();
             }
 
             writer.write(header);
         } catch (Exception e1) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e1);
+            e1.printStackTrace();
         }
 
         return position;
@@ -116,7 +115,7 @@ public class ZipUtil {
             try {
                 position = f.getInt(writer);
             } catch (Exception e1) {
-                uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e1);
+                e1.printStackTrace();
             }
 
             writer.write(ZipUtil.Version); // versionGenerator
@@ -147,10 +146,10 @@ public class ZipUtil {
             try {
                 position2 = f.getInt(writer);
             } catch (Exception e) {
-                uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
+                e.printStackTrace();
             }
         } catch (Exception e2) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e2);
+            e2.printStackTrace();
         }
 
         return position2 - position + 4;
@@ -271,6 +270,7 @@ public class ZipUtil {
                 final int count = decompressor.inflate(buf);
                 bos.write(buf, 0, count);
             } catch (final DataFormatException e) {
+                e.printStackTrace();
             }
         }
 

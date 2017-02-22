@@ -69,7 +69,7 @@ public final class SteamChat extends ClientMsgHandler {
         try {
             createChat.writeNullTermString("", Charset.forName("UTF8")); // ?? we need a \0
         } catch (final IOException e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
+            e.printStackTrace();
         }
         getClient().send(createChat);
     }
@@ -94,7 +94,7 @@ public final class SteamChat extends ClientMsgHandler {
             leaveChat.write(EChatMemberStateChange.Left.v()); // StateChange
             leaveChat.write(getClient().getSteamId().convertToLong()); // ChatterActedBy
         } catch (final IOException e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
+            e.printStackTrace();
         }
         getClient().send(leaveChat);
     }
@@ -120,7 +120,7 @@ public final class SteamChat extends ClientMsgHandler {
         try {
             chatMsg.writeNullTermString(message, Charset.forName("UTF8"));
         } catch (final IOException e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
+            e.printStackTrace();
         }
         getClient().send(chatMsg);
     }
@@ -216,7 +216,7 @@ public final class SteamChat extends ClientMsgHandler {
         try {
             msgData = chatMsg.getPayload().readBytes();
         } catch (IOException e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
+            e.printStackTrace();
         }
         final ChatMsgCallback callback = new ChatMsgCallback(chatMsg.getBody(), msgData);
         getClient().postCallback(callback);
@@ -229,7 +229,7 @@ public final class SteamChat extends ClientMsgHandler {
             final ChatMemberInfoCallback callback = new ChatMemberInfoCallback(membInfo.getBody(), payload);
             getClient().postCallback(callback);
         } catch (IOException e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
+            e.printStackTrace();
         }
     }
 

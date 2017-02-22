@@ -24,7 +24,7 @@ public final class VACStatusCallback extends CallbackMsg {
                 bannedApps.add(cs.readInt32());
             }
         } catch (final IOException e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
+            e.printStackTrace();
         }
     }
 

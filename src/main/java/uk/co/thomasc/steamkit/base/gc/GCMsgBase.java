@@ -44,10 +44,8 @@ public abstract class GCMsgBase<T extends IGCSerializableHeader> extends AMsgBas
         super(payloadReserve);
         try {
             header = clazz.newInstance();
-        } catch (final InstantiationException e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
-        } catch (final IllegalAccessException e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
+        } catch (final InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
         }
     }
 

@@ -42,7 +42,7 @@ public final class Package {
             is.readInt(); // unknown uint at the beginning of the buffer
             data.readAsBinary(is);
         } catch (final IOException e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
+            e.printStackTrace();
         }
     }
 

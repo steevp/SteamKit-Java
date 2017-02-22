@@ -1,16 +1,8 @@
 package uk.co.thomasc.steamkit.util.crypto;
 
 import org.spongycastle.jce.provider.BouncyCastleProvider;
-
-import java.nio.ByteBuffer;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.SecureRandom;
-import java.security.Security;
-import java.util.zip.CRC32;
+import uk.co.thomasc.steamkit.util.classlesshasher.JenkinsHash;
+import uk.co.thomasc.steamkit.util.logging.Debug;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -18,9 +10,9 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-
-import uk.co.thomasc.steamkit.util.classlesshasher.JenkinsHash;
-import uk.co.thomasc.steamkit.util.logging.Debug;
+import java.nio.ByteBuffer;
+import java.security.*;
+import java.util.zip.CRC32;
 
 /**
  * Provides Crypto functions used in Steam protocols
@@ -39,9 +31,9 @@ public class CryptoHelper {
             final MessageDigest md = MessageDigest.getInstance("SHA-1", "SC");
             return md.digest(input);
         } catch (final NoSuchAlgorithmException e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
+            e.printStackTrace();
         } catch (NoSuchProviderException e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
+            e.printStackTrace();
         }
         return null;
     }
@@ -110,20 +102,14 @@ public class CryptoHelper {
             System.arraycopy(cipherText, 0, output, cryptedIv.length, cipherText.length);
 
             return output;
-        } catch (final InvalidKeyException e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
-        } catch (final InvalidAlgorithmParameterException e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
-        } catch (final NoSuchAlgorithmException e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
-        } catch (final NoSuchPaddingException e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
-        } catch (final IllegalBlockSizeException e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
-        } catch (final BadPaddingException e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
-        } catch (final NoSuchProviderException e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
+        } catch (final InvalidKeyException |
+                InvalidAlgorithmParameterException |
+                NoSuchPaddingException |
+                NoSuchAlgorithmException |
+                BadPaddingException |
+                IllegalBlockSizeException |
+                NoSuchProviderException e) {
+            e.printStackTrace();
         }
         return new byte[0];
     }
@@ -156,25 +142,19 @@ public class CryptoHelper {
             // decrypt the remaining ciphertext in cbc with the decrypted IV
             cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(key, "AES"), new IvParameterSpec(iv));
             return cipher.doFinal(cipherText);
-        } catch (final InvalidKeyException e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
-        } catch (final InvalidAlgorithmParameterException e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
-        } catch (final NoSuchAlgorithmException e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
-        } catch (final NoSuchPaddingException e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
-        } catch (final IllegalBlockSizeException e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
-        } catch (final BadPaddingException e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
-        } catch (final NoSuchProviderException e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
+        } catch (final InvalidKeyException |
+                InvalidAlgorithmParameterException |
+                NoSuchPaddingException |
+                NoSuchAlgorithmException |
+                BadPaddingException |
+                IllegalBlockSizeException |
+                NoSuchProviderException e) {
+            e.printStackTrace();
         }
         return new byte[0];
     }
 
-    public static byte[] copyOfRange(byte[] from, int start, int end){
+    public static byte[] copyOfRange(byte[] from, int start, int end) {
         int length = end - start;
         byte[] result = new byte[length];
         System.arraycopy(from, start, result, 0, length);

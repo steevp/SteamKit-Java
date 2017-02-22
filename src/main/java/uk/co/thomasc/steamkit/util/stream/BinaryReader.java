@@ -24,7 +24,7 @@ public class BinaryReader {
         try {
             reader.pushLimit(len);
         } catch (final InvalidProtocolBufferException e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
+            e.printStackTrace();
         }
     }
 

@@ -20,7 +20,7 @@ public final class AccountList<T extends Account> extends HashMap<SteamID, T> {
                 account.steamId = steamId;
                 put(steamId, account);
             } catch (Exception e) {
-                uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
+                e.printStackTrace();
             }
         }
         return get(steamId);

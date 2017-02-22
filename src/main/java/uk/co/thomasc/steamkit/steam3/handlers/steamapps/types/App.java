@@ -42,7 +42,7 @@ public final class App {
                 kv.readAsBinary(cs);
                 sections.put(EAppInfoSection.f(section.sectionId), kv);
             } catch (final IOException e) {
-                uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
+                e.printStackTrace();
             }
         }
     }

@@ -192,7 +192,7 @@ public final class SteamClient extends CMClient {
                 try {
                     callbackLock.wait(timeout);
                 } catch (final InterruptedException e) {
-                    uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
+                    e.printStackTrace();
                 }
                 if (callbackQueue.size() == 0) {
                     return null;
@@ -217,7 +217,7 @@ public final class SteamClient extends CMClient {
                 try {
                     callbackLock.wait();
                 } catch (final InterruptedException e) {
-                    uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
+                    e.printStackTrace();
                 }
             }
 
@@ -242,7 +242,7 @@ public final class SteamClient extends CMClient {
                 try {
                     callbackLock.wait(timeout);
                 } catch (final InterruptedException e) {
-                    uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
+                    e.printStackTrace();
                 }
                 if (callbackQueue.size() == 0) {
                     return null;

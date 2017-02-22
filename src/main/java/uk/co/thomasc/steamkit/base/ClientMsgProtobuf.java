@@ -132,7 +132,7 @@ public final class ClientMsgProtobuf<U extends MessageNano> extends MsgBase<MsgH
         try {
             body = (U) clazz.newInstance();
         } catch (Exception e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
+            e.printStackTrace();
         }
         // set our emsg
         getHeader().msg = eMsg;
@@ -168,7 +168,7 @@ public final class ClientMsgProtobuf<U extends MessageNano> extends MsgBase<MsgH
         try {
             deSerialize(msg.getData());
         } catch (final IOException e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
+            e.printStackTrace();
         }
     }
 
@@ -199,7 +199,7 @@ public final class ClientMsgProtobuf<U extends MessageNano> extends MsgBase<MsgH
         try {
             body = (U) clazz.newInstance();
         } catch (Exception e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
+            e.printStackTrace();
         }
         final int startPos = is.getPosition();
         CodedInputByteBufferNano byteBuffer = CodedInputByteBufferNano.newInstance(data, startPos, is.getRemaining());

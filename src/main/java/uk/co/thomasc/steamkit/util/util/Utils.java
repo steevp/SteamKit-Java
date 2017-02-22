@@ -26,7 +26,7 @@ public class Utils {
                 }
             } while (NetworkInterface.getNetworkInterfaces().hasMoreElements());
         } catch (final SocketException e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
+            e.printStackTrace();
         }
         return null;
     }

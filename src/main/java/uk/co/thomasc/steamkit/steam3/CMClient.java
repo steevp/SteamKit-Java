@@ -65,7 +65,7 @@ public abstract class CMClient {
     public static void updateCMServers(String[] addrs) {
         Servers = new IPEndPoint[addrs.length];
         for (int i = 0; i < addrs.length; i++) Servers[i] = IPEndPoint.fromString(addrs[i]);
-        uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("CMClient", "Loaded IP list, length: " + Servers.length);
+        DebugLog.writeLine("CMClient", "Loaded IP list, length: " + Servers.length);
     }
 
     /**
@@ -127,7 +127,7 @@ public abstract class CMClient {
                 try {
                     onClientMsgReceived(CMClient.getPacketMsg(e.getData()));
                 } catch (final IOException ex) {
-                    uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", ex);
+                    ex.printStackTrace();
                 }
             }
         });
@@ -213,6 +213,7 @@ public abstract class CMClient {
                 try {
                     connection.send(msg);
                 } catch (final IOException e) {
+                    e.printStackTrace();
                 }
             }
         }).start();
@@ -371,7 +372,7 @@ public abstract class CMClient {
             encResp.write(keyCrc);
             encResp.write(0);
         } catch (final IOException e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
+            e.printStackTrace();
         }
         send(encResp);
     }

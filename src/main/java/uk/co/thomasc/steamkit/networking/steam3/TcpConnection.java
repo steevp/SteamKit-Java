@@ -1,17 +1,17 @@
 package uk.co.thomasc.steamkit.networking.steam3;
 
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
-
 import uk.co.thomasc.steamkit.base.IClientMsg;
 import uk.co.thomasc.steamkit.util.cSharp.events.EventArgs;
 import uk.co.thomasc.steamkit.util.cSharp.ip.IPEndPoint;
 import uk.co.thomasc.steamkit.util.logging.DebugLog;
 import uk.co.thomasc.steamkit.util.stream.BinaryReader;
 import uk.co.thomasc.steamkit.util.stream.BinaryWriter;
+
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
 
 public class TcpConnection extends Connection {
     final static int MAGIC = 0x31305456; // "VT01"
@@ -91,8 +91,9 @@ public class TcpConnection extends Connection {
         try {
             netThread.join();
         } catch (final InterruptedException e) {
+            e.printStackTrace();
         }
-        ;
+
         netThread = null;
 
         cleanup();
@@ -157,7 +158,7 @@ public class TcpConnection extends Connection {
                 try {
                     Thread.sleep(100);
                 } catch (final InterruptedException e1) {
-                    uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e1);
+                    e1.printStackTrace();
                 }
 
                 if (!isConnected) {
@@ -168,8 +169,8 @@ public class TcpConnection extends Connection {
                 try {
                     canRead = !netReader.isAtEnd();
                 } catch (final IOException e) {
+                    e.printStackTrace();
                 }
-                ;
 
                 if (!canRead) {
                     // nothing to read yet
@@ -238,8 +239,8 @@ public class TcpConnection extends Connection {
                 }
                 sock.close();
             } catch (final IOException e) {
+                e.printStackTrace();
             }
-            ;
 
             sock = null;
         }
@@ -251,7 +252,7 @@ public class TcpConnection extends Connection {
             try {
                 return InetAddress.getLocalHost();
             } catch (UnknownHostException e) {
-                uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
+                e.printStackTrace();
             } // Return a InetAddress. The request will fail anyway so it doesn't matter
         }
         return sock.getLocalAddress();

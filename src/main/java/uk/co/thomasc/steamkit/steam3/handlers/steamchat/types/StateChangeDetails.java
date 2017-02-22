@@ -39,7 +39,7 @@ public final class StateChangeDetails {
                 memberInfo.readFromBinary(is);
             }
         } catch (final IOException e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
+            e.printStackTrace();
         }
         // based off disassembly
         //  - for InfoUpdate, a ChatMemberInfo object is present

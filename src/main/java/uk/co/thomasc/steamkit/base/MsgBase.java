@@ -56,10 +56,8 @@ public abstract class MsgBase<T extends ISteamSerializableHeader> extends AMsgBa
         super(payloadReserve);
         try {
             header = clazz.newInstance();
-        } catch (final InstantiationException e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
-        } catch (final IllegalAccessException e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
+        } catch (final InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
         }
     }
 

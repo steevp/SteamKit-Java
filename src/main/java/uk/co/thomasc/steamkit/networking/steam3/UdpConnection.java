@@ -1,19 +1,5 @@
 package uk.co.thomasc.steamkit.networking.steam3;
 
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import uk.co.thomasc.steamkit.base.IClientMsg;
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EUdpPacketType;
 import uk.co.thomasc.steamkit.base.generated.steamlanguageinternal.ChallengeData;
@@ -23,6 +9,10 @@ import uk.co.thomasc.steamkit.util.cSharp.ip.IPEndPoint;
 import uk.co.thomasc.steamkit.util.logging.DebugLog;
 import uk.co.thomasc.steamkit.util.stream.BinaryReader;
 import uk.co.thomasc.steamkit.util.stream.BinaryWriter;
+
+import java.io.IOException;
+import java.net.*;
+import java.util.*;
 
 public class UdpConnection extends Connection {
     /**
@@ -101,7 +91,7 @@ public class UdpConnection extends Connection {
         try {
             sock = new DatagramSocket();
         } catch (final IOException e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
+            e.printStackTrace();
         }
 
         state = UdpState.Disconnected;
@@ -156,8 +146,8 @@ public class UdpConnection extends Connection {
         try {
             netThread.join();
         } catch (final InterruptedException e) {
+            e.printStackTrace();
         }
-        ;
 
         // Advance this the same way that steam does, when a socket gets reused.
         sourceConnId += 256;
@@ -185,7 +175,7 @@ public class UdpConnection extends Connection {
 
             sendData(new BinaryReader(data));
         } catch (final IOException e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
+            e.printStackTrace();
         }
     }
 
@@ -360,7 +350,7 @@ public class UdpConnection extends Connection {
             try {
                 payload.write(packet.getPayload().readBytes());
             } catch (final IOException e) {
-                uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
+                e.printStackTrace();
             }
         }
 
@@ -392,7 +382,7 @@ public class UdpConnection extends Connection {
             try {
                 sock.setSoTimeout(150);
             } catch (final SocketException e1) {
-                uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e1);
+                e1.printStackTrace();
             }
 
             Calendar cl = Calendar.getInstance();
@@ -429,7 +419,7 @@ public class UdpConnection extends Connection {
                     try {
                         Thread.sleep(10);
                     } catch (final InterruptedException e1) {
-                        uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e1);
+                        e1.printStackTrace();
                     }
                     while (received) {
                         // Data from the desired server was received; delay timeout
@@ -451,7 +441,7 @@ public class UdpConnection extends Connection {
                     }
                 } catch (final IOException e) {
                     DebugLog.writeLine("UdpConnection", "Critical socket failure: " + e.getMessage());
-
+                    e.printStackTrace();
                     state = UdpState.Disconnected;
                     break;
                 }
@@ -574,7 +564,7 @@ public class UdpConnection extends Connection {
         try {
             cr.deSerialize(packet.getPayload());
         } catch (final IOException e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
+            e.printStackTrace();
         }
 
         final ConnectData cd = new ConnectData();
@@ -584,7 +574,7 @@ public class UdpConnection extends Connection {
         try {
             cd.serialize(ms);
         } catch (final IOException e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
+            e.printStackTrace();
         }
 
         sendSequenced(new UdpPacket(EUdpPacketType.Connect, new BinaryReader(ms.toByteArray())));

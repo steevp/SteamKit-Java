@@ -114,10 +114,8 @@ public final class ClientMsg<T extends ISteamSerializableMessage> extends MsgBas
         super(ExtendedClientMsgHdr.class, payloadReserve);
         try {
             body = clazz.newInstance();
-        } catch (final InstantiationException e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
-        } catch (final IllegalAccessException e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
+        } catch (final InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
         }
         // assign our emsg
         getHeader().msg = body.getEMsg();
@@ -152,7 +150,7 @@ public final class ClientMsg<T extends ISteamSerializableMessage> extends MsgBas
         try {
             deSerialize(msg.getData());
         } catch (final IOException e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
+            e.printStackTrace();
         }
     }
 

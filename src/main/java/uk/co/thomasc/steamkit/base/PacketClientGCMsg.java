@@ -49,7 +49,7 @@ public final class PacketClientGCMsg implements IPacketGCMsg {
         try {
             gcHdr.deSerialize(is);
         } catch (final IOException e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
+            e.printStackTrace();
         }
         targetJobID = new JobID(gcHdr.targetJobID);
         sourceJobID = new JobID(gcHdr.sourceJobID);

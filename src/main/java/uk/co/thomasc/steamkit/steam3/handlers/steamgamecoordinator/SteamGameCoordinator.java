@@ -1,7 +1,5 @@
 package uk.co.thomasc.steamkit.steam3.handlers.steamgamecoordinator;
 
-import java.io.IOException;
-
 import uk.co.thomasc.steamkit.base.ClientMsgProtobuf;
 import uk.co.thomasc.steamkit.base.IPacketMsg;
 import uk.co.thomasc.steamkit.base.gc.ClientGCMsg;
@@ -16,6 +14,8 @@ import uk.co.thomasc.steamkit.steam3.handlers.ClientMsgHandler;
 import uk.co.thomasc.steamkit.steam3.handlers.steamgamecoordinator.callbacks.CraftResponseCallback;
 import uk.co.thomasc.steamkit.steam3.handlers.steamgamecoordinator.callbacks.MessageCallback;
 import uk.co.thomasc.steamkit.util.util.MsgUtil;
+
+import java.io.IOException;
 
 /**
  * This handler handles all game coordinator messaging.
@@ -64,6 +64,7 @@ public final class SteamGameCoordinator extends ClientMsgHandler {
 
             getClient().send(clientMsg);
         } catch (final IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -89,7 +90,7 @@ public final class SteamGameCoordinator extends ClientMsgHandler {
                     final CraftResponseCallback craftCallback = new CraftResponseCallback(craftMsg.getBody());
                     getClient().postCallback(craftCallback);
                 } catch (IOException e) {
-                    uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
+                    e.printStackTrace();
                 }
             }
         }

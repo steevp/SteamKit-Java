@@ -217,6 +217,7 @@ public class KeyValue {
                 return kv;
             }
         } catch (final Exception e) {
+            e.printStackTrace();
         }
         return null;
     }
@@ -306,7 +307,7 @@ public class KeyValue {
             file.createNewFile();
             recursiveSaveToFile(new FileOutputStream(file));
         } catch (final IOException e) {
-            uk.co.thomasc.steamkit.util.logging.DebugLog.writeLine("NEW_EX", "Exception: %s", e);
+            e.printStackTrace();
         }
     }
 
