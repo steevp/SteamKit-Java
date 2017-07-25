@@ -357,7 +357,7 @@ public class KeyValue {
         parent.children = new ArrayList<KeyValue>();
         while (true) {
             final Type type = Type.f(input.readByte());
-            if (type == Type.End) {
+            if (type == null || type == Type.End) {
                 break;
             }
             KeyValue child = new KeyValue();
