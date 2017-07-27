@@ -357,7 +357,7 @@ public class KeyValue {
         parent.children = new ArrayList<KeyValue>();
         while (true) {
             final Type type = Type.f(input.readByte());
-            if (type == null || type == Type.End) {
+            if (type == Type.End) {
                 break;
             }
             KeyValue child = new KeyValue();
@@ -383,6 +383,7 @@ public class KeyValue {
                 child.value = String.valueOf(input.readInt());
                 break;
 
+            case Int64:
             case UInt64:
                 child.value = String.valueOf(input.readLong());
                 break;
