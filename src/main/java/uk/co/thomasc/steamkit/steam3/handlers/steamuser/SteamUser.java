@@ -63,12 +63,15 @@ public final class SteamUser extends ClientMsgHandler {
 
         final SteamID steamId = new SteamID(0, details.accountInstance, getClient().getConnectedUniverse(), EAccountType.Individual);
 
-        final int localIp = (int) NetHelpers.getIPAddress(getClient().getLocalIP());
+        if (details.loginId == null) {
+            final int localIp = (int) NetHelpers.getIPAddress(getClient().getLocalIP());
+            logon.getBody().obfustucatedPrivateIp = localIp ^ MsgClientLogon.ObfuscationMask;
+        } else {
+            logon.getBody().obfustucatedPrivateIp = details.loginId;
+        }
 
         logon.getProtoHeader().clientSessionid = 0;
         logon.getProtoHeader().steamid = steamId.convertToLong();
-
-        logon.getBody().obfustucatedPrivateIp = localIp ^ MsgClientLogon.ObfuscationMask;
 
         if(details.username.length() > 0)
             logon.getBody().accountName = details.username;

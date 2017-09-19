@@ -46,6 +46,11 @@ public final class LogOnDetails {
     public String loginkey = "";
 
     /**
+     * Used to identify the logon session.
+     */
+    public Integer loginId = null;
+
+    /**
      * Initializes a new instance of the {@link LogOnDetails} class.
      */
     public LogOnDetails() {
