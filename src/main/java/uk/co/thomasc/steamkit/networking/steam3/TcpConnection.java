@@ -213,7 +213,11 @@ public class TcpConnection extends Connection {
             // decrypt the data off the wire if needed
             if (netFilter != null) {
                 packData = netFilter.processIncoming(packData);
+                if (packData.length == 0) {
+                    throw new IOException("Decrypted packet size is zero");
+                }
             }
+            
         } catch (final IOException ex) {
             DebugLog.writeLine("TcpConnection", "Socket exception occurred while reading packet: %s", ex);
 
