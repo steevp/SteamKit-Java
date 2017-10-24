@@ -204,6 +204,15 @@ public final class SteamUser extends ClientMsgHandler {
     }
 
     /**
+     * Requests a new WebAPI authentication user nonce.
+     */
+    public void requestWebAPIUserNonce() {
+        final ClientMsgProtobuf<CMsgClientRequestWebAPIAuthenticateUserNonce> request = new ClientMsgProtobuf<>(CMsgClientRequestWebAPIAuthenticateUserNonce.class, EMsg.ClientRequestWebAPIAuthenticateUserNonce);
+        request.setSourceJobID(getClient().getNextJobID());
+        getClient().send(request);
+    }
+
+    /**
      * Start the process to enable TOTP two-factor authentication for your account
      *
      * @param device_identifier        An identifier for the device.
@@ -298,6 +307,9 @@ public final class SteamUser extends ClientMsgHandler {
         case ClientPurchaseResponse:
             handlePurchaseResponse(packetMsg);
             break;
+        case ClientRequestWebAPIAuthenticateUserNonceResponse:
+            handleWebAPIUserNonceResponse(packetMsg);
+            break;
         }
     }
 
@@ -361,6 +373,13 @@ public final class SteamUser extends ClientMsgHandler {
         final ClientMsgProtobuf<CMsgClientPurchaseResponse> purchaseResp = new ClientMsgProtobuf<CMsgClientPurchaseResponse>(CMsgClientPurchaseResponse.class, packetMsg);
 
         final PurchaseResponseCallback callback = new PurchaseResponseCallback(purchaseResp.getBody());
+        getClient().postCallback(callback);
+    }
+
+    void handleWebAPIUserNonceResponse(IPacketMsg packetMsg) {
+        final ClientMsgProtobuf<CMsgClientRequestWebAPIAuthenticateUserNonceResponse> response = new ClientMsgProtobuf<>(CMsgClientRequestWebAPIAuthenticateUserNonceResponse.class, packetMsg);
+        
+        final WebAPIUserNonceCallback callback = new WebAPIUserNonceCallback(response.getBody());
         getClient().postCallback(callback);
     }
 }
