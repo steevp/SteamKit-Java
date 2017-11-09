@@ -230,7 +230,9 @@ public class TcpConnection extends Connection {
             return;
         }
 
-        onNetMsgReceived(new NetMsgEventArgs(packData, new IPEndPoint(sock.getInetAddress().getHostAddress(), sock.getPort())));
+        if (sock != null) {
+            onNetMsgReceived(new NetMsgEventArgs(packData, new IPEndPoint(sock.getInetAddress().getHostAddress(), sock.getPort())));
+        }
     }
 
     void cleanup() {
