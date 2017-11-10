@@ -34,7 +34,7 @@ public class TcpConnection extends Connection {
     @Override
     public void connect(IPEndPoint endPoint) {
         // if we're connected, disconnect
-        disconnect();
+        //disconnect();
 
         DebugLog.writeLine("TcpConnection", "Connecting to %s...", endPoint);
         Socket socket = null;
