@@ -243,6 +243,8 @@ public abstract class CMClient {
         });
     }
 
+    private final Object lock = new Object();
+
     public void connect() {
         connect(true);
     }
@@ -257,19 +259,23 @@ public abstract class CMClient {
      *                   versions of SteamKit always used encryption.
      */
     public void connect(boolean bEncrypted) {
-        disconnect();
-        encrypted = bEncrypted;
-        final Random random = new Random();
-        final IPEndPoint server = CMClient.Servers[random.nextInt(CMClient.Servers.length)];
-        connection.connect(server);
+        synchronized (lock) {
+            disconnect();
+            encrypted = bEncrypted;
+            final Random random = new Random();
+            final IPEndPoint server = CMClient.Servers[random.nextInt(CMClient.Servers.length)];
+            connection.connect(server);
+        }
     }
 
     /**
      * Disconnects this client.
      */
     public void disconnect() {
-        heartBeatFunc.stop();
-        connection.disconnect();
+        synchronized (lock) {
+            heartBeatFunc.stop();
+            connection.disconnect();
+        }
     }
 
     /**
