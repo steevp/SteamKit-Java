@@ -257,7 +257,7 @@ public abstract class CMClient {
      *                   versions of SteamKit always used encryption.
      */
     public void connect(boolean bEncrypted) {
-        //disconnect();
+        disconnect();
         encrypted = bEncrypted;
         final Random random = new Random();
         final IPEndPoint server = CMClient.Servers[random.nextInt(CMClient.Servers.length)];
