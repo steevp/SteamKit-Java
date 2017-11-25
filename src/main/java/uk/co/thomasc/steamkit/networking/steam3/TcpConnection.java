@@ -25,6 +25,8 @@ public class TcpConnection extends Connection {
 
     Thread netThread;
 
+    private final Object lock = new Object();
+
     /**
      * Connects to the specified end point.
      *
@@ -123,7 +125,7 @@ public class TcpConnection extends Connection {
                 data = netFilter.processOutgoing(data);
             }
 
-            synchronized (sock) {
+            synchronized (lock) {
                 // write header
                 netWriter.write(data.length);
                 netWriter.write(TcpConnection.MAGIC);
