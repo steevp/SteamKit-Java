@@ -71,6 +71,7 @@ public class TcpConnection extends Connection {
         netWriter = new BinaryWriter(sock.getOutputStream());
 
         // initialize our network thread
+        DebugLog.writeLine("TcpConnection", "Starting NetLoop");
         netThread = new Thread(new NetLoop());
         netThread.setName("TcpConnection Thread");
         netThread.start();
