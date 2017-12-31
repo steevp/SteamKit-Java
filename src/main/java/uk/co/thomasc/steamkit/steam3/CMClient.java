@@ -217,6 +217,8 @@ public abstract class CMClient {
             @Override
             public void handleEvent(Object sender, EventArgsGeneric<Boolean> e) {
                 connectedUniverse = EUniverse.Invalid;
+                sessionId = null;
+                steamId = null;
                 heartBeatFunc.stop();
                 connection.netFilter = null;
                 onClientDisconnected(e.getValue());
