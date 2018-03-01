@@ -3,6 +3,7 @@ package uk.co.thomasc.steamkit.types.steamid;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.Locale;
 
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EAccountType;
 import uk.co.thomasc.steamkit.base.generated.steamlanguage.EUniverse;
@@ -500,9 +501,9 @@ public class SteamID {
         case Invalid:
         case Individual:
             if (getAccountUniverse().v() <= EUniverse.Public.v()) {
-                return String.format("STEAM_0:%d:%d", getAccountID() & 1, (int) getAccountID() >> 1);
+                return String.format(Locale.US, "STEAM_0:%d:%d", getAccountID() & 1, (int) getAccountID() >> 1);
             } else {
-                return String.format("STEAM_%d:%d:%d", getAccountID() & 1, (int) getAccountID() >> 1, getAccountUniverse().v());
+                return String.format(Locale.US, "STEAM_%d:%d:%d", getAccountID() & 1, (int) getAccountID() >> 1, getAccountUniverse().v());
             }
         default:
             return super.toString();

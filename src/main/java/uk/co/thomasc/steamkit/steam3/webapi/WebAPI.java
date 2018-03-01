@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Locale;
 
 import uk.co.thomasc.steamkit.types.keyvalue.KeyValue;
 import uk.co.thomasc.steamkit.util.WebHelpers;
@@ -68,7 +69,7 @@ public final class WebAPI {
 
         urlBuilder.append(secure ? "https://" : "http://");
         urlBuilder.append(API_ROOT);
-        urlBuilder.append(String.format("/%s/%s/v%d", iface, func, version));
+        urlBuilder.append(String.format(Locale.US, "/%s/%s/v%d", iface, func, version));
 
         final boolean isGet = method.equalsIgnoreCase("GET");
 
